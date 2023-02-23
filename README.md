@@ -1,36 +1,19 @@
-**This project is no longer maintained and its repository is only kept for archival purposes.**
-
 # PHPLOC
 
 `phploc` is a tool for quickly measuring the size and analyzing the structure of a PHP project.
 
 ## Installation
 
-This tool is distributed as a [PHP Archive (PHAR)](https://php.net/phar):
-
 ```bash
-$ wget https://phar.phpunit.de/phploc.phar
-
-$ php phploc.phar --version
+$ composer global install cmgmyr/phploc
 ```
-
-Using [Phive](https://phar.io/) is the recommended way for managing the tool dependencies of your project:
-
-```bash
-$ phive install phploc
-
-$ ./tools/phploc --version
-```
-
-**[It is not recommended to use Composer to download and install this tool.](https://twitter.com/s_bergmann/status/999635212723212288)**
-
 ## Usage Examples
 
 ### Analyse a directory and print the result
 
 ```
-$ php phploc.phar src
-phploc 7.0.0 by Sebastian Bergmann.
+$ phploc src
+phploc 8.0.0 by Chris Gmyr.
 
 Directories                                          3
 Files                                               10

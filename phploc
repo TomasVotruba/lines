@@ -3,7 +3,7 @@
 /*
  * This file is part of PHPLOC.
  *
- * (c) Sebastian Bergmann <sebastian@phpunit.de>
+ * (c) Chris Gmyr <cmgmyr@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -27,4 +27,4 @@ if (!$loaded) {
     );
 }
 
-exit((new \SebastianBergmann\PHPLOC\Application)->run($_SERVER['argv']));
+exit((new \Cmgmyr\PHPLOC\Application)->run($_SERVER['argv']));

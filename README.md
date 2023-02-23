@@ -4,8 +4,6 @@
 
 ## Installation
 
-This tool is distributed as a [PHP Archive (PHAR)](https://php.net/phar):
-
 ```bash
 $ composer global install cmgmyr/phploc
 ```

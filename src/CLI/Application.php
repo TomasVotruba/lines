@@ -2,20 +2,20 @@
 /*
  * This file is part of PHPLOC.
  *
- * (c) Sebastian Bergmann <sebastian@phpunit.de>
+ * (c) Chris Gmyr <cmgmyr@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace SebastianBergmann\PHPLOC;
+namespace Cmgmyr\PHPLOC;
 
 use const PHP_EOL;
 use function printf;
+use Cmgmyr\PHPLOC\Log\Csv as CsvPrinter;
+use Cmgmyr\PHPLOC\Log\Json as JsonPrinter;
+use Cmgmyr\PHPLOC\Log\Text as TextPrinter;
+use Cmgmyr\PHPLOC\Log\Xml as XmlPrinter;
 use SebastianBergmann\FileIterator\Facade;
-use SebastianBergmann\PHPLOC\Log\Csv as CsvPrinter;
-use SebastianBergmann\PHPLOC\Log\Json as JsonPrinter;
-use SebastianBergmann\PHPLOC\Log\Text as TextPrinter;
-use SebastianBergmann\PHPLOC\Log\Xml as XmlPrinter;
 use SebastianBergmann\Version;
 
 final class Application
@@ -87,7 +87,7 @@ final class Application
     private function printVersion(): void
     {
         printf(
-            'phploc %s by Sebastian Bergmann.' . PHP_EOL,
+            'phploc %s by Chris Gmyr.' . PHP_EOL,
             (new Version(self::VERSION, dirname(__DIR__)))->getVersion()
         );
     }

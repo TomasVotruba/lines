@@ -2,12 +2,12 @@
 /*
  * This file is part of PHPLOC.
  *
- * (c) Sebastian Bergmann <sebastian@phpunit.de>
+ * (c) Chris Gmyr <cmgmyr@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace SebastianBergmann\PHPLOC;
+namespace Cmgmyr\PHPLOC;
 
 use function count;
 use function explode;
@@ -19,12 +19,12 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SebastianBergmann\PHPLOC\Log\Csv
+ * @covers \Cmgmyr\PHPLOC\Log\Csv
  */
 final class CsvTest extends TestCase
 {
     /**
-     * @var \SebastianBergmann\PHPLOC\Log\Csv
+     * @var \Cmgmyr\PHPLOC\Log\Csv
      */
     private $single;
 
@@ -84,7 +84,7 @@ final class CsvTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->single = new \SebastianBergmann\PHPLOC\Log\Csv;
+        $this->single = new \Cmgmyr\PHPLOC\Log\Csv;
     }
 
     public function testPrintedResultContainsHeadings(): void

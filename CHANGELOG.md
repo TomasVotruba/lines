@@ -2,6 +2,14 @@
 
 All notable changes in PHPLOC are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [8.0.0] - 2023-02-23
+
+### Changed
+
+* Changed PHP version constraint in `composer.json` from `>=7.3` to `^8.1`
+* Changed Namespace from `SebastianBergmann\PHPLOC` to `Cmgmyr\PHPLOC`
+* Removed tools and phar build files, added GitHub actions
+
 ## [7.0.2] - 2020-12-07
 
 ### Changed

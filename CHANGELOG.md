@@ -2,6 +2,12 @@
 
 All notable changes in PHPLOC are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [8.0.1] - 2023-03-17
+
+### Changed
+
+* Changed PHP version constraint in `composer.json` from `^8.1` to `^7.4 || ^8.0`
+
 ## [8.0.0] - 2023-02-23
 
 ### Changed

@@ -23,7 +23,7 @@
         "ext-json": "*",
         "sebastian/cli-parser": "^1.0|^2.0",
         "sebastian/version": "^3.0|^4.0",
-        "phpunit/php-file-iterator": "^3.0"
+        "phpunit/php-file-iterator": "^3.0|^4.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.2",

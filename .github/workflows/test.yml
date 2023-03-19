@@ -15,17 +15,26 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ ubuntu-latest ]
-        php-versions: [ '8.2', '8.1', '8.0', '7.4' ]
+        php: [ '8.2', '8.1', '8.0', '7.4' ]
         dependency-stability: [ 'prefer-stable' ]
+        include:
+          -   php: '8.2'
+              phpunit: '^10.0'
+          -   php: '8.1'
+              phpunit: '^10.0'
+          -   php: '8.0'
+              phpunit: '^9.0'
+          -   php: '7.4'
+              phpunit: '^9.0'
 
-    name: P${{ matrix.php-versions }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}
+    name: P${{ matrix.php }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}
 
     steps:
       - uses: actions/checkout@v3
       - name: Install PHP versions
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php }}
           coverage: "pcov"
 
       - name: Get Composer Cache Directory 2
@@ -60,11 +69,19 @@ jobs:
         if: matrix.dependency-stability == 'prefer-lowest'
         run: composer update --prefer-stable --prefer-lowest
 
-      - name: Execute tests (Unit and Feature tests) via PHPUnit
+      - name: Force PHPUnit version
+        run: composer require --dev phpunit/phpunit:${{ matrix.phpunit }} --update-with-dependencies -n --ansi
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit 9
+        if: matrix.phpunit == '^9.0'
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml -c phpunit9.xml
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit 10
+        if: matrix.phpunit == '^10.0'
         run: vendor/bin/phpunit --coverage-clover=coverage.xml
 
       - name: Upload coverage to Codecov
-        if: matrix.php-versions == '8.1'
+        if: matrix.php == '8.1'
         uses: codecov/codecov-action@v3
         with:
           files: ./coverage.xml

@@ -2,6 +2,12 @@
 
 All notable changes in PHPLOC are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [8.0.2] - 2023-03-19
+
+### Changed
+
+* Expanded dependencies to handle both PHPUnit 9 and 10.
+
 ## [8.0.1] - 2023-03-17
 
 ### Changed

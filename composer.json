@@ -21,13 +21,13 @@
         "php": "^7.4 || ^8.0",
         "ext-dom": "*",
         "ext-json": "*",
-        "sebastian/cli-parser": "^1.0",
-        "sebastian/version": "^3.0",
-        "phpunit/php-file-iterator": "^3.0"
+        "sebastian/cli-parser": "^1.0|^2.0",
+        "sebastian/version": "^3.0|^4.0",
+        "phpunit/php-file-iterator": "^3.0|^4.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.2",
-        "phpunit/phpunit": "^9.0",
+        "phpunit/phpunit": "^9.0|^10.0",
         "vimeo/psalm": "^5.7"
     },
     "autoload": {

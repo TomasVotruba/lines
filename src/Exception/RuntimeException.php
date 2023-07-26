@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cmgmyr\PHPLOC;
+namespace TomasVotruba\Lines;
 
 final class RuntimeException extends \RuntimeException
 {

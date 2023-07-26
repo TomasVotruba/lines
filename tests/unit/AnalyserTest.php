@@ -2,20 +2,14 @@
 
 declare(strict_types=1);
 
-namespace TomasVotruba\Lines;
+namespace TomasVotruba\Lines\Tests;
 
-use const E_ALL;
-use function error_reporting;
-use function sprintf;
+use TomasVotruba\Lines\Analyser;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(\TomasVotruba\Lines\Analyser::class)]
 final class AnalyserTest extends TestCase
 {
-    /**
-     * @var Analyser
-     */
-    private $analyser;
+    private Analyser $analyser;
 
     protected function setUp(): void
     {

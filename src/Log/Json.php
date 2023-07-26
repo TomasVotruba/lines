@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Cmgmyr\PHPLOC\Log;
+namespace TomasVotruba\Lines\Log;
 
 use const JSON_PRETTY_PRINT;
 use function array_merge;

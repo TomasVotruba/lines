@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cmgmyr\PHPLOC;
+namespace TomasVotruba\Lines;
 
 use function array_intersect;
 use function array_sum;

@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
-namespace Cmgmyr\PHPLOC;
+namespace TomasVotruba\Lines;
 
 use const PHP_EOL;
 use function printf;
-use Cmgmyr\PHPLOC\Log\Csv as CsvPrinter;
-use Cmgmyr\PHPLOC\Log\Json as JsonPrinter;
-use Cmgmyr\PHPLOC\Log\Text as TextPrinter;
-use Cmgmyr\PHPLOC\Log\Xml as XmlPrinter;
+use TomasVotruba\Lines\Log\Csv as CsvPrinter;
+use TomasVotruba\Lines\Log\Json as JsonPrinter;
+use TomasVotruba\Lines\Log\Text as TextPrinter;
+use TomasVotruba\Lines\Log\Xml as XmlPrinter;
 use SebastianBergmann\FileIterator\Facade;
 use SebastianBergmann\Version;
 

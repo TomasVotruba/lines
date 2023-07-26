@@ -2,19 +2,20 @@
 
 `lines` is a tool for quickly measuring the size and analyzing the structure of a PHP project.
 
-## Installation
+## Install
+
+The package is scoped and downgraded to PHP 7.2. So you can install it anywhere with any set of dependencies:
 
 ```bash
-$ composer require tomasvotruba/lines --dev
+composer require tomasvotruba/lines --dev
 ```
 
-## Usage Examples
+## Usage
 
-### Analyse a directory and print the result
+@todo json
 
-```
-$ phploc src
-phploc 8.0.2 by Chris Gmyr.
+```bash
+vendor/bin/phploc src
 
 Directories                                          3
 Files                                               10
@@ -56,3 +57,9 @@ Structure
     Global Constants                                 0 (0.00%)
     Class Constants                                  0 (0.00%)
 ```
+
+
+## How to Read these Results?
+
+* https://matthiasnoback.nl/2019/09/using-phploc-for-quick-code-quality-estimation-part-1/
+* https://matthiasnoback.nl/2019/09/using-phploc-for-quick-code-quality-estimation-part-2/

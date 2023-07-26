@@ -17,11 +17,12 @@ final class ArgumentsBuilder
     {
         $cliParser = new CliParser();
 
+
         try {
             $options = $cliParser->parse($argv, '', [
                 'suffix=',
                 'exclude=',
-                'log-json=',
+                'json',
                 'help',
             ]);
         } catch (CliParserException $cliParserException) {
@@ -36,7 +37,7 @@ final class ArgumentsBuilder
 
         $exclude = [];
         $suffixes = ['.php'];
-        $jsonLogfile = null;
+        $jsonFormat = null;
         $help = false;
 
         foreach ($options[0] as $option) {
@@ -49,8 +50,8 @@ final class ArgumentsBuilder
                     $exclude[] = $option[1];
                     break;
 
-                case '--log-json':
-                    $jsonLogfile = $option[1];
+                case '--json':
+                    $jsonFormat = true;
                     break;
 
                 case '--help':
@@ -63,6 +64,6 @@ final class ArgumentsBuilder
             throw new ShouldNotHappenException('No directory specified');
         }
 
-        return new Arguments($directories, $suffixes, $exclude, $jsonLogfile, $help);
+        return new Arguments($directories, $suffixes, $exclude, $jsonFormat, $help);
     }
 }

@@ -9,7 +9,7 @@ final class Json
     /**
      * @param array<string, mixed> $count
      */
-    public function printResult(string $filename, array $count): void
+    public function printResult(array $count): void
     {
         $directories = [];
 
@@ -23,10 +23,8 @@ final class Json
         unset($count['directories'], $count['files']);
 
         $report = array_merge($directories, $count);
+        $json = json_encode($report, JSON_PRETTY_PRINT);
 
-        file_put_contents(
-            $filename,
-            json_encode($report, JSON_PRETTY_PRINT)
-        );
+        echo $json . PHP_EOL;
     }
 }

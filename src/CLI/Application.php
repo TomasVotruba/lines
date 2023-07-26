@@ -29,9 +29,9 @@ final class Application
             return StatusCode::ERROR;
         }
 
-        echo PHP_EOL;
 
         if ($arguments->displayHelp()) {
+            echo PHP_EOL;
             $this->help();
 
             return StatusCode::SUCCESS;
@@ -48,12 +48,12 @@ final class Application
         $analyser = new Analyser();
         $result = $analyser->countFiles($filePaths);
 
-        $textPrinter = new TextPrinter();
-        $textPrinter->printResult($result);
-
-        if ($arguments->jsonLogfile()) {
+        if ($arguments->isJsonFormat()) {
             $printer = new JsonPrinter();
-            $printer->printResult($arguments->jsonLogfile(), $result);
+            $printer->printResult($result);
+        } else {
+            $textPrinter = new TextPrinter();
+            $textPrinter->printResult($result);
         }
 
         return StatusCode::SUCCESS;
@@ -71,7 +71,7 @@ Usage:
   --exclude <path>  Exclude files with <path> in their path from the analysis
                     (can be given multiple times)
 
-  --log-json <file> Write results in JSON format to <file>
+  --json            Write results in JSON format
 EOT;
     }
 }

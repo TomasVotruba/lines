@@ -15,8 +15,8 @@ final class Arguments
         private readonly array $directories,
         private readonly array $suffixes,
         private readonly array $exclude,
-        private readonly ?string $jsonLogfile,
-        private readonly bool $help,
+        private readonly bool  $jsonFormat,
+        private readonly bool  $help,
     ) {
     }
 
@@ -44,9 +44,9 @@ final class Arguments
         return $this->exclude;
     }
 
-    public function jsonLogfile(): ?string
+    public function isJsonFormat(): bool
     {
-        return $this->jsonLogfile;
+        return $this->jsonFormat;
     }
 
     public function displayHelp(): bool

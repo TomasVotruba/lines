@@ -15,7 +15,13 @@ composer require tomasvotruba/lines --dev
 @todo json
 
 ```bash
-vendor/bin/phploc src
+vendor/bin/lines src --json
+```
+
+Or via text output:
+
+```bash
+vendor/bin/lines src
 
 Directories                                          3
 Files                                               10

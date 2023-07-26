@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace TomasVotruba\Lines\Log;
+namespace TomasVotruba\Lines\Console\OutputFormatter;
 
-use const PHP_EOL;
+use Symfony\Component\Console\Output\OutputInterface;
 
-final class Text
+final class TextOutputFormatter
 {
     /**
      * @param array<string, mixed> $count
      */
-    public function printResult(array $count): void
+    public function printResult(array $count, OutputInterface $output): void
     {
         if ($count['directories'] > 0) {
             \printf(
@@ -24,53 +24,52 @@ final class Text
 
         $format = <<<'END'
 Size
-  Lines of Code (LOC)                       %10d
-  Comment Lines of Code (CLOC)              %10d (%.2f%%)
-  Non-Comment Lines of Code (NCLOC)         %10d (%.2f%%)
-  Logical Lines of Code (LLOC)              %10d (%.2f%%)
-    Classes                                 %10d (%.2f%%)
-      Average Class Length                  %10d
-        Minimum Class Length                %10d
-        Maximum Class Length                %10d
-      Average Method Length                 %10d
-        Minimum Method Length               %10d
-        Maximum Method Length               %10d
-      Average Methods Per Class             %10d
-        Minimum Methods Per Class           %10d
-        Maximum Methods Per Class           %10d
-    Functions                               %10d (%.2f%%)
-      Average Function Length               %10d
-    Not in classes or functions             %10d (%.2f%%)
+    Lines of Code (LOC)                       %10d
+    Comment Lines of Code (CLOC)              %10d (%.2f%%)
+    Non-Comment Lines of Code (NCLOC)         %10d (%.2f%%)
+    Logical Lines of Code (LLOC)              %10d (%.2f%%)
+        Classes                                 %10d (%.2f%%)
+            Average Class Length                  %10d
+                Minimum Class Length                %10d
+                Maximum Class Length                %10d
+            Average Method Length                 %10d
+                Minimum Method Length               %10d
+                Maximum Method Length               %10d
+            Average Methods Per Class             %10d
+                Minimum Methods Per Class           %10d
+                Maximum Methods Per Class           %10d
+        Functions                               %10d (%.2f%%)
+            Average Function Length               %10d
+            Not in classes or functions             %10d (%.2f%%)
 
 Structure
-  Namespaces                                %10d
-  Interfaces                                %10d
-  Traits                                    %10d
-  Classes                                   %10d
-    Abstract Classes                        %10d (%.2f%%)
-    Concrete Classes                        %10d (%.2f%%)
-      Final Classes                         %10d (%.2f%%)
-      Non-Final Classes                     %10d (%.2f%%)
-  Methods                                   %10d
-    Scope
-      Non-Static Methods                    %10d (%.2f%%)
-      Static Methods                        %10d (%.2f%%)
-    Visibility
-      Public Methods                        %10d (%.2f%%)
-      Protected Methods                     %10d (%.2f%%)
-      Private Methods                       %10d (%.2f%%)
-  Functions                                 %10d
-    Named Functions                         %10d (%.2f%%)
-    Anonymous Functions                     %10d (%.2f%%)
-  Constants                                 %10d
-    Global Constants                        %10d (%.2f%%)
-    Class Constants                         %10d (%.2f%%)
-      Public Constants                      %10d (%.2f%%)
-      Non-Public Constants                  %10d (%.2f%%)
-
+    Namespaces                                %10d
+    Interfaces                                %10d
+    Traits                                    %10d
+    Classes                                   %10d
+        Abstract Classes                        %10d (%.2f%%)
+        Concrete Classes                        %10d (%.2f%%)
+            Final Classes                         %10d (%.2f%%)
+            Non-Final Classes                     %10d (%.2f%%)
+        Methods                                   %10d
+            Scope
+                Non-Static                    %10d (%.2f%%)
+                Static                        %10d (%.2f%%)
+            Visibility
+                Public                        %10d (%.2f%%)
+                Protected                     %10d (%.2f%%)
+                Private                       %10d (%.2f%%)
+            Functions                                 %10d
+                Named                         %10d (%.2f%%)
+                Anonymous                     %10d (%.2f%%)
+            Constants                                 %10d
+                Global                        %10d (%.2f%%)
+                Class                         %10d (%.2f%%)
+                Public                      %10d (%.2f%%)
+                Non-Public                  %10d (%.2f%%)
 END;
 
-        printf(
+        $result = sprintf(
             $format,
             $count['loc'],
             $count['cloc'],
@@ -133,5 +132,7 @@ END;
             $count['nonPublicClassConstants'],
             $count['classConstants'] > 0 ? ($count['nonPublicClassConstants'] / $count['classConstants']) * 100 : 0
         );
+
+        $output->writeln($result);
     }
 }

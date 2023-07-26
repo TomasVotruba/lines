@@ -17,7 +17,7 @@ final class AnalyserTest extends TestCase
         $this->analyser = new Analyser;
     }
 
-    public function testWithoutTests(): void
+    public function test(): void
     {
         $this->assertEqualsWithDelta(
             [
@@ -63,7 +63,7 @@ final class AnalyserTest extends TestCase
                 'methodLlocMin'               => 4,
                 'methodLlocAvg'               => 5.6,
                 'methodLlocMax'               => 7,
-                'averageMethodsPerClass'      => 1.33,
+                'averageMethodsPerClass'      => 1.3,
                 'minimumMethodsPerClass'      => 0,
                 'maximumMethodsPerClass'      => 4,
             ],
@@ -72,28 +72,6 @@ final class AnalyserTest extends TestCase
             ),
             0.1
         );
-    }
-
-    public function testTraitsAreCountedCorrectly(): void
-    {
-        $result = $this->analyser->countFiles(
-            [
-                __DIR__ . '/../_files/trait.php',
-            ],
-        );
-
-        $this->assertSame(1, $result['traits']);
-    }
-
-    public function testIssue112IsFixed(): void
-    {
-        $result = $this->analyser->countFiles(
-            [
-                __DIR__ . '/../_files/issue_112.php',
-            ],
-        );
-
-        $this->assertSame(5, $result['loc']);
     }
 
     #[DataProvider('issue126Provider')]

@@ -32,6 +32,9 @@ final class Analyser
      */
     public function countFiles(array $files): array
     {
+        Assert::allString($files);
+        Assert::allFileExists($files);
+
         foreach ($files as $file) {
             $this->countFile($file);
         }
@@ -227,10 +230,7 @@ final class Analyser
                                 }
                             }
 
-                            if ($testClass &&
-                                $this->isTestMethod($functionName, $visibility, $static, $tokens, $i)) {
-                                $this->collector->incrementTestMethods();
-                            } elseif (!$testClass) {
+                            if (! $testClass) {
                                 $isInMethod = true;
                                 $this->collector->currentMethodStart();
 
@@ -425,28 +425,6 @@ final class Analyser
         // Fallback: Treat the class as a test case class if the name
         // of the parent class ends with "TestCase".
         return str_ends_with((string) $this->classes[$className], 'testcase');
-    }
-
-    private function isTestMethod(string $functionName, int $visibility, bool $static, array $tokens, int $currentToken): bool
-    {
-        if ($static || $visibility != T_PUBLIC) {
-            return false;
-        }
-
-        if (str_starts_with($functionName, 'test')) {
-            return true;
-        }
-
-        while ($tokens[$currentToken][0] !== T_DOC_COMMENT) {
-            if ($tokens[$currentToken] === '{' || $tokens[$currentToken] === '}') {
-                return false;
-            }
-
-            --$currentToken;
-        }
-
-        return str_contains((string) $tokens[$currentToken][1], '@test') ||
-               str_contains((string) $tokens[$currentToken][1], '@scenario');
     }
 
     private function getNextNonWhitespaceTokenPos(array $tokens, int $start): int|bool

@@ -295,7 +295,8 @@ final class Publisher
 
     private function getAverage(string $key): float
     {
-        return $this->divide($this->getSum($key), $this->getCount($key));
+        $result = $this->divide($this->getSum($key), $this->getCount($key));
+        return (float) number_format($result, 1);
     }
 
     private function getCount(string $key): int

@@ -24,47 +24,53 @@ final class TextOutputFormatter
 
         $format = <<<'END'
 Size
-    Lines of Code (LOC)                       %10d
-    Comment Lines of Code (CLOC)              %10d (%.2f%%)
-    Non-Comment Lines of Code (NCLOC)         %10d (%.2f%%)
-    Logical Lines of Code (LLOC)              %10d (%.2f%%)
-        Classes                                 %10d (%.2f%%)
-            Average Class Length                  %10d
-                Minimum Class Length                %10d
-                Maximum Class Length                %10d
-            Average Method Length                 %10d
-                Minimum Method Length               %10d
-                Maximum Method Length               %10d
-            Average Methods Per Class             %10d
-                Minimum Methods Per Class           %10d
-                Maximum Methods Per Class           %10d
-        Functions                               %10d (%.2f%%)
-            Average Function Length               %10d
-            Not in classes or functions             %10d (%.2f%%)
+    Lines of Code                           %10d
+    Comment Lines of Code                   %10d (%.2f%%)
+    Non-Comment Lines of Code               %10d (%.2f%%)
+    Logical Lines of Code                   %10d (%.2f%%)
+
+    Classes
+        Lines                       %10d (%.2f%%)
+        Length
+            Average                 %10d
+            Minimum                 %10d
+            Maximum                 %10d
+    Methods
+        Length
+            Average                 %10d
+            Min                     %10d
+            Max                     %10d
+        Methods Per Class
+                Average                     %10d
+                Minimum                     %10d
+                Maximum                     %10d
+    Functions                           %10d (%.2f%%)
+        Average Length                  %10d
+        Not in classes or functions     %10d (%.2f%%)
 
 Structure
-    Namespaces                                %10d
-    Interfaces                                %10d
-    Traits                                    %10d
-    Classes                                   %10d
-        Abstract Classes                        %10d (%.2f%%)
-        Concrete Classes                        %10d (%.2f%%)
-            Final Classes                         %10d (%.2f%%)
-            Non-Final Classes                     %10d (%.2f%%)
-        Methods                                   %10d
+    Namespaces                              %10d
+    Interfaces                              %10d
+    Traits                                  %10d
+    Classes                                 %10d
+        Abstract Classes                    %10d (%.2f%%)
+        Concrete Classes                    %10d (%.2f%%)
+            Final Classes                   %10d (%.2f%%)
+            Non-Final Classes               %10d (%.2f%%)
+        Methods                             %10d
             Scope
-                Non-Static                    %10d (%.2f%%)
-                Static                        %10d (%.2f%%)
+                Non-Static                  %10d (%.2f%%)
+                Static                      %10d (%.2f%%)
             Visibility
-                Public                        %10d (%.2f%%)
-                Protected                     %10d (%.2f%%)
-                Private                       %10d (%.2f%%)
-            Functions                                 %10d
-                Named                         %10d (%.2f%%)
-                Anonymous                     %10d (%.2f%%)
-            Constants                                 %10d
-                Global                        %10d (%.2f%%)
-                Class                         %10d (%.2f%%)
+                Public                      %10d (%.2f%%)
+                Protected                   %10d (%.2f%%)
+                Private                     %10d (%.2f%%)
+            Functions                       %10d
+                Named                       %10d (%.2f%%)
+                Anonymous                   %10d (%.2f%%)
+            Constants                       %10d
+                Global                      %10d (%.2f%%)
+                Class                       %10d (%.2f%%)
                 Public                      %10d (%.2f%%)
                 Non-Public                  %10d (%.2f%%)
 END;

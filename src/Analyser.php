@@ -42,10 +42,10 @@ final class Analyser
     /**
      * @param string[] $files
      */
-    public function countFiles(array $files, bool $countTests): array
+    public function countFiles(array $files): array
     {
         foreach ($files as $file) {
-            $this->countFile($file, $countTests);
+            $this->countFile($file);
         }
 
         return $this->collector->getPublisher()->toArray();
@@ -80,12 +80,8 @@ final class Analyser
         }
     }
 
-    private function countFile(string $filename, bool $countTests): void
+    private function countFile(string $filename): void
     {
-        if ($countTests) {
-            $this->preProcessFile($filename);
-        }
-
         $buffer = file_get_contents($filename);
         $this->collector->incrementLines(substr_count($buffer, "\n"));
         $tokens    = token_get_all($buffer);
@@ -193,9 +189,6 @@ final class Analyser
                         $this->collector->incrementTraits();
                     } elseif ($token === T_INTERFACE) {
                         $this->collector->incrementInterfaces();
-                    } elseif ($countTests && $this->isTestClass($className)) {
-                        $testClass = true;
-                        $this->collector->incrementTestClasses();
                     } else {
                         $classModifierToken = $this->getPreviousNonWhitespaceNonCommentTokenPos($tokens, $i);
 

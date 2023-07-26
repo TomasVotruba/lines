@@ -1,14 +1,15 @@
-<?php declare(strict_types=1);
-namespace TomasVotruba\Lines;
+<?php
+
+declare(strict_types=1);
+
+namespace TomasVotruba\Lines\CLI;
 
 use SebastianBergmann\CliParser\Exception as CliParserException;
 use SebastianBergmann\CliParser\Parser as CliParser;
+use TomasVotruba\Lines\Exception\ShouldNotHappenException;
 
 final class ArgumentsBuilder
 {
-    /**
-     * @throws ArgumentsBuilderException
-     */
     public function build(array $argv): Arguments
     {
         try {
@@ -18,10 +19,8 @@ final class ArgumentsBuilder
                 [
                     'suffix=',
                     'exclude=',
-                    'count-tests',
                     'log-json=',
                     'help',
-                    'version',
                 ]
             );
         } catch (CliParserException $cliParserException) {
@@ -35,10 +34,8 @@ final class ArgumentsBuilder
         $directories = $options[1];
         $exclude     = [];
         $suffixes    = ['.php'];
-        $countTests  = false;
         $jsonLogfile = null;
         $help        = false;
-        $version     = false;
 
         foreach ($options[0] as $option) {
             switch ($option[0]) {
@@ -52,11 +49,6 @@ final class ArgumentsBuilder
 
                     break;
 
-                case '--count-tests':
-                    $countTests = true;
-
-                    break;
-
                 case '--log-json':
                     $jsonLogfile = $option[1];
 
@@ -67,29 +59,19 @@ final class ArgumentsBuilder
                     $help = true;
 
                     break;
-
-                case 'v':
-                case '--version':
-                    $version = true;
-
-                    break;
             }
         }
 
-        if (empty($options[1]) && !$help && !$version) {
-            throw new ArgumentsBuilderException(
-                'No directory specified'
-            );
+        if (empty($options[1]) && !$help) {
+            throw new ShouldNotHappenException('No directory specified');
         }
 
         return new Arguments(
             $directories,
             $suffixes,
             $exclude,
-            $countTests,
             $jsonLogfile,
             $help,
-            $version,
         );
     }
 }

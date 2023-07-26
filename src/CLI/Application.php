@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\CLI;
 
-use TomasVotruba\Lines\ArgumentsBuilder;
 use TomasVotruba\Lines\Log\Json as JsonPrinter;
 use TomasVotruba\Lines\Log\Text as TextPrinter;
 use SebastianBergmann\FileIterator\Facade;
 
 final class Application
 {
+    /**
+     * @param mixed[] $argv
+     */
     public function run(array $argv): int
     {
+        $argumentsBuilder = new ArgumentsBuilder();
+
         try {
-            $arguments = (new ArgumentsBuilder())->build($argv);
-        } catch (Exception $exception) {
-            print PHP_EOL . $exception->getMessage() . PHP_EOL;
+            $arguments = $argumentsBuilder->build($argv);
+        } catch (\Throwable $throwable) {
+            print PHP_EOL . $throwable->getMessage() . PHP_EOL;
 
             return 1;
         }
@@ -67,10 +71,6 @@ Options for selecting files:
                     (default: .php; can be given multiple times)
   --exclude <path>  Exclude files with <path> in their path from the analysis
                     (can be given multiple times)
-
-Options for analysing files:
-
-  --count-tests     Count PHPUnit test case classes and test methods
 
 Options for report generation:
 

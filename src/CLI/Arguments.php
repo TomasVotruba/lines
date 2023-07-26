@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
-namespace TomasVotruba\Lines;
+
+namespace TomasVotruba\Lines\CLI;
 
 final class Arguments
 {
@@ -16,7 +17,6 @@ final class Arguments
          * @psalm-var list<string>
          */
         private readonly array $exclude,
-        private readonly bool $countTests,
         private readonly ?string $jsonLogfile,
         private readonly bool $help,
         private readonly bool $version
@@ -46,11 +46,6 @@ final class Arguments
     public function exclude(): array
     {
         return $this->exclude;
-    }
-
-    public function countTests(): bool
-    {
-        return $this->countTests;
     }
 
     public function jsonLogfile(): ?string

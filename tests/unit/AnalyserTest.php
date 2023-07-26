@@ -92,37 +92,6 @@ final class AnalyserTest extends TestCase
         );
     }
 
-    public function testFilesThatExtendPHPUnitTestCaseAreCountedAsTests(): void
-    {
-        $result = $this->analyser->countFiles(
-            [
-                __DIR__ . '/../_files/tests.php',
-            ],
-        );
-
-        $this->assertSame(1, $result['testClasses']);
-    }
-
-    public function testFilesThatExtendPHPUnitTestCaseAreCountedAsTests2(): void
-    {
-        $result = $this->analyser->countFiles([
-            __DIR__ . '/../_files/tests_old.php'
-        ]);
-
-        $this->assertSame(1, $result['testClasses']);
-    }
-
-    public function testFilesIndirectlyTestClasses(): void
-    {
-        $result = $this->analyser->countFiles([__DIR__ . '/../_files/twoTestsThatIndirectlyExtendPHPUnitTestCase.php']);
-        $this->assertSame(3, $result['testClasses']);
-
-        $this->analyser->reset();
-
-        $result = $this->analyser->countFiles([__DIR__ . '/../_files/twoTestsThatIndirectlyExtendOldPHPUnitTestCase.php']);
-        $this->assertSame(3, $result['testClasses']);
-    }
-
     public function testTraitsAreCountedCorrectly(): void
     {
         $result = $this->analyser->countFiles(

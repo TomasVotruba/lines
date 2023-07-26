@@ -10,11 +10,6 @@ final class Analyser
 {
     private Collector $collector;
 
-    /**
-     * @var array<string, string|null>
-     */
-    private array $classes = [];
-
     public function __construct()
     {
         $this->collector = new Collector;
@@ -344,7 +339,7 @@ final class Analyser
     }
 
     /**
-     * @param mixed<int, mixed> $tokens
+     * @param array<int, mixed> $tokens
      */
     private function getNamespaceName(array $tokens, int $i): string|bool
     {
@@ -366,7 +361,7 @@ final class Analyser
     }
 
     /**
-     * @param mixed<int, mixed> $tokens
+     * @param array<int, mixed> $tokens
      */
     private function getClassName(string $namespace, array $tokens, int $i): string
     {
@@ -392,7 +387,7 @@ final class Analyser
     }
 
     /**
-     * @param mixed<int, mixed> $tokens
+     * @param array<int, mixed> $tokens
      */
     private function getNextNonWhitespaceTokenPos(array $tokens, int $start): int|bool
     {
@@ -410,7 +405,7 @@ final class Analyser
     }
 
     /**
-     * @param mixed<int, mixed> $tokens
+     * @param array<int, mixed> $tokens
      */
     private function getPreviousNonWhitespaceTokenPos(array $tokens, int $start): int|bool
     {
@@ -428,7 +423,7 @@ final class Analyser
     }
 
     /**
-     * @param mixed<int, mixed> $tokens
+     * @param array<int, mixed> $tokens
      */
     private function getPreviousNonWhitespaceNonCommentTokenPos(array $tokens, int $start): int|bool
     {
@@ -451,7 +446,7 @@ final class Analyser
     }
 
     /**
-     * @param mixed<int, mixed> $tokens
+     * @param array<int, mixed> $tokens
      */
     private function isClassDeclaration(array $tokens, int $i): bool
     {

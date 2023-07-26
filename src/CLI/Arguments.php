@@ -3,38 +3,25 @@ namespace TomasVotruba\Lines;
 
 final class Arguments
 {
-    /**
-     * @psalm-var list<string>
-     */
-    private array $directories;
-
-    /**
-     * @psalm-var list<string>
-     */
-    private array $suffixes;
-
-    /**
-     * @psalm-var list<string>
-     */
-    private array $exclude;
-
-    private bool $countTests;
-
-    private ?string $jsonLogfile = null;
-
-    private bool $help;
-
-    private bool $version;
-
-    public function __construct(array $directories, array $suffixes, array $exclude, bool $countTests, ?string $jsonLogfile, bool $help, bool $version)
+    public function __construct(
+        /**
+         * @psalm-var list<string>
+         */
+        private readonly array $directories,
+        /**
+         * @psalm-var list<string>
+         */
+        private readonly array $suffixes,
+        /**
+         * @psalm-var list<string>
+         */
+        private readonly array $exclude,
+        private readonly bool $countTests,
+        private readonly ?string $jsonLogfile,
+        private readonly bool $help,
+        private readonly bool $version
+    )
     {
-        $this->directories = $directories;
-        $this->suffixes    = $suffixes;
-        $this->exclude     = $exclude;
-        $this->countTests  = $countTests;
-        $this->jsonLogfile = $jsonLogfile;
-        $this->help        = $help;
-        $this->version     = $version;
     }
 
     /**

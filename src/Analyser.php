@@ -48,16 +48,14 @@ use function is_array;
 use function is_string;
 use function rtrim;
 use function str_replace;
-use function strpos;
 use function strtolower;
-use function substr;
 use function substr_count;
 use function token_get_all;
 use function trim;
 
 final class Analyser
 {
-    private Collector $collector;
+    private readonly Collector $collector;
 
     private array $classes = [];
 
@@ -538,7 +536,7 @@ final class Analyser
             $className = $namespace . '\\' . $className;
         }
 
-        return strtolower($className);
+        return strtolower((string) $className);
     }
 
     /**
@@ -579,7 +577,7 @@ final class Analyser
 
         // Fallback: Treat the class as a test case class if the name
         // of the parent class ends with "TestCase".
-        return substr((string) $this->classes[$className], -8) === 'testcase';
+        return str_ends_with((string) $this->classes[$className], 'testcase');
     }
 
     /**
@@ -596,7 +594,7 @@ final class Analyser
             return false;
         }
 
-        if (strpos($functionName, 'test') === 0) {
+        if (str_starts_with($functionName, 'test')) {
             return true;
         }
 
@@ -608,8 +606,8 @@ final class Analyser
             $currentToken--;
         }
 
-        return strpos($tokens[$currentToken][1], '@test') !== false ||
-               strpos($tokens[$currentToken][1], '@scenario') !== false;
+        return str_contains((string) $tokens[$currentToken][1], '@test') ||
+               str_contains((string) $tokens[$currentToken][1], '@scenario');
     }
 
     /**

@@ -26,7 +26,7 @@ abstract class AnAbstractClass
  */
 class AClass extends AnAbstractClass implements AnInterface
 {
-    public const A_CLASS_CONSTANT = 'bar';
+    final public const A_CLASS_CONSTANT = 'bar';
 
     private static array $a = [];
 

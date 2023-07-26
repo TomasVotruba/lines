@@ -343,6 +343,9 @@ final class Analyser
         }
     }
 
+    /**
+     * @param mixed<int, mixed> $tokens
+     */
     private function getNamespaceName(array $tokens, int $i): string|bool
     {
         if (isset($tokens[$i + 2][1])) {
@@ -362,6 +365,9 @@ final class Analyser
         return false;
     }
 
+    /**
+     * @param mixed<int, mixed> $tokens
+     */
     private function getClassName(string $namespace, array $tokens, int $i): string
     {
         $i += 2;
@@ -385,42 +391,9 @@ final class Analyser
         return strtolower((string) $className);
     }
 
-    private function isTestClass(string $className): bool
-    {
-        $parent = $this->classes[$className];
-        $count  = 0;
-
-        // Check ancestry for PHPUnit_Framework_TestCase.
-        while ($parent !== null) {
-            ++$count;
-
-            if ($count > 100) {
-                // Prevent infinite loops and just bail
-                break;
-            }
-
-            if ($parent === 'phpunit_framework_testcase' ||
-                $parent === '\\phpunit_framework_testcase' ||
-                // TODO: Recognize PHPUnit\Framework\TestCase when it is imported
-                $parent === 'phpunit\\framework\\testcase' ||
-                $parent === '\\phpunit\\framework\\testcase') {
-                return true;
-            }
-
-            if (isset($this->classes[$parent]) && $parent !== $this->classes[$parent]) {
-                $parent = $this->classes[$parent];
-            } else {
-                // Class has a parent that is declared in a file
-                // that was not pre-processed.
-                break;
-            }
-        }
-
-        // Fallback: Treat the class as a test case class if the name
-        // of the parent class ends with "TestCase".
-        return str_ends_with((string) $this->classes[$className], 'testcase');
-    }
-
+    /**
+     * @param mixed<int, mixed> $tokens
+     */
     private function getNextNonWhitespaceTokenPos(array $tokens, int $start): int|bool
     {
         if (isset($tokens[$start + 1])) {
@@ -437,7 +410,7 @@ final class Analyser
     }
 
     /**
-     * @param mixed[] $tokens
+     * @param mixed<int, mixed> $tokens
      */
     private function getPreviousNonWhitespaceTokenPos(array $tokens, int $start): int|bool
     {
@@ -454,6 +427,9 @@ final class Analyser
         return false;
     }
 
+    /**
+     * @param mixed<int, mixed> $tokens
+     */
     private function getPreviousNonWhitespaceNonCommentTokenPos(array $tokens, int $start): int|bool
     {
         $previousTokenIndex = $start - 1;
@@ -474,6 +450,9 @@ final class Analyser
         return false;
     }
 
+    /**
+     * @param mixed<int, mixed> $tokens
+     */
     private function isClassDeclaration(array $tokens, int $i): bool
     {
         $n = $this->getPreviousNonWhitespaceTokenPos($tokens, $i);

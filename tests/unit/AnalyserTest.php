@@ -50,8 +50,6 @@ final class AnalyserTest extends TestCase
                 'publicClassConstants'        => 1,
                 'nonPublicClassConstants'     => 0,
                 'globalConstants'             => 1,
-                'testClasses'                 => 0,
-                'testMethods'                 => 0,
                 'llocByNof'                   => 0.5,
                 'methodCalls'                 => 6,
                 'staticMethodCalls'           => 4,
@@ -213,7 +211,7 @@ final class AnalyserTest extends TestCase
     public function test_it_provides_average_minimum_and_maximum_number_of_methods_per_class(): void
     {
         $result = $this->analyser->countFiles([__DIR__ . '/../_files/methods_per_class.php']);
-        $this->assertSame(2, $result['averageMethodsPerClass']);
+        $this->assertSame(2.0, $result['averageMethodsPerClass']);
         $this->assertSame(0, $result['minimumMethodsPerClass']);
         $this->assertSame(4, $result['maximumMethodsPerClass']);
     }

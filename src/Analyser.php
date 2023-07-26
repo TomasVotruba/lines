@@ -61,7 +61,6 @@ final class Analyser
         $namespace    = false;
         $className    = null;
         $functionName = null;
-        $testClass    = false;
         $this->collector->currentClassReset();
         $isLogicalLine = true;
         $isInMethod    = false;
@@ -72,7 +71,7 @@ final class Analyser
 
                 if ($token === ';') {
                     if ($isLogicalLine) {
-                        if ($className !== null && !$testClass) {
+                        if ($className !== null) {
                             $this->collector->currentClassIncrementLines();
 
                             if ($functionName !== null) {
@@ -86,8 +85,6 @@ final class Analyser
                     }
 
                     $isLogicalLine = true;
-                } elseif ($token === '?' && !$testClass) {
-                    // nothing
                 } elseif ($token === '{') {
                     if ($currentBlock === T_CLASS) {
                         $block = $className;
@@ -113,7 +110,6 @@ final class Analyser
                             }
                         } elseif ($block === $className) {
                             $className = null;
-                            $testClass = false;
                             $this->collector->currentClassStop();
                             $this->collector->currentClassReset();
                         }
@@ -230,25 +226,23 @@ final class Analyser
                                 }
                             }
 
-                            if (! $testClass) {
-                                $isInMethod = true;
-                                $this->collector->currentMethodStart();
+                            $isInMethod = true;
+                            $this->collector->currentMethodStart();
 
-                                $this->collector->currentClassIncrementMethods();
+                            $this->collector->currentClassIncrementMethods();
 
-                                if (!$static) {
-                                    $this->collector->incrementNonStaticMethods();
-                                } else {
-                                    $this->collector->incrementStaticMethods();
-                                }
+                            if (!$static) {
+                                $this->collector->incrementNonStaticMethods();
+                            } else {
+                                $this->collector->incrementStaticMethods();
+                            }
 
-                                if ($visibility === T_PUBLIC) {
-                                    $this->collector->incrementPublicMethods();
-                                } elseif ($visibility === T_PROTECTED) {
-                                    $this->collector->incrementProtectedMethods();
-                                } elseif ($visibility === T_PRIVATE) {
-                                    $this->collector->incrementPrivateMethods();
-                                }
+                            if ($visibility === T_PUBLIC) {
+                                $this->collector->incrementPublicMethods();
+                            } elseif ($visibility === T_PROTECTED) {
+                                $this->collector->incrementProtectedMethods();
+                            } elseif ($visibility === T_PRIVATE) {
+                                $this->collector->incrementPrivateMethods();
                             }
                         }
                     }

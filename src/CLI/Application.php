@@ -24,12 +24,12 @@ final class Application
         try {
             $arguments = $argumentsBuilder->build($argv);
         } catch (Throwable $throwable) {
-            print PHP_EOL . $throwable->getMessage() . PHP_EOL;
+            echo PHP_EOL . $throwable->getMessage() . PHP_EOL;
 
             return StatusCode::ERROR;
         }
 
-        print PHP_EOL;
+        echo PHP_EOL;
 
         if ($arguments->displayHelp()) {
             $this->help();
@@ -41,7 +41,7 @@ final class Application
         $filePaths = $phpFilesFinder->findInDirectories($arguments->getDirectories(), $arguments->getSuffixes(), $arguments->getExclude());
 
         if ($filePaths === []) {
-            print 'No files found to scan' . PHP_EOL;
+            echo 'No files found to scan' . PHP_EOL;
             return StatusCode::ERROR;
         }
 
@@ -61,18 +61,15 @@ final class Application
 
     private function help(): void
     {
-        print <<<'EOT'
+        echo <<<'EOT'
 Usage:
-  phploc [options] <directory>
-
-Options for selecting files:
+  lines <directory> [options]
 
   --suffix <suffix> Include files with names ending in <suffix> in the analysis
-                    (default: .php; can be given multiple times)
+                    (default: ".ph"p; can be given multiple times)
+
   --exclude <path>  Exclude files with <path> in their path from the analysis
                     (can be given multiple times)
-
-Options for report generation:
 
   --log-json <file> Write results in JSON format to <file>
 EOT;

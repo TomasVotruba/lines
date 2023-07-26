@@ -18,7 +18,10 @@ jobs:
 
                     -
                         name: 'Bare Run'
-                        run: php bin/lines --ansi
+                        run: |
+                            php bin/lines vendor
+                            composer install --no-dev
+                            php bin/lines vendor
 
                     -
                         name: 'PHPStan'

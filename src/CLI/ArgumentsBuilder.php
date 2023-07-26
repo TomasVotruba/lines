@@ -18,7 +18,7 @@ final class ArgumentsBuilder
         try {
             $options = (new CliParser)->parse(
                 $argv,
-                'hv',
+                '',
                 [
                     'suffix=',
                     'exclude=',

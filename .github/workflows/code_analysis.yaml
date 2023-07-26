@@ -20,7 +20,7 @@ jobs:
                         name: 'Bare Run'
                         run: |
                             php bin/lines vendor
-                            composer install --no-dev
+                            composer install --no-dev --ansi
                             php bin/lines vendor
 
                     -

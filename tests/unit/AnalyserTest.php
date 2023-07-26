@@ -22,8 +22,8 @@ final class AnalyserTest extends TestCase
         $this->assertEqualsWithDelta(
             [
                 'files'                       => 1,
-                'loc'                         => 75,
-                'lloc'                        => 24,
+                'loc'                         => 80,
+                'lloc'                        => 30,
                 'llocClasses'                 => 22,
                 'llocFunctions'               => 1,
                 'llocGlobal'                  => 1,
@@ -56,7 +56,7 @@ final class AnalyserTest extends TestCase
                 'instanceMethodCalls'         => 2,
                 'directories'                 => 0,
                 'namespaces'                  => 1,
-                'ncloc'                       => 68,
+                'ncloc'                       => 73,
                 'classLlocMin'                => 0,
                 'classLlocAvg'                => 7.3,
                 'classLlocMax'                => 22,

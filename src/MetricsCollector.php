@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines;
 
-final class Collector
+use TomasVotruba\Lines\Enum\CounterName;
+
+final class MetricsCollector
 {
     /**
      * @var array<string, mixed>
@@ -24,23 +26,23 @@ final class Collector
 
     public function addFile(string $filename): void
     {
-        $this->increment('files');
-        $this->addUnique('directories', dirname($filename));
+        $this->increment(CounterName::FILES);
+        $this->addUnique(CounterName::DIRECTORIES, dirname($filename));
     }
 
     public function incrementLines(int $number): void
     {
-        $this->increment('lines', $number);
+        $this->increment(CounterName::LINES, $number);
     }
 
     public function incrementCommentLines(int $number): void
     {
-        $this->increment('comment lines', $number);
+        $this->increment(CounterName::COMMENT_LINES, $number);
     }
 
     public function incrementLogicalLines(): void
     {
-        $this->increment('logical lines');
+        $this->increment(CounterName::LOGICAL_LINES);
     }
 
     public function currentClassReset(): void
@@ -80,12 +82,12 @@ final class Collector
 
     public function currentMethodStop(): void
     {
-        $this->addToArray('method lines', $this->currentMethodLines);
+        $this->addToArray(CounterName::METHOD_LINES, $this->currentMethodLines);
     }
 
     public function incrementFunctionLines(): void
     {
-        $this->increment('function lines');
+        $this->increment(CounterName::FUNCTION_LINES);
     }
 
     public function addConstant(string $name): void
@@ -95,12 +97,12 @@ final class Collector
 
     public function incrementNonStaticMethodCalls(): void
     {
-        $this->increment('non-static method calls');
+        $this->increment(CounterName::NON_STATIC_METHOD_CALLS);
     }
 
     public function incrementStaticMethodCalls(): void
     {
-        $this->increment('static method calls');
+        $this->increment(key: CounterName::STATIC_METHOD_CALLS);
     }
 
     public function addNamespace(string $namespace): void
@@ -110,7 +112,7 @@ final class Collector
 
     public function incrementInterfaces(): void
     {
-        $this->increment('interfaces');
+        $this->increment(CounterName::INTERFACES);
     }
 
     public function incrementTraits(): void
@@ -120,27 +122,27 @@ final class Collector
 
     public function incrementAbstractClasses(): void
     {
-        $this->increment('abstract classes');
+        $this->increment(CounterName::ABSTRACT_CLASSES);
     }
 
     public function incrementNonFinalClasses(): void
     {
-        $this->increment('non-final classes');
+        $this->increment(CounterName::NON_FINAL_CLASSES);
     }
 
     public function incrementFinalClasses(): void
     {
-        $this->increment('final classes');
+        $this->increment(CounterName::FINAL_CLASSES);
     }
 
     public function incrementNonStaticMethods(): void
     {
-        $this->increment('non-static methods');
+        $this->increment(CounterName::NON_STATIC_METHODS);
     }
 
     public function incrementStaticMethods(): void
     {
-        $this->increment('static methods');
+        $this->increment(CounterName::STATIC_METHODS);
     }
 
     public function incrementPublicMethods(): void
@@ -201,7 +203,10 @@ final class Collector
         $this->counts[$key] += $number;
     }
 
-    private function check(string $key, mixed $default): void
+    /**
+     * @param int|mixed[] $default
+     */
+    private function check(string $key, int|array $default): void
     {
         if (! isset($this->counts[$key])) {
             $this->counts[$key] = $default;

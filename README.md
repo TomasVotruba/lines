@@ -35,18 +35,6 @@ Size
       Average Function Length                        0
     Not in classes or functions                     26 (6.90%)
 
-Dependencies
-  Global Accesses                                    0
-    Global Constants                                 0 (0.00%)
-    Global Variables                                 0 (0.00%)
-    Super-Global Variables                           0 (0.00%)
-  Attribute Accesses                                85
-    Non-Static                                      85 (100.00%)
-    Static                                           0 (0.00%)
-  Method Calls                                     280
-    Non-Static                                     276 (98.57%)
-    Static                                           4 (1.43%)
-
 Structure
   Namespaces                                         3
   Interfaces                                         1

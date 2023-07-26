@@ -330,8 +330,6 @@ final class Analyser
 
                             ++$j;
                         }
-                    } else {
-                        $this->collector->addPossibleConstantAccesses($value);
                     }
 
                     break;
@@ -351,25 +349,6 @@ final class Analyser
                         } else {
                             $this->collector->incrementNonStaticMethodCalls();
                         }
-                    } elseif ($token === T_DOUBLE_COLON &&
-                        $tokens[$n][0] === T_VARIABLE) {
-                        $this->collector->incrementStaticAttributeAccesses();
-                    } elseif ($token === T_OBJECT_OPERATOR) {
-                        $this->collector->incrementNonStaticAttributeAccesses();
-                    }
-
-                    break;
-
-                case T_GLOBAL:
-                    $this->collector->incrementGlobalVariableAccesses();
-
-                    break;
-
-                case T_VARIABLE:
-                    if ($value === '$GLOBALS') {
-                        $this->collector->incrementGlobalVariableAccesses();
-                    } elseif (isset($this->superGlobals[$value])) {
-                        $this->collector->incrementSuperGlobalVariableAccesses();
                     }
 
                     break;

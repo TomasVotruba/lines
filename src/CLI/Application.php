@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines\CLI;
 
 use Throwable;
-use SebastianBergmann\FileIterator\Facade;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Enum\StatusCode;
 use TomasVotruba\Lines\Log\Json as JsonPrinter;
 use TomasVotruba\Lines\Log\Text as TextPrinter;
+use TomasVotruba\Lines\PhpFilesFinder;
 
 final class Application
 {
@@ -31,26 +31,22 @@ final class Application
 
         print PHP_EOL;
 
-        if ($arguments->help()) {
+        if ($arguments->displayHelp()) {
             $this->help();
 
             return StatusCode::SUCCESS;
         }
 
-        $files = [];
+        $phpFilesFinder = new PhpFilesFinder();
+        $filePaths = $phpFilesFinder->findInDirectories($arguments->getDirectories(), $arguments->getSuffixes(), $arguments->getExclude());
 
-        foreach ($arguments->directories() as $directory) {
-            $currentFiles = (new Facade())->getFilesAsArray($directory, $arguments->suffixes(), '', $arguments->exclude());
-            $files = [...$files, ...$currentFiles];
-        }
-
-        if ($files === []) {
+        if ($filePaths === []) {
             print 'No files found to scan' . PHP_EOL;
             return StatusCode::ERROR;
         }
 
         $analyser = new Analyser();
-        $result = $analyser->countFiles($files);
+        $result = $analyser->countFiles($filePaths);
 
         $textPrinter = new TextPrinter();
         $textPrinter->printResult($result);

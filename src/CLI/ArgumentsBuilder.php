@@ -15,17 +15,15 @@ final class ArgumentsBuilder
      */
     public function build(array $argv): Arguments
     {
+        $cliParser = new CliParser();
+
         try {
-            $options = (new CliParser())->parse(
-                $argv,
-                '',
-                [
-                    'suffix=',
-                    'exclude=',
-                    'log-json=',
-                    'help',
-                ]
-            );
+            $options = $cliParser->parse($argv, '', [
+                'suffix=',
+                'exclude=',
+                'log-json=',
+                'help',
+            ]);
         } catch (CliParserException $cliParserException) {
             throw new ShouldNotHappenException(
                 $cliParserException->getMessage(),
@@ -35,6 +33,7 @@ final class ArgumentsBuilder
         }
 
         $directories = $options[1];
+
         $exclude = [];
         $suffixes = ['.php'];
         $jsonLogfile = null;
@@ -44,23 +43,18 @@ final class ArgumentsBuilder
             switch ($option[0]) {
                 case '--suffix':
                     $suffixes[] = $option[1];
-
                     break;
 
                 case '--exclude':
                     $exclude[] = $option[1];
-
                     break;
 
                 case '--log-json':
                     $jsonLogfile = $option[1];
-
                     break;
 
-                case 'h':
                 case '--help':
                     $help = true;
-
                     break;
             }
         }
@@ -69,12 +63,6 @@ final class ArgumentsBuilder
             throw new ShouldNotHappenException('No directory specified');
         }
 
-        return new Arguments(
-            $directories,
-            $suffixes,
-            $exclude,
-            $jsonLogfile,
-            $help,
-        );
+        return new Arguments($directories, $suffixes, $exclude, $jsonLogfile, $help);
     }
 }

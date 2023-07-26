@@ -23,7 +23,7 @@ final class Arguments
     /**
      * @return string[]
      */
-    public function directories(): array
+    public function getDirectories(): array
     {
         return $this->directories;
     }
@@ -31,7 +31,7 @@ final class Arguments
     /**
      * @return string[]
      */
-    public function suffixes(): array
+    public function getSuffixes(): array
     {
         return $this->suffixes;
     }
@@ -39,7 +39,7 @@ final class Arguments
     /**
      * @return string[]
      */
-    public function exclude(): array
+    public function getExclude(): array
     {
         return $this->exclude;
     }
@@ -49,7 +49,7 @@ final class Arguments
         return $this->jsonLogfile;
     }
 
-    public function help(): bool
+    public function displayHelp(): bool
     {
         return $this->help;
     }

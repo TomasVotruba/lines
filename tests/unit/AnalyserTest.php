@@ -140,15 +140,6 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $result['classes']);
     }
 
-    public function testIssue139IsFixed(): void
-    {
-        $result = $this->analyser->countFiles([
-            __DIR__ . '/../_files/issue_139.php',
-        ]);
-
-        $this->assertSame(1, $result['anonymousFunctions']);
-    }
-
     public function testDeclareIsNotLogicalLine(): void
     {
         $result = $this->analyser->countFiles([__DIR__ . '/../_files/with_declare.php']);

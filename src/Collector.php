@@ -179,16 +179,6 @@ final class Collector
         $this->increment('non-public class constants');
     }
 
-    public function incrementTestClasses(): void
-    {
-        $this->increment('test classes');
-    }
-
-    public function incrementTestMethods(): void
-    {
-        $this->increment('test methods');
-    }
-
     private function addUnique(string $key, mixed $name): void
     {
         $this->check($key, []);

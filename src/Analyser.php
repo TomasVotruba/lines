@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace TomasVotruba\Lines;
 
+use Webmozart\Assert\Assert;
+
 /**
  * @see \TomasVotruba\Lines\Tests\AnalyserTest
  */
@@ -39,7 +41,10 @@ final class Analyser
 
     private function countFile(string $filename): void
     {
+        Assert::fileExists($filename);
+
         $buffer = file_get_contents($filename);
+
         $this->collector->incrementLines(substr_count($buffer, "\n"));
         $tokens    = token_get_all($buffer);
         $numTokens = count($tokens);

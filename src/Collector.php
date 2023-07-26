@@ -10,11 +10,7 @@ final class Collector
 {
     private array $counts = [];
 
-    private int $currentClassComplexity = 0;
-
     private int $currentClassLines = 0;
-
-    private int $currentMethodComplexity = 0;
 
     private int $currentMethodLines = 0;
 
@@ -48,12 +44,6 @@ final class Collector
 
     public function currentClassReset(): void
     {
-        if ($this->currentClassComplexity > 0) {
-            $this->addToArray('class complexity', $this->currentClassComplexity);
-            $this->addToArray('class lines', $this->currentClassLines);
-        }
-
-        $this->currentClassComplexity = 0;
         $this->currentClassLines      = 0;
         $this->currentNumberOfMethods = 0;
     }
@@ -63,11 +53,6 @@ final class Collector
         $this->addToArray('methods per class', $this->currentNumberOfMethods);
     }
 
-    public function currentClassIncrementComplexity(): void
-    {
-        ++$this->currentClassComplexity;
-    }
-
     public function currentClassIncrementLines(): void
     {
         ++$this->currentClassLines;
@@ -75,19 +60,12 @@ final class Collector
 
     public function currentMethodStart(): void
     {
-        $this->currentMethodComplexity = 1;
         $this->currentMethodLines      = 0;
     }
 
     public function currentClassIncrementMethods(): void
     {
         ++$this->currentNumberOfMethods;
-    }
-
-    public function currentMethodIncrementComplexity(): void
-    {
-        ++$this->currentMethodComplexity;
-        $this->increment('total method complexity');
     }
 
     public function currentMethodIncrementLines(): void
@@ -97,18 +75,12 @@ final class Collector
 
     public function currentMethodStop(): void
     {
-        $this->addToArray('method complexity', $this->currentMethodComplexity);
         $this->addToArray('method lines', $this->currentMethodLines);
     }
 
     public function incrementFunctionLines(): void
     {
         $this->increment('function lines');
-    }
-
-    public function incrementComplexity(): void
-    {
-        $this->increment('complexity');
     }
 
     public function addPossibleConstantAccesses($name): void

@@ -97,12 +97,7 @@ final class Analyser
 
                     $isLogicalLine = true;
                 } elseif ($token === '?' && !$testClass) {
-                    if ($className !== null) {
-                        $this->collector->currentClassIncrementComplexity();
-                        $this->collector->currentMethodIncrementComplexity();
-                    }
-
-                    $this->collector->incrementComplexity();
+                    // nothing
                 } elseif ($token === '{') {
                     if ($currentBlock === T_CLASS) {
                         $block = $className;
@@ -156,7 +151,6 @@ final class Analyser
                     }
 
                     $this->collector->currentClassReset();
-                    $this->collector->currentClassIncrementComplexity();
                     $className    = $this->getClassName($namespace, $tokens, $i);
                     $currentBlock = T_CLASS;
 
@@ -297,15 +291,6 @@ final class Analyser
                 case T_LOGICAL_AND:
                 case T_BOOLEAN_OR:
                 case T_LOGICAL_OR:
-                    if (!$testClass) {
-                        if ($isInMethod) {
-                            $this->collector->currentClassIncrementComplexity();
-                            $this->collector->currentMethodIncrementComplexity();
-                        }
-
-                        $this->collector->incrementComplexity();
-                    }
-
                     break;
 
                 case T_COMMENT:

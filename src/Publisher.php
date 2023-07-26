@@ -16,142 +16,107 @@ final class Publisher
         return $this->getCount('directories') - 1;
     }
 
-    public function getFiles()
+    public function getFiles(): int
     {
         return $this->getValue('files');
     }
 
-    public function getLines()
+    public function getLines(): int
     {
         return $this->getValue('lines');
     }
 
-    public function getCommentLines()
+    public function getCommentLines(): int
     {
         return $this->getValue('comment lines');
     }
 
-    public function getNonCommentLines()
+    public function getNonCommentLines(): int
     {
         return $this->getLines() - $this->getCommentLines();
     }
 
-    public function getLogicalLines()
+    public function getLogicalLines(): int
     {
         return $this->getValue('logical lines');
     }
 
-    public function getClassLines()
+    public function getClassLines(): int
     {
         return $this->getSum('class lines');
     }
 
-    public function getAverageClassLength()
+    public function getAverageClassLength(): int
     {
         return $this->getAverage('class lines');
     }
 
-    public function getMinimumClassLength()
+    public function getMinimumClassLength(): int
     {
         return $this->getMinimum('class lines');
     }
 
-    public function getMaximumClassLength()
+    public function getMaximumClassLength(): int
     {
         return $this->getMaximum('class lines');
     }
 
-    public function getAverageMethodLength()
+    public function getAverageMethodLength(): int
     {
         return $this->getAverage('method lines');
     }
 
-    public function getMinimumMethodLength()
+    public function getMinimumMethodLength(): int
     {
         return $this->getMinimum('method lines');
     }
 
-    public function getMaximumMethodLength()
+    public function getMaximumMethodLength(): int
     {
         return $this->getMaximum('method lines');
     }
 
-    public function getAverageMethodsPerClass()
+    public function getAverageMethodsPerClass(): int
     {
         return $this->getAverage('methods per class');
     }
 
-    public function getMinimumMethodsPerClass()
+    public function getMinimumMethodsPerClass(): int
     {
         return $this->getMinimum('methods per class');
     }
 
-    public function getMaximumMethodsPerClass()
+    public function getMaximumMethodsPerClass(): int
     {
         return $this->getMaximum('methods per class');
     }
 
-    public function getFunctionLines()
+    public function getFunctionLines(): int
     {
         return $this->getValue('function lines');
     }
 
-    public function getAverageFunctionLength()
+    public function getAverageFunctionLength(): int
     {
         return $this->divide($this->getFunctionLines(), $this->getFunctions());
     }
 
-    public function getNotInClassesOrFunctions()
+    public function getNotInClassesOrFunctions(): int
     {
         return $this->getLogicalLines() - $this->getClassLines() - $this->getFunctionLines();
     }
 
-    public function getGlobalAccesses()
-    {
-        return $this->getGlobalConstantAccesses() + $this->getGlobalVariableAccesses() + $this->getSuperGlobalVariableAccesses();
-    }
-
-    public function getGlobalConstantAccesses(): int
-    {
-        return count(array_intersect($this->getValue('possible constant accesses', []), $this->getValue('constant', [])));
-    }
-
-    public function getGlobalVariableAccesses()
-    {
-        return $this->getValue('global variable accesses');
-    }
-
-    public function getSuperGlobalVariableAccesses()
-    {
-        return $this->getValue('super global variable accesses');
-    }
-
-    public function getAttributeAccesses()
-    {
-        return $this->getNonStaticAttributeAccesses() + $this->getStaticAttributeAccesses();
-    }
-
-    public function getNonStaticAttributeAccesses()
-    {
-        return $this->getValue('non-static attribute accesses');
-    }
-
-    public function getStaticAttributeAccesses()
-    {
-        return $this->getValue('static attribute accesses');
-    }
-
-    public function getMethodCalls()
+    public function getMethodCalls(): int
     {
         return $this->getNonStaticMethodCalls() + $this->getStaticMethodCalls();
     }
 
-    public function getNonStaticMethodCalls()
+    public function getNonStaticMethodCalls(): int
     {
         return $this->getValue('non-static method calls');
     }
 
-    public function getStaticMethodCalls()
+    public function getStaticMethodCalls(): int
     {
         return $this->getValue('static method calls');
     }
@@ -161,124 +126,114 @@ final class Publisher
         return $this->getCount('namespaces');
     }
 
-    public function getInterfaces()
+    public function getInterfaces(): int
     {
         return $this->getValue('interfaces');
     }
 
-    public function getTraits()
+    public function getTraits(): int
     {
         return $this->getValue('traits');
     }
 
-    public function getClasses()
+    public function getClasses(): int
     {
         return $this->getAbstractClasses() + $this->getConcreteClasses();
     }
 
-    public function getAbstractClasses()
+    public function getAbstractClasses(): int
     {
         return $this->getValue('abstract classes');
     }
 
-    public function getConcreteClasses()
+    public function getConcreteClasses(): int
     {
         return $this->getFinalClasses() + $this->getNonFinalClasses();
     }
 
-    public function getFinalClasses()
+    public function getFinalClasses(): int
     {
         return $this->getValue('final classes');
     }
 
-    public function getNonFinalClasses()
+    public function getNonFinalClasses(): int
     {
         return $this->getValue('non-final classes');
     }
 
-    public function getMethods()
+    public function getMethods(): int
     {
         return $this->getNonStaticMethods() + $this->getStaticMethods();
     }
 
-    public function getNonStaticMethods()
+    public function getNonStaticMethods(): int
     {
         return $this->getValue('non-static methods');
     }
 
-    public function getStaticMethods()
+    public function getStaticMethods(): int
     {
         return $this->getValue('static methods');
     }
 
-    public function getPublicMethods()
+    public function getPublicMethods(): int
     {
         return $this->getValue('public methods');
     }
 
-    public function getNonPublicMethods()
+    public function getNonPublicMethods(): int
     {
         return $this->getProtectedMethods() + $this->getPrivateMethods();
     }
 
-    public function getProtectedMethods()
+    public function getProtectedMethods(): int
     {
         return $this->getValue('protected methods');
     }
 
-    public function getPrivateMethods()
+    public function getPrivateMethods(): int
     {
         return $this->getValue('private methods');
     }
 
-    public function getFunctions()
+    public function getFunctions(): int
     {
         return $this->getNamedFunctions() + $this->getAnonymousFunctions();
     }
 
-    public function getNamedFunctions()
+    public function getNamedFunctions(): int
     {
         return $this->getValue('named functions');
     }
 
-    public function getAnonymousFunctions()
+    public function getAnonymousFunctions(): int
     {
         return $this->getValue('anonymous functions');
     }
 
-    public function getConstants()
+    public function getConstants(): int
     {
         return $this->getGlobalConstants() + $this->getClassConstants();
     }
 
-    public function getGlobalConstants()
+    public function getGlobalConstants(): int
     {
         return $this->getValue('global constants');
     }
 
-    public function getPublicClassConstants()
+    public function getPublicClassConstants(): int
     {
         return $this->getValue('public class constants');
     }
 
-    public function getNonPublicClassConstants()
+    public function getNonPublicClassConstants(): int
     {
         return $this->getValue('non-public class constants');
     }
 
-    public function getClassConstants()
+    public function getClassConstants(): int
     {
         return $this->getPublicClassConstants() + $this->getNonPublicClassConstants();
-    }
-
-    public function getTestClasses()
-    {
-        return $this->getValue('test classes');
-    }
-
-    public function getTestMethods()
-    {
-        return $this->getValue('test methods');
     }
 
     /**
@@ -316,19 +271,10 @@ final class Publisher
             'publicClassConstants'        => $this->getPublicClassConstants(),
             'nonPublicClassConstants'     => $this->getNonPublicClassConstants(),
             'globalConstants'             => $this->getGlobalConstants(),
-            'testClasses'                 => $this->getTestClasses(),
-            'testMethods'                 => $this->getTestMethods(),
             'llocByNof'                   => $this->getAverageFunctionLength(),
             'methodCalls'                 => $this->getMethodCalls(),
             'staticMethodCalls'           => $this->getStaticMethodCalls(),
             'instanceMethodCalls'         => $this->getNonStaticMethodCalls(),
-            'attributeAccesses'           => $this->getAttributeAccesses(),
-            'staticAttributeAccesses'     => $this->getStaticAttributeAccesses(),
-            'instanceAttributeAccesses'   => $this->getNonStaticAttributeAccesses(),
-            'globalAccesses'              => $this->getGlobalAccesses(),
-            'globalVariableAccesses'      => $this->getGlobalVariableAccesses(),
-            'superGlobalVariableAccesses' => $this->getSuperGlobalVariableAccesses(),
-            'globalConstantAccesses'      => $this->getGlobalConstantAccesses(),
             'directories'                 => $this->getDirectories(),
             'classLlocMin'                => $this->getMinimumClassLength(),
             'classLlocAvg'                => $this->getAverageClassLength(),

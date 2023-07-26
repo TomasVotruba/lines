@@ -39,18 +39,6 @@ Size
       Average Function Length               %10d
     Not in classes or functions             %10d (%.2f%%)
 
-Dependencies
-  Global Accesses                           %10d
-    Global Constants                        %10d (%.2f%%)
-    Global Variables                        %10d (%.2f%%)
-    Super-Global Variables                  %10d (%.2f%%)
-  Attribute Accesses                        %10d
-    Non-Static                              %10d (%.2f%%)
-    Static                                  %10d (%.2f%%)
-  Method Calls                              %10d
-    Non-Static                              %10d (%.2f%%)
-    Static                                  %10d (%.2f%%)
-
 Structure
   Namespaces                                %10d
   Interfaces                                %10d
@@ -104,18 +92,6 @@ END;
             $count['llocByNof'],
             $count['llocGlobal'],
             $count['lloc'] > 0 ? ($count['llocGlobal'] / $count['lloc']) * 100 : 0,
-            $count['globalAccesses'],
-            $count['globalConstantAccesses'],
-            $count['globalAccesses'] > 0 ? ($count['globalConstantAccesses'] / $count['globalAccesses']) * 100 : 0,
-            $count['globalVariableAccesses'],
-            $count['globalAccesses'] > 0 ? ($count['globalVariableAccesses'] / $count['globalAccesses']) * 100 : 0,
-            $count['superGlobalVariableAccesses'],
-            $count['globalAccesses'] > 0 ? ($count['superGlobalVariableAccesses'] / $count['globalAccesses']) * 100 : 0,
-            $count['attributeAccesses'],
-            $count['instanceAttributeAccesses'],
-            $count['attributeAccesses'] > 0 ? ($count['instanceAttributeAccesses'] / $count['attributeAccesses']) * 100 : 0,
-            $count['staticAttributeAccesses'],
-            $count['attributeAccesses'] > 0 ? ($count['staticAttributeAccesses'] / $count['attributeAccesses']) * 100 : 0,
             $count['methodCalls'],
             $count['instanceMethodCalls'],
             $count['methodCalls'] > 0 ? ($count['instanceMethodCalls'] / $count['methodCalls']) * 100 : 0,

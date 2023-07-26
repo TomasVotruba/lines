@@ -1,13 +1,4 @@
-#!/usr/bin/env php
 <?php
-/*
- * This file is part of PHPLOC.
- *
- * (c) Chris Gmyr <cmgmyr@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 $loaded = false;
 
@@ -27,4 +18,5 @@ if (!$loaded) {
     );
 }
 
+// @todo
 exit((new \Cmgmyr\PHPLOC\Application)->run($_SERVER['argv']));

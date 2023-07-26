@@ -1,12 +1,7 @@
-<?php declare(strict_types=1);
-/*
- * This file is part of PHPLOC.
- *
- * (c) Chris Gmyr <cmgmyr@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+<?php
+
+declare(strict_types=1);
+
 namespace Cmgmyr\PHPLOC;
 
 use function array_intersect;
@@ -15,16 +10,14 @@ use function count;
 use function max;
 use function min;
 
-class Publisher
+final class Publisher
 {
-    private $counts;
-
-    public function __construct(array $counts)
-    {
-        $this->counts = $counts;
+    public function __construct(
+        private array $counts
+    ) {
     }
 
-    public function getDirectories()
+    public function getDirectories(): int
     {
         return $this->getCount('directories') - 1;
     }

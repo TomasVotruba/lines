@@ -1,12 +1,13 @@
-# PHPLOC
+# Lines
 
-`phploc` is a tool for quickly measuring the size and analyzing the structure of a PHP project.
+`lines` is a tool for quickly measuring the size and analyzing the structure of a PHP project.
 
 ## Installation
 
 ```bash
-$ composer global install cmgmyr/phploc
+$ composer require tomasvotruba/lines --dev
 ```
+
 ## Usage Examples
 
 ### Analyse a directory and print the result

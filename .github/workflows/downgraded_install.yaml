@@ -1,0 +1,28 @@
+name: Downgraded Install
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    downgraded_install:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v3
+
+            # see https://github.com/shivammathur/setup-php
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.2
+                    coverage: none
+
+            # composer install cache - https://github.com/ramsey/composer-install
+            -   uses: "ramsey/composer-install@v2"
+
+            -   run: composer require symfony/console:^4.4 --ansi
+
+            # make co-exist with other dependencies
+            -   run: composer require tomasvotruba/lines
+            -   run: vendor/bin/lines

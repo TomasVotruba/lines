@@ -1,33 +1,24 @@
-<?php declare(strict_types=1);
-namespace TomasVotruba\Lines;
+<?php
 
-use const PHP_EOL;
-use function printf;
-use TomasVotruba\Lines\Log\Csv as CsvPrinter;
+declare(strict_types=1);
+
+namespace TomasVotruba\Lines\CLI;
+
+use TomasVotruba\Lines\ArgumentsBuilder;
 use TomasVotruba\Lines\Log\Json as JsonPrinter;
 use TomasVotruba\Lines\Log\Text as TextPrinter;
-use TomasVotruba\Lines\Log\Xml as XmlPrinter;
 use SebastianBergmann\FileIterator\Facade;
-use SebastianBergmann\Version;
 
 final class Application
 {
-    private const VERSION = '8.0.2';
-
     public function run(array $argv): int
     {
-        $this->printVersion();
-
         try {
-            $arguments = (new ArgumentsBuilder)->build($argv);
+            $arguments = (new ArgumentsBuilder())->build($argv);
         } catch (Exception $e) {
             print PHP_EOL . $e->getMessage() . PHP_EOL;
 
             return 1;
-        }
-
-        if ($arguments->version()) {
-            return 0;
         }
 
         print PHP_EOL;
@@ -55,33 +46,13 @@ final class Application
 
         (new TextPrinter)->printResult($result, $arguments->countTests());
 
-        if ($arguments->csvLogfile()) {
-            $printer = new CsvPrinter;
-
-            $printer->printResult($arguments->csvLogfile(), $result);
-        }
-
         if ($arguments->jsonLogfile()) {
             $printer = new JsonPrinter;
 
             $printer->printResult($arguments->jsonLogfile(), $result);
         }
 
-        if ($arguments->xmlLogfile()) {
-            $printer = new XmlPrinter;
-
-            $printer->printResult($arguments->xmlLogfile(), $result);
-        }
-
         return 0;
-    }
-
-    private function printVersion(): void
-    {
-        printf(
-            'phploc %s by Chris Gmyr.' . PHP_EOL,
-            (new Version(self::VERSION, dirname(__DIR__)))->getVersion()
-        );
     }
 
     private function help(): void
@@ -103,9 +74,7 @@ Options for analysing files:
 
 Options for report generation:
 
-  --log-csv <file>  Write results in CSV format to <file>
   --log-json <file> Write results in JSON format to <file>
-  --log-xml <file>  Write results in XML format to <file>
 
 EOT;
     }

@@ -6,10 +6,13 @@ namespace TomasVotruba\Lines;
  */
 final class Analyser
 {
-    private readonly Collector $collector;
+    private Collector $collector;
 
     private array $classes = [];
 
+    /**
+     * @var array<string, bool>
+     */
     private array $superGlobals = [
         '$_ENV'             => true,
         '$_POST'            => true,
@@ -29,6 +32,11 @@ final class Analyser
     public function __construct()
     {
         $this->collector = new Collector;
+    }
+
+    public function reset(): void
+    {
+        $this->collector = new Collector();
     }
 
     /**

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines;
 
-use function dirname;
-
 final class Collector
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $counts = [];
 
     private int $currentClassLines = 0;
@@ -83,34 +84,9 @@ final class Collector
         $this->increment('function lines');
     }
 
-    public function addPossibleConstantAccesses($name): void
-    {
-        $this->addToArray('possible constant accesses', $name);
-    }
-
     public function addConstant($name): void
     {
         $this->addToArray('constant', $name);
-    }
-
-    public function incrementGlobalVariableAccesses(): void
-    {
-        $this->increment('global variable accesses');
-    }
-
-    public function incrementSuperGlobalVariableAccesses(): void
-    {
-        $this->increment('super global variable accesses');
-    }
-
-    public function incrementNonStaticAttributeAccesses(): void
-    {
-        $this->increment('non-static attribute accesses');
-    }
-
-    public function incrementStaticAttributeAccesses(): void
-    {
-        $this->increment('static attribute accesses');
     }
 
     public function incrementNonStaticMethodCalls(): void

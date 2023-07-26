@@ -300,17 +300,17 @@ final class Publisher
         return isset($this->counts[$key]) ? is_countable($this->counts[$key]) ? count($this->counts[$key]) : 0 : 0;
     }
 
-    private function getSum(string $key)
+    private function getSum(string $key): int
     {
         return isset($this->counts[$key]) ? array_sum($this->counts[$key]) : 0;
     }
 
-    private function getMaximum(string $key)
+    private function getMaximum(string $key): int
     {
         return isset($this->counts[$key]) ? max($this->counts[$key]) : 0;
     }
 
-    private function getMinimum(string $key)
+    private function getMinimum(string $key): int
     {
         return isset($this->counts[$key]) ? min($this->counts[$key]) : 0;
     }
@@ -320,7 +320,7 @@ final class Publisher
         return $this->counts[$key] ?? $default;
     }
 
-    private function divide($x, $y)
+    private function divide(int $x, int $y): float
     {
         return $y != 0 ? $x / $y : 0;
     }

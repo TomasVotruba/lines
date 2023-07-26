@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
+use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class TextOutputFormatter
 {
+    public function __construct(
+        private readonly SymfonyStyle $symfonyStyle,
+    ) {
+    }
+
     /**
      * @param array<string, mixed> $count
      */
@@ -21,6 +28,23 @@ final class TextOutputFormatter
                 $count['files']
             );
         }
+
+        $tableRows = [
+            ['Total lines', number_format($count['loc'], 0, '.', ' ')],
+            ['Comment lines', $count['cloc']],
+            ['Non-comment lines', $count['ncloc']],
+            ['Logical lines', $count['lloc']],
+        ];
+
+        $tableStyle = new TableStyle();
+        $tableStyle->setPadType(STR_PAD_LEFT);
+
+        $this->symfonyStyle->createTable()
+            ->setRows($tableRows)
+            ->setColumnStyle(1, $tableStyle)
+            ->render();
+
+        return;
 
         $format = <<<'END'
 Size

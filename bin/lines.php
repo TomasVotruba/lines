@@ -3,7 +3,7 @@
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use TomasVotruba\Lines\Console\Command\AnalyzeCommand;
+use TomasVotruba\Lines\Console\Command\MeasureCommand;
 
 $loaded = false;
 
@@ -25,7 +25,7 @@ if (!$loaded) {
 
 
 $application = new Application();
-$application->add(new AnalyzeCommand());
+$application->add(new MeasureCommand());
 
 $input = new ArgvInput();
 $output = new ConsoleOutput();

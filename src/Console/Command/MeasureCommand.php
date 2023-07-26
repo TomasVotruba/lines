@@ -14,7 +14,7 @@ use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
 use TomasVotruba\Lines\PhpFilesFinder;
 
-final class AnalyzeCommand extends Command
+final class MeasureCommand extends Command
 {
     private readonly PhpFilesFinder $phpFilesFinder;
 
@@ -30,8 +30,7 @@ final class AnalyzeCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('analyze');
-        $this->setAliases(['analyse']);
+        $this->setName('measure');
 
         $this->setDescription('Measure lines of code in given path(s)');
 

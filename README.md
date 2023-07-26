@@ -15,13 +15,13 @@ composer require tomasvotruba/lines --dev
 @todo json
 
 ```bash
-vendor/bin/lines analyze src --json
+vendor/bin/lines measure src --json
 ```
 
 Or via text output:
 
 ```bash
-vendor/bin/lines analyze src
+vendor/bin/lines measure src
 
 Directories                                          3
 Files                                               10

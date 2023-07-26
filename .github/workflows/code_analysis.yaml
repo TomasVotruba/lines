@@ -19,11 +19,11 @@ jobs:
                     -
                         name: 'Bare Run'
                         run: |
-                            bin/lines analyse vendor
+                            bin/lines measure vendor
                             composer install --no-dev --ansi
 
                             # try json output
-                            bin/lines analyse vendor --json
+                            bin/lines measure vendor --json
 
                     -
                         name: 'PHPStan'

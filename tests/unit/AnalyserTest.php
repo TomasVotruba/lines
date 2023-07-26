@@ -9,9 +9,7 @@ use function error_reporting;
 use function sprintf;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Cmgmyr\PHPLOC\Analyser
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Cmgmyr\PHPLOC\Analyser::class)]
 final class AnalyserTest extends TestCase
 {
     /**
@@ -239,9 +237,7 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $result['traits']);
     }
 
-    /**
-     * @ticket 64
-     */
+    #[\PHPUnit\Framework\Attributes\Ticket(64)]
     public function testIssue64IsFixed(): void
     {
         $result = $this->analyser->countFiles(
@@ -254,9 +250,7 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $result['cloc']);
     }
 
-    /**
-     * @ticket 112
-     */
+    #[\PHPUnit\Framework\Attributes\Ticket(112)]
     public function testIssue112IsFixed(): void
     {
         $result = $this->analyser->countFiles(
@@ -269,11 +263,8 @@ final class AnalyserTest extends TestCase
         $this->assertSame(5, $result['loc']);
     }
 
-    /**
-     * @ticket 126
-     *
-     * @dataProvider issue126Provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('issue126Provider')]
+    #[\PHPUnit\Framework\Attributes\Ticket(126)]
     public function testIssue126IsFixed($fileNumber, $cloc): void
     {
         $file   = __DIR__ . '/../_files/issue_126/issue_126_' . $fileNumber . '.php';
@@ -289,7 +280,7 @@ final class AnalyserTest extends TestCase
         $this->assertSame($cloc, $result['cloc'], $assertString);
     }
 
-    public function issue126Provider()
+    public static function issue126Provider()
     {
         // issue_126_X.php => CLOC
         return [
@@ -305,9 +296,8 @@ final class AnalyserTest extends TestCase
 
     /**
      * @requires PHP 7
-     *
-     * @ticket 138
      */
+    #[\PHPUnit\Framework\Attributes\Ticket(138)]
     public function testIssue138IsFixed(): void
     {
         error_reporting(E_ALL);
@@ -322,9 +312,7 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $result['classes']);
     }
 
-    /**
-     * @ticket 139
-     */
+    #[\PHPUnit\Framework\Attributes\Ticket(139)]
     public function testIssue139IsFixed(): void
     {
         error_reporting(E_ALL);

@@ -1,12 +1,4 @@
 <?php declare(strict_types=1);
-/*
- * This file is part of PHPLOC.
- *
- * (c) Chris Gmyr <cmgmyr@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 namespace Cmgmyr\PHPLOC;
 
 use function count;
@@ -18,9 +10,7 @@ use function trim;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Cmgmyr\PHPLOC\Log\Csv
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Cmgmyr\PHPLOC\Log\Csv::class)]
 final class CsvTest extends TestCase
 {
     /**

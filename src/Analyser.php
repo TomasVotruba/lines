@@ -8,6 +8,9 @@ final class Analyser
 {
     private Collector $collector;
 
+    /**
+     * @var array<string, string|null>
+     */
     private array $classes = [];
 
     /**
@@ -423,10 +426,7 @@ final class Analyser
         }
     }
 
-    /**
-     * @return string
-     */
-    private function getNamespaceName(array $tokens, int $i)
+    private function getNamespaceName(array $tokens, int $i): string|bool
     {
         if (isset($tokens[$i + 2][1])) {
             $namespace = $tokens[$i + 2][1];
@@ -445,12 +445,7 @@ final class Analyser
         return false;
     }
 
-    /**
-     * @param string $namespace
-     *
-     * @return string
-     */
-    private function getClassName($namespace, array $tokens, int $i): string
+    private function getClassName(string $namespace, array $tokens, int $i): string
     {
         $i += 2;
 
@@ -509,10 +504,6 @@ final class Analyser
         return str_ends_with((string) $this->classes[$className], 'testcase');
     }
 
-    /**
-     *
-     * @return bool
-     */
     private function isTestMethod(string $functionName, int $visibility, bool $static, array $tokens, int $currentToken): bool
     {
         if ($static || $visibility != T_PUBLIC) {
@@ -535,12 +526,7 @@ final class Analyser
                str_contains((string) $tokens[$currentToken][1], '@scenario');
     }
 
-    /**
-     * @param int $start
-     *
-     * @return bool
-     */
-    private function getNextNonWhitespaceTokenPos(array $tokens, $start)
+    private function getNextNonWhitespaceTokenPos(array $tokens, int $start): int|bool
     {
         if (isset($tokens[$start + 1])) {
             if (isset($tokens[$start + 1][0]) &&
@@ -555,10 +541,7 @@ final class Analyser
         return false;
     }
 
-    /**
-     * @return bool
-     */
-    private function getPreviousNonWhitespaceTokenPos(array $tokens, int $start)
+    private function getPreviousNonWhitespaceTokenPos(array $tokens, int $start): int|bool
     {
         if (isset($tokens[$start - 1])) {
             if (isset($tokens[$start - 1][0]) &&
@@ -573,10 +556,7 @@ final class Analyser
         return false;
     }
 
-    /**
-     * @return bool
-     */
-    private function getPreviousNonWhitespaceNonCommentTokenPos(array $tokens, int $start)
+    private function getPreviousNonWhitespaceNonCommentTokenPos(array $tokens, int $start): int|bool
     {
         $previousTokenIndex = $start - 1;
 
@@ -596,9 +576,6 @@ final class Analyser
         return false;
     }
 
-    /**
-     * @return bool
-     */
     private function isClassDeclaration(array $tokens, int $i): bool
     {
         $n = $this->getPreviousNonWhitespaceTokenPos($tokens, $i);

@@ -4,6 +4,9 @@ namespace TomasVotruba\Lines\Log;
 
 final class Json
 {
+    /**
+     * @param array<string, mixed> $count
+     */
     public function printResult(string $filename, array $count): void
     {
         $directories = [];

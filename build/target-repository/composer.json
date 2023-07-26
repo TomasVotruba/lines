@@ -1,17 +1,12 @@
 {
-    "name": "tomasvotruba/class-leak",
-    "description": "Detect leaking classes",
+    "name": "tomasvotruba/lines",
+    "description": "Measuring the size of PHP project",
     "license": "MIT",
+    "bin": [
+        "bin/lines",
+        "bin/lines.php"
+    ],
     "require": {
         "php": ">=7.2"
-    },
-    "bin": [
-        "bin/class-leak",
-        "bin/class-leak.php"
-    ],
-    "autoload": {
-        "psr-4": {
-            "TomasVotruba\\ClassLeak\\": "app"
-        }
     }
 }

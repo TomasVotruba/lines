@@ -24,7 +24,7 @@ final class Application
         } catch (\Throwable $throwable) {
             print PHP_EOL . $throwable->getMessage() . PHP_EOL;
 
-            return 1;
+            return StatusCode::ERROR;
         }
 
         print PHP_EOL;
@@ -32,7 +32,7 @@ final class Application
         if ($arguments->help()) {
             $this->help();
 
-            return 0;
+            return StatusCode::SUCCESS;
         }
 
         $files = (new Facade)->getFilesAsArray(

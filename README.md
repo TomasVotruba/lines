@@ -22,40 +22,40 @@ Files                                               10
 
 Size
   Lines of Code (LOC)                             1882
-  Comment Lines of Code (CLOC)                     255 (13.55%)
-  Non-Comment Lines of Code (NCLOC)               1627 (86.45%)
-  Logical Lines of Code (LLOC)                     377 (20.03%)
-    Classes                                        351 (93.10%)
+  Comment Lines of Code (CLOC)                     255 (13.5%)
+  Non-Comment Lines of Code (NCLOC)               1627 (86.4%)
+  Logical Lines of Code (LLOC)                     377 (20.0%)
+    Classes                                        351 (93.1%)
       Average Class Length                          35
         Minimum Class Length                         0
         Maximum Class Length                       172
       Average Method Length                          2
         Minimum Method Length                        1
         Maximum Method Length                      117
-    Functions                                        0 (0.00%)
+    Functions                                        0 (0.0%)
       Average Function Length                        0
-    Not in classes or functions                     26 (6.90%)
+    Not in classes or functions                     26 (6.9%)
 
 Structure
   Namespaces                                         3
   Interfaces                                         1
   Traits                                             0
   Classes                                            9
-    Abstract Classes                                 0 (0.00%)
-    Concrete Classes                                 9 (100.00%)
+    Abstract Classes                                 0 (0.0%)
+    Concrete Classes                                 9 (100.0%)
   Methods                                          130
     Scope
-      Non-Static Methods                           130 (100.00%)
-      Static Methods                                 0 (0.00%)
+      Non-Static Methods                           130 (100.0%)
+      Static Methods                                 0 (0.0%)
     Visibility
-      Public Methods                               103 (79.23%)
-      Non-Public Methods                            27 (20.77%)
+      Public Methods                               103 (79.2%)
+      Non-Public Methods                            27 (20.7%)
   Functions                                          0
-    Named Functions                                  0 (0.00%)
-    Anonymous Functions                              0 (0.00%)
+    Named Functions                                  0 (0.0%)
+    Anonymous Functions                              0 (0.0%)
   Constants                                          0
-    Global Constants                                 0 (0.00%)
-    Class Constants                                  0 (0.00%)
+    Global Constants                                 0 (0.0%)
+    Class Constants                                  0 (0.0%)
 ```
 
 

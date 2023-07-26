@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Cmgmyr\PHPLOC;
+namespace TomasVotruba\Lines;
 
 use const T_ABSTRACT;
 use const T_BOOLEAN_AND;

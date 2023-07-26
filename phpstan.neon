@@ -1,0 +1,6 @@
+parameters:
+    paths:
+        - src
+        - tests/unit
+
+    level: 8

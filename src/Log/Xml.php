@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Cmgmyr\PHPLOC\Log;
+namespace TomasVotruba\Lines\Log;
 
 use function file_put_contents;
 use DOMDocument;

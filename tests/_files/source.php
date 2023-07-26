@@ -7,7 +7,6 @@ namespace a\name\space;
 
 define('A_GLOBAL_CONSTANT', 'foo');
 
-use function time;
 
 function &a_global_function()
 {

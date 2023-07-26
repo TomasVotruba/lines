@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Cmgmyr\PHPLOC;
+namespace TomasVotruba\Lines;
 
 use function count;
 use function explode;
@@ -10,11 +10,11 @@ use function trim;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(\Cmgmyr\PHPLOC\Log\Csv::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\TomasVotruba\Lines\Log\Csv::class)]
 final class CsvTest extends TestCase
 {
     /**
-     * @var \Cmgmyr\PHPLOC\Log\Csv
+     * @var \TomasVotruba\Lines\Log\Csv
      */
     private $single;
 
@@ -74,7 +74,7 @@ final class CsvTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->single = new \Cmgmyr\PHPLOC\Log\Csv;
+        $this->single = new \TomasVotruba\Lines\Log\Csv;
     }
 
     public function testPrintedResultContainsHeadings(): void

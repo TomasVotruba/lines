@@ -286,9 +286,6 @@ final class AnalyserTest extends TestCase
         ];
     }
 
-    /**
-     * @requires PHP 7
-     */
     public function testIssue138IsFixed(): void
     {
         error_reporting(E_ALL);

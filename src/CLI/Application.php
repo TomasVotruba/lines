@@ -13,6 +13,7 @@ use TomasVotruba\Lines\Log\Text as TextPrinter;
 final class Application
 {
     /**
+     * @api run in bin file
      * @param mixed[] $argv
      */
     public function run(array $argv): int

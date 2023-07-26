@@ -18,11 +18,6 @@ final class Analyser
         $this->collector = new Collector();
     }
 
-    public function reset(): void
-    {
-        $this->collector = new Collector();
-    }
-
     /**
      * @param string[] $files
      *

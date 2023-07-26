@@ -1,5 +1,7 @@
 <?php
 
+use TomasVotruba\Lines\CLI\Application;
+
 $loaded = false;
 
 foreach (array(__DIR__ . '/../../autoload.php', __DIR__ . '/vendor/autoload.php') as $file) {
@@ -18,5 +20,7 @@ if (!$loaded) {
     );
 }
 
-// @todo
-exit((new \TomasVotruba\Lines\Application)->run($_SERVER['argv']));
+$application = new Application();
+$statusCode = $application->run($_SERVER['argv']);
+
+exit($statusCode);

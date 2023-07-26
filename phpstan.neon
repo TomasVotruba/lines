@@ -1,5 +1,6 @@
 parameters:
     paths:
+        - bin
         - src
         - tests
 

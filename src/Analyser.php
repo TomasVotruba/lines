@@ -42,6 +42,7 @@ final class Analyser
         Assert::fileExists($filename);
 
         $buffer = file_get_contents($filename);
+        Assert::string($buffer);
 
         $this->collector->incrementLines(substr_count($buffer, "\n"));
         $tokens    = token_get_all($buffer);
@@ -119,7 +120,11 @@ final class Analyser
             switch ($token) {
                 case T_NAMESPACE:
                     $namespace = $this->getNamespaceName($tokens, $i);
-                    $this->collector->addNamespace($namespace);
+
+                    if (is_string($namespace)) {
+                        $this->collector->addNamespace($namespace);
+                    }
+
                     $isLogicalLine = false;
 
                     break;
@@ -169,7 +174,7 @@ final class Analyser
 
                     $next = $this->getNextNonWhitespaceTokenPos($tokens, $i);
 
-                    if ($tokens[$next] === '&' || (is_array($tokens[$next]) && $tokens[$next][1] === '&')) {
+                    if (is_int($next) && ($tokens[$next] === '&' || (is_array($tokens[$next]) && $tokens[$next][1] === '&'))) {
                         $next = $this->getNextNonWhitespaceTokenPos($tokens, $next);
                     }
 
@@ -201,23 +206,21 @@ final class Analyser
                                     continue;
                                 }
 
-                                if (isset($tokens[$j][0])) {
-                                    switch ($tokens[$j][0]) {
-                                        case T_PRIVATE:
-                                            $visibility = T_PRIVATE;
+                                switch ($tokens[$j][0]) {
+                                    case T_PRIVATE:
+                                        $visibility = T_PRIVATE;
 
-                                            break;
+                                        break;
 
-                                        case T_PROTECTED:
-                                            $visibility = T_PROTECTED;
+                                    case T_PROTECTED:
+                                        $visibility = T_PROTECTED;
 
-                                            break;
+                                        break;
 
-                                        case T_STATIC:
-                                            $static = true;
+                                    case T_STATIC:
+                                        $static = true;
 
-                                            break;
-                                    }
+                                        break;
                                 }
                             }
 
@@ -313,6 +316,8 @@ final class Analyser
                 case T_DOUBLE_COLON:
                 case T_OBJECT_OPERATOR:
                     $n  = $this->getNextNonWhitespaceTokenPos($tokens, $i);
+                    Assert::integer($n);
+
                     $nn = $this->getNextNonWhitespaceTokenPos($tokens, $n);
 
                     if ($n && $nn &&
@@ -341,7 +346,7 @@ final class Analyser
     /**
      * @param array<int, mixed> $tokens
      */
-    private function getNamespaceName(array $tokens, int $i): string|bool
+    private function getNamespaceName(array $tokens, int $i): ?string
     {
         if (isset($tokens[$i + 2][1])) {
             $namespace = $tokens[$i + 2][1];
@@ -357,7 +362,7 @@ final class Analyser
             return $namespace;
         }
 
-        return false;
+        return null;
     }
 
     /**

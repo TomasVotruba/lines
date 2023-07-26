@@ -26,12 +26,14 @@ abstract class AnAbstractClass
  */
 class AClass extends AnAbstractClass implements AnInterface
 {
-    const A_CLASS_CONSTANT = 'bar';
+    public const A_CLASS_CONSTANT = 'bar';
 
-    private static $a = array();
+    private static array $a = [];
 
     public static function aStaticMethod()
     {
+        $o = null;
+        $m = null;
         global $foo;
 
         $a = $_GET['a'];
@@ -45,7 +47,8 @@ class AClass extends AnAbstractClass implements AnInterface
 
     public function aPublicMethod()
     {
-        $a = true ? true : false;
+        $m = null;
+        $a = true ?: false;
 
         c::m();
         c::$m();
@@ -56,6 +59,8 @@ class AClass extends AnAbstractClass implements AnInterface
 
     protected function aProtectedMethod()
     {
+        $c = null;
+        $m = null;
         if (true) {
         }
 
@@ -67,6 +72,7 @@ class AClass extends AnAbstractClass implements AnInterface
 
     private function aPrivateMethod()
     {
+        $great = null;
         $function = function() {};
         echo "This is {$great}";
         echo "This is ${great}";

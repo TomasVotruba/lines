@@ -57,20 +57,11 @@ use function trim;
 
 final class Analyser
 {
-    /**
-     * @var Collector
-     */
-    private $collector;
+    private Collector $collector;
 
-    /**
-     * @var array
-     */
-    private $classes = [];
+    private array $classes = [];
 
-    /**
-     * @var array
-     */
-    private $superGlobals = [
+    private array $superGlobals = [
         '$_ENV'             => true,
         '$_POST'            => true,
         '$_GET'             => true,

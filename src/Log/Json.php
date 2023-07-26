@@ -1,10 +1,6 @@
 <?php declare(strict_types=1);
-namespace TomasVotruba\Lines\Log;
 
-use const JSON_PRETTY_PRINT;
-use function array_merge;
-use function file_put_contents;
-use function json_encode;
+namespace TomasVotruba\Lines\Log;
 
 final class Json
 {

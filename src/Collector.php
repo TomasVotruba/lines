@@ -8,17 +8,17 @@ use function dirname;
 
 final class Collector
 {
-    private $counts = [];
+    private array $counts = [];
 
-    private $currentClassComplexity = 0;
+    private int $currentClassComplexity = 0;
 
-    private $currentClassLines = 0;
+    private int $currentClassLines = 0;
 
-    private $currentMethodComplexity = 0;
+    private int $currentMethodComplexity = 0;
 
-    private $currentMethodLines = 0;
+    private int $currentMethodLines = 0;
 
-    private $currentNumberOfMethods = 0;
+    private int $currentNumberOfMethods = 0;
 
     public function getPublisher()
     {

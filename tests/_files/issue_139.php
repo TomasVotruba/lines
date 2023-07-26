@@ -4,9 +4,7 @@ class SomeClass
 {
     public function someFunction($in)
     {
-        function () use ($in) {
-            return '';
-        };
+        fn() => '';
     }
 
     public function someOtherFunction()

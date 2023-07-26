@@ -288,8 +288,6 @@ final class AnalyserTest extends TestCase
 
     public function testIssue138IsFixed(): void
     {
-        error_reporting(E_ALL);
-
         $result = $this->analyser->countFiles(
             [
                 __DIR__ . '/../_files/issue_138.php',
@@ -302,8 +300,6 @@ final class AnalyserTest extends TestCase
 
     public function testIssue139IsFixed(): void
     {
-        error_reporting(E_ALL);
-
         $result = $this->analyser->countFiles(
             [
                 __DIR__ . '/../_files/issue_139.php',

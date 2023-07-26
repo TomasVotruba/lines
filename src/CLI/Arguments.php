@@ -6,57 +6,33 @@ final class Arguments
     /**
      * @psalm-var list<string>
      */
-    private $directories;
+    private array $directories;
 
     /**
      * @psalm-var list<string>
      */
-    private $suffixes;
+    private array $suffixes;
 
     /**
      * @psalm-var list<string>
      */
-    private $exclude;
+    private array $exclude;
 
-    /**
-     * @var bool
-     */
-    private $countTests;
+    private bool $countTests;
 
-    /**
-     * @var ?string
-     */
-    private $csvLogfile;
+    private ?string $jsonLogfile = null;
 
-    /**
-     * @var ?string
-     */
-    private $jsonLogfile;
+    private bool $help;
 
-    /**
-     * @var ?string
-     */
-    private $xmlLogfile;
+    private bool $version;
 
-    /**
-     * @var bool
-     */
-    private $help;
-
-    /**
-     * @var bool
-     */
-    private $version;
-
-    public function __construct(array $directories, array $suffixes, array $exclude, bool $countTests, ?string $csvLogfile, ?string $jsonLogfile, ?string $xmlLogfile, bool $help, bool $version)
+    public function __construct(array $directories, array $suffixes, array $exclude, bool $countTests, ?string $jsonLogfile, bool $help, bool $version)
     {
         $this->directories = $directories;
         $this->suffixes    = $suffixes;
         $this->exclude     = $exclude;
         $this->countTests  = $countTests;
-        $this->csvLogfile  = $csvLogfile;
         $this->jsonLogfile = $jsonLogfile;
-        $this->xmlLogfile  = $xmlLogfile;
         $this->help        = $help;
         $this->version     = $version;
     }
@@ -90,19 +66,9 @@ final class Arguments
         return $this->countTests;
     }
 
-    public function csvLogfile(): ?string
-    {
-        return $this->csvLogfile;
-    }
-
     public function jsonLogfile(): ?string
     {
         return $this->jsonLogfile;
-    }
-
-    public function xmlLogfile(): ?string
-    {
-        return $this->xmlLogfile;
     }
 
     public function help(): bool

@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines;
 
-use function array_intersect;
-use function array_sum;
-use function count;
-use function max;
-use function min;
-
 final class Publisher
 {
     public function __construct(

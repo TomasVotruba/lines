@@ -1,58 +1,6 @@
 <?php declare(strict_types=1);
 namespace TomasVotruba\Lines;
 
-use const T_ABSTRACT;
-use const T_BOOLEAN_AND;
-use const T_BOOLEAN_OR;
-use const T_CASE;
-use const T_CATCH;
-use const T_CLASS;
-use const T_COMMENT;
-use const T_CONST;
-use const T_CONSTANT_ENCAPSED_STRING;
-use const T_CURLY_OPEN;
-use const T_DECLARE;
-use const T_DOC_COMMENT;
-use const T_DOLLAR_OPEN_CURLY_BRACES;
-use const T_DOUBLE_COLON;
-use const T_ELSEIF;
-use const T_EXTENDS;
-use const T_FINAL;
-use const T_FOR;
-use const T_FOREACH;
-use const T_FUNCTION;
-use const T_GLOBAL;
-use const T_IF;
-use const T_INTERFACE;
-use const T_LOGICAL_AND;
-use const T_LOGICAL_OR;
-use const T_NAMESPACE;
-use const T_NEW;
-use const T_NS_SEPARATOR;
-use const T_OBJECT_OPERATOR;
-use const T_PRIVATE;
-use const T_PROTECTED;
-use const T_PUBLIC;
-use const T_STATIC;
-use const T_STRING;
-use const T_TRAIT;
-use const T_USE;
-use const T_VARIABLE;
-use const T_WHILE;
-use const T_WHITESPACE;
-use function array_pop;
-use function count;
-use function file_get_contents;
-use function in_array;
-use function is_array;
-use function is_string;
-use function rtrim;
-use function str_replace;
-use function strtolower;
-use function substr_count;
-use function token_get_all;
-use function trim;
-
 /**
  * @see \TomasVotruba\Lines\Tests\AnalyserTest
  */

@@ -24,11 +24,11 @@ final class ArgumentsBuilder
                     'version',
                 ]
             );
-        } catch (CliParserException $e) {
+        } catch (CliParserException $cliParserException) {
             throw new ArgumentsBuilderException(
-                $e->getMessage(),
-                (int) $e->getCode(),
-                $e
+                $cliParserException->getMessage(),
+                (int) $cliParserException->getCode(),
+                $cliParserException
             );
         }
 

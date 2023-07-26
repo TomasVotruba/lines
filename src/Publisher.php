@@ -162,7 +162,7 @@ final class Publisher
         return $this->getGlobalConstantAccesses() + $this->getGlobalVariableAccesses() + $this->getSuperGlobalVariableAccesses();
     }
 
-    public function getGlobalConstantAccesses()
+    public function getGlobalConstantAccesses(): int
     {
         return count(array_intersect($this->getValue('possible constant accesses', []), $this->getValue('constant', [])));
     }
@@ -207,7 +207,7 @@ final class Publisher
         return $this->getValue('static method calls');
     }
 
-    public function getNamespaces()
+    public function getNamespaces(): int
     {
         return $this->getCount('namespaces');
     }
@@ -332,7 +332,7 @@ final class Publisher
         return $this->getValue('test methods');
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'files'                       => $this->getFiles(),
@@ -401,32 +401,32 @@ final class Publisher
         ];
     }
 
-    private function getAverage($key)
+    private function getAverage(string $key)
     {
         return $this->divide($this->getSum($key), $this->getCount($key));
     }
 
-    private function getCount($key)
+    private function getCount(string $key): int
     {
-        return isset($this->counts[$key]) ? count($this->counts[$key]) : 0;
+        return isset($this->counts[$key]) ? is_countable($this->counts[$key]) ? count($this->counts[$key]) : 0 : 0;
     }
 
-    private function getSum($key)
+    private function getSum(string $key)
     {
         return isset($this->counts[$key]) ? array_sum($this->counts[$key]) : 0;
     }
 
-    private function getMaximum($key)
+    private function getMaximum(string $key)
     {
         return isset($this->counts[$key]) ? max($this->counts[$key]) : 0;
     }
 
-    private function getMinimum($key)
+    private function getMinimum(string $key)
     {
         return isset($this->counts[$key]) ? min($this->counts[$key]) : 0;
     }
 
-    private function getValue($key, $default = 0)
+    private function getValue(string $key, $default = 0)
     {
         return $this->counts[$key] ?? $default;
     }

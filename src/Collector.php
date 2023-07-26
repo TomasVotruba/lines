@@ -20,7 +20,7 @@ final class Collector
 
     private int $currentNumberOfMethods = 0;
 
-    public function getPublisher()
+    public function getPublisher(): Publisher
     {
         return new Publisher($this->counts);
     }
@@ -52,6 +52,7 @@ final class Collector
             $this->addToArray('class complexity', $this->currentClassComplexity);
             $this->addToArray('class lines', $this->currentClassLines);
         }
+
         $this->currentClassComplexity = 0;
         $this->currentClassLines      = 0;
         $this->currentNumberOfMethods = 0;
@@ -64,12 +65,12 @@ final class Collector
 
     public function currentClassIncrementComplexity(): void
     {
-        $this->currentClassComplexity++;
+        ++$this->currentClassComplexity;
     }
 
     public function currentClassIncrementLines(): void
     {
-        $this->currentClassLines++;
+        ++$this->currentClassLines;
     }
 
     public function currentMethodStart(): void
@@ -80,18 +81,18 @@ final class Collector
 
     public function currentClassIncrementMethods(): void
     {
-        $this->currentNumberOfMethods++;
+        ++$this->currentNumberOfMethods;
     }
 
     public function currentMethodIncrementComplexity(): void
     {
-        $this->currentMethodComplexity++;
+        ++$this->currentMethodComplexity;
         $this->increment('total method complexity');
     }
 
     public function currentMethodIncrementLines(): void
     {
-        $this->currentMethodLines++;
+        ++$this->currentMethodLines;
     }
 
     public function currentMethodStop(): void
@@ -240,25 +241,25 @@ final class Collector
         $this->increment('test methods');
     }
 
-    private function addUnique($key, $name): void
+    private function addUnique(string $key, $name): void
     {
         $this->check($key, []);
         $this->counts[$key][$name] = true;
     }
 
-    private function addToArray($key, $value): void
+    private function addToArray(string $key, $value): void
     {
         $this->check($key, []);
         $this->counts[$key][] = $value;
     }
 
-    private function increment($key, $number = 1): void
+    private function increment(string $key, $number = 1): void
     {
         $this->check($key, 0);
         $this->counts[$key] += $number;
     }
 
-    private function check($key, $default): void
+    private function check(string $key, array|int $default): void
     {
         if (!isset($this->counts[$key])) {
             $this->counts[$key] = $default;

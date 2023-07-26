@@ -21,6 +21,10 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->sets([
         LevelSetList::UP_TO_PHP_81,
+        \Rector\Set\ValueObject\SetList::CODE_QUALITY,
+        \Rector\Set\ValueObject\SetList::CODING_STYLE,
+        \Rector\Set\ValueObject\SetList::TYPE_DECLARATION,
         \Rector\PHPUnit\Set\PHPUnitSetList::PHPUNIT_100,
+        \Rector\PHPUnit\Set\PHPUnitSetList::PHPUNIT_CODE_QUALITY,
     ]);
 };

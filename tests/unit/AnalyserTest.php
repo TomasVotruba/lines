@@ -257,7 +257,7 @@ final class AnalyserTest extends TestCase
     }
 
     #[DataProvider('issue126Provider')]
-    public function testIssue126IsFixed($fileNumber, $cloc): void
+    public function testIssue126IsFixed($fileNumber, mixed $cloc): void
     {
         $file   = __DIR__ . '/../_files/issue_126/issue_126_' . $fileNumber . '.php';
         $result = $this->analyser->countFiles([$file], false);
@@ -272,7 +272,7 @@ final class AnalyserTest extends TestCase
         $this->assertSame($cloc, $result['cloc'], $assertString);
     }
 
-    public static function issue126Provider()
+    public static function issue126Provider(): array
     {
         // issue_126_X.php => CLOC
         return [
@@ -300,12 +300,9 @@ final class AnalyserTest extends TestCase
 
     public function testIssue139IsFixed(): void
     {
-        $result = $this->analyser->countFiles(
-            [
-                __DIR__ . '/../_files/issue_139.php',
-            ],
-            false
-        );
+        $result = $this->analyser->countFiles([
+            __DIR__ . '/../_files/issue_139.php',
+        ],false);
 
         $this->assertSame(1, $result['anonymousFunctions']);
     }

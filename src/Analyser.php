@@ -53,6 +53,9 @@ use function substr_count;
 use function token_get_all;
 use function trim;
 
+/**
+ * @see \TomasVotruba\Lines\Tests\AnalyserTest
+ */
 final class Analyser
 {
     private readonly Collector $collector;
@@ -80,7 +83,7 @@ final class Analyser
         $this->collector = new Collector;
     }
 
-    public function countFiles(array $files, bool $countTests)
+    public function countFiles(array $files, bool $countTests): array
     {
         foreach ($files as $file) {
             $this->countFile($file, $countTests);
@@ -95,34 +98,25 @@ final class Analyser
         $numTokens = count($tokens);
         $namespace = false;
 
-        for ($i = 0; $i < $numTokens; $i++) {
+        for ($i = 0; $i < $numTokens; ++$i) {
             if (is_string($tokens[$i])) {
                 continue;
             }
 
-            switch ($tokens[$i][0]) {
-                case T_NAMESPACE:
-                    $namespace = $this->getNamespaceName($tokens, $i);
-
+            if ($tokens[$i][0] == T_NAMESPACE) {
+                $namespace = $this->getNamespaceName($tokens, $i);
+            } elseif ($tokens[$i][0] == T_CLASS) {
+                if (!$this->isClassDeclaration($tokens, $i)) {
                     break;
-
-                case T_CLASS:
-                    if (!$this->isClassDeclaration($tokens, $i)) {
-                        break;
-                    }
-
-                    $className = $this->getClassName($namespace, $tokens, $i);
-
-                    if (isset($tokens[$i + 4]) && is_array($tokens[$i + 4]) &&
-                        $tokens[$i + 4][0] === T_EXTENDS) {
-                        $parent = $this->getClassName($namespace, $tokens, $i + 4);
-                    } else {
-                        $parent = null;
-                    }
-
-                    $this->classes[$className] = $parent;
-
-                    break;
+                }
+                $className = $this->getClassName($namespace, $tokens, $i);
+                if (isset($tokens[$i + 4]) && is_array($tokens[$i + 4]) &&
+                    $tokens[$i + 4][0] === T_EXTENDS) {
+                    $parent = $this->getClassName($namespace, $tokens, $i + 4);
+                } else {
+                    $parent = null;
+                }
+                $this->classes[$className] = $parent;
             }
         }
     }
@@ -130,10 +124,9 @@ final class Analyser
     /**
      * Processes a single file.
      *
-     * @param string $filename
      * @param bool   $countTests
      */
-    public function countFile($filename, $countTests): void
+    public function countFile(string $filename, $countTests): void
     {
         if ($countTests) {
             $this->preProcessFile($filename);
@@ -158,7 +151,7 @@ final class Analyser
         $isLogicalLine = true;
         $isInMethod    = false;
 
-        for ($i = 0; $i < $numTokens; $i++) {
+        for ($i = 0; $i < $numTokens; ++$i) {
             if (is_string($tokens[$i])) {
                 $token = trim($tokens[$i]);
 
@@ -176,6 +169,7 @@ final class Analyser
 
                         $this->collector->incrementLogicalLines();
                     }
+
                     $isLogicalLine = true;
                 } elseif ($token === '?' && !$testClass) {
                     if ($className !== null) {
@@ -245,25 +239,23 @@ final class Analyser
                         $this->collector->incrementTraits();
                     } elseif ($token === T_INTERFACE) {
                         $this->collector->incrementInterfaces();
+                    } elseif ($countTests && $this->isTestClass($className)) {
+                        $testClass = true;
+                        $this->collector->incrementTestClasses();
                     } else {
-                        if ($countTests && $this->isTestClass($className)) {
-                            $testClass = true;
-                            $this->collector->incrementTestClasses();
-                        } else {
-                            $classModifierToken = $this->getPreviousNonWhitespaceNonCommentTokenPos($tokens, $i);
+                        $classModifierToken = $this->getPreviousNonWhitespaceNonCommentTokenPos($tokens, $i);
 
-                            if ($classModifierToken !== false &&
-                                $tokens[$classModifierToken][0] === T_ABSTRACT
-                            ) {
-                                $this->collector->incrementAbstractClasses();
-                            } elseif (
-                                $classModifierToken !== false &&
-                                $tokens[$classModifierToken][0] === T_FINAL
-                            ) {
-                                $this->collector->incrementFinalClasses();
-                            } else {
-                                $this->collector->incrementNonFinalClasses();
-                            }
+                        if ($classModifierToken &&
+                            $tokens[$classModifierToken][0] === T_ABSTRACT
+                        ) {
+                            $this->collector->incrementAbstractClasses();
+                        } elseif (
+                            $classModifierToken &&
+                            $tokens[$classModifierToken][0] === T_FINAL
+                        ) {
+                            $this->collector->incrementFinalClasses();
+                        } else {
+                            $this->collector->incrementNonFinalClasses();
                         }
                     }
 
@@ -301,7 +293,7 @@ final class Analyser
                             $static     = false;
                             $visibility = T_PUBLIC;
 
-                            for ($j = $i; $j > 0; $j--) {
+                            for ($j = $i; $j > 0; --$j) {
                                 if (is_string($tokens[$j])) {
                                     if ($tokens[$j] === '{' ||
                                         $tokens[$j] === '}' ||
@@ -405,7 +397,7 @@ final class Analyser
                 case T_CONST:
                     $possibleScopeToken = $this->getPreviousNonWhitespaceNonCommentTokenPos($tokens, $i);
 
-                    if ($possibleScopeToken !== false &&
+                    if ($possibleScopeToken &&
                         in_array($tokens[$possibleScopeToken][0], [T_PRIVATE, T_PROTECTED], true)
                     ) {
                         $this->collector->incrementNonPublicClassConstants();
@@ -424,12 +416,12 @@ final class Analyser
                         while (isset($tokens[$j]) && $tokens[$j] !== ';') {
                             if (is_array($tokens[$j]) &&
                                 $tokens[$j][0] === T_CONSTANT_ENCAPSED_STRING) {
-                                $this->collector->addConstant(str_replace('\'', '', $tokens[$j][1]));
+                                $this->collector->addConstant(str_replace("'", '', $tokens[$j][1]));
 
                                 break;
                             }
 
-                            $j++;
+                            ++$j;
                         }
                     } else {
                         $this->collector->addPossibleConstantAccesses($value);
@@ -452,13 +444,11 @@ final class Analyser
                         } else {
                             $this->collector->incrementNonStaticMethodCalls();
                         }
-                    } else {
-                        if ($token === T_DOUBLE_COLON &&
-                            $tokens[$n][0] === T_VARIABLE) {
-                            $this->collector->incrementStaticAttributeAccesses();
-                        } elseif ($token === T_OBJECT_OPERATOR) {
-                            $this->collector->incrementNonStaticAttributeAccesses();
-                        }
+                    } elseif ($token === T_DOUBLE_COLON &&
+                        $tokens[$n][0] === T_VARIABLE) {
+                        $this->collector->incrementStaticAttributeAccesses();
+                    } elseif ($token === T_OBJECT_OPERATOR) {
+                        $this->collector->incrementNonStaticAttributeAccesses();
                     }
 
                     break;
@@ -487,11 +477,9 @@ final class Analyser
     }
 
     /**
-     * @param int $i
-     *
      * @return string
      */
-    private function getNamespaceName(array $tokens, $i)
+    private function getNamespaceName(array $tokens, int $i)
     {
         if (isset($tokens[$i + 2][1])) {
             $namespace = $tokens[$i + 2][1];
@@ -512,11 +500,10 @@ final class Analyser
 
     /**
      * @param string $namespace
-     * @param int    $i
      *
      * @return string
      */
-    private function getClassName($namespace, array $tokens, $i)
+    private function getClassName($namespace, array $tokens, int $i): string
     {
         $i += 2;
 
@@ -540,18 +527,16 @@ final class Analyser
     }
 
     /**
-     * @param string $className
-     *
      * @return bool
      */
-    private function isTestClass($className)
+    private function isTestClass(string $className): bool
     {
         $parent = $this->classes[$className];
         $count  = 0;
 
         // Check ancestry for PHPUnit_Framework_TestCase.
         while ($parent !== null) {
-            $count++;
+            ++$count;
 
             if ($count > 100) {
                 // Prevent infinite loops and just bail
@@ -581,14 +566,10 @@ final class Analyser
     }
 
     /**
-     * @param string $functionName
-     * @param int    $visibility
-     * @param bool   $static
-     * @param int    $currentToken
      *
      * @return bool
      */
-    private function isTestMethod($functionName, $visibility, $static, array $tokens, $currentToken)
+    private function isTestMethod(string $functionName, int $visibility, bool $static, array $tokens, int $currentToken): bool
     {
         if ($static || $visibility != T_PUBLIC) {
             return false;
@@ -603,7 +584,7 @@ final class Analyser
                 return false;
             }
 
-            $currentToken--;
+            --$currentToken;
         }
 
         return str_contains((string) $tokens[$currentToken][1], '@test') ||
@@ -631,11 +612,9 @@ final class Analyser
     }
 
     /**
-     * @param int $start
-     *
      * @return bool
      */
-    private function getPreviousNonWhitespaceTokenPos(array $tokens, $start)
+    private function getPreviousNonWhitespaceTokenPos(array $tokens, int $start)
     {
         if (isset($tokens[$start - 1])) {
             if (isset($tokens[$start - 1][0]) &&
@@ -674,11 +653,9 @@ final class Analyser
     }
 
     /**
-     * @param int $i
-     *
      * @return bool
      */
-    private function isClassDeclaration(array $tokens, $i)
+    private function isClassDeclaration(array $tokens, int $i): bool
     {
         $n = $this->getPreviousNonWhitespaceTokenPos($tokens, $i);
 

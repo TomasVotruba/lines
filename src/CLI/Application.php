@@ -15,8 +15,8 @@ final class Application
     {
         try {
             $arguments = (new ArgumentsBuilder())->build($argv);
-        } catch (Exception $e) {
-            print PHP_EOL . $e->getMessage() . PHP_EOL;
+        } catch (Exception $exception) {
+            print PHP_EOL . $exception->getMessage() . PHP_EOL;
 
             return 1;
         }
@@ -36,7 +36,7 @@ final class Application
             $arguments->exclude()
         );
 
-        if (empty($files)) {
+        if ($files === []) {
             print 'No files found to scan' . PHP_EOL;
 
             return 1;

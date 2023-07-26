@@ -41,6 +41,7 @@
         "rector": "vendor/bin/rector --dry-run --ansi"
     },
     "config": {
+        "platform-check": false,
         "allow-plugins": {
             "phpstan/extension-installer": true
         }

@@ -5,7 +5,10 @@ use const PHP_EOL;
 
 final class Text
 {
-    public function printResult(array $count, bool $printTests): void
+    /**
+     * @param array<string, mixed> $count
+     */
+    public function printResult(array $count): void
     {
         if ($count['directories'] > 0) {
             \printf(
@@ -172,15 +175,5 @@ END;
             $count['nonPublicClassConstants'],
             $count['classConstants'] > 0 ? ($count['nonPublicClassConstants'] / $count['classConstants']) * 100 : 0
         );
-
-        if ($printTests) {
-            \printf(
-                PHP_EOL . 'Tests' . PHP_EOL .
-                '  Classes                                   %10d' . PHP_EOL .
-                '  Methods                                   %10d' . PHP_EOL,
-                $count['testClasses'],
-                $count['testMethods']
-            );
-        }
     }
 }

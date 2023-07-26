@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\CLI;
 
+use TomasVotruba\Lines\Analyser;
+use TomasVotruba\Lines\Enum\StatusCode;
 use TomasVotruba\Lines\Log\Json as JsonPrinter;
 use TomasVotruba\Lines\Log\Text as TextPrinter;
 use SebastianBergmann\FileIterator\Facade;
@@ -42,21 +44,21 @@ final class Application
 
         if ($files === []) {
             print 'No files found to scan' . PHP_EOL;
-
-            return 1;
+            return StatusCode::ERROR;
         }
 
-        $result = (new Analyser)->countFiles($files, $arguments->countTests());
+        $analyser = new Analyser();
+        $result = $analyser->countFiles($files);
 
-        (new TextPrinter)->printResult($result, $arguments->countTests());
+        $textPrinter = new TextPrinter;
+        $textPrinter->printResult($result);
 
         if ($arguments->jsonLogfile()) {
             $printer = new JsonPrinter;
-
             $printer->printResult($arguments->jsonLogfile(), $result);
         }
 
-        return 0;
+        return StatusCode::SUCCESS;
     }
 
     private function help(): void
@@ -75,7 +77,6 @@ Options for selecting files:
 Options for report generation:
 
   --log-json <file> Write results in JSON format to <file>
-
 EOT;
     }
 }

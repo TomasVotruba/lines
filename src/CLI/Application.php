@@ -36,12 +36,12 @@ final class Application
             return StatusCode::SUCCESS;
         }
 
-        $files = (new Facade())->getFilesAsArray(
-            $arguments->directories(),
-            $arguments->suffixes(),
-            '',
-            $arguments->exclude()
-        );
+        $files = [];
+
+        foreach ($arguments->directories() as $directory) {
+            $currentFiles = (new Facade())->getFilesAsArray($directory, $arguments->suffixes(), '', $arguments->exclude());
+            $files = array_merge($files, $currentFiles);
+        }
 
         if ($files === []) {
             print 'No files found to scan' . PHP_EOL;

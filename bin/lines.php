@@ -4,9 +4,9 @@ use TomasVotruba\Lines\CLI\Application;
 
 $loaded = false;
 
-foreach (array(__DIR__ . '/../../autoload.php', __DIR__ . '/vendor/autoload.php') as $file) {
-    if (file_exists($file)) {
-        require $file;
+foreach (array(__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php') as $filePath) {
+    if (file_exists($filePath)) {
+        require $filePath;
         $loaded = true;
         break;
     }

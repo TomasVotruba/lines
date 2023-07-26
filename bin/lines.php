@@ -1,6 +1,9 @@
 <?php
 
-use TomasVotruba\Lines\CLI\Application;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use TomasVotruba\Lines\Console\Command\AnalyzeCommand;
 
 $loaded = false;
 
@@ -20,7 +23,12 @@ if (!$loaded) {
     );
 }
 
-$application = new Application();
-$statusCode = $application->run($_SERVER['argv']);
 
-exit($statusCode);
+$application = new Application();
+$application->add(new AnalyzeCommand());
+
+$input = new ArgvInput();
+$output = new ConsoleOutput();
+
+$exitCode = $application->run($input, $output);
+exit($exitCode);

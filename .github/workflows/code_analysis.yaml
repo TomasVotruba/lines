@@ -19,9 +19,11 @@ jobs:
                     -
                         name: 'Bare Run'
                         run: |
-                            php bin/lines vendor
+                            bin/lines analyse vendor
                             composer install --no-dev --ansi
-                            php bin/lines vendor
+
+                            # try json output
+                            bin/lines analyse vendor --json
 
                     -
                         name: 'PHPStan'

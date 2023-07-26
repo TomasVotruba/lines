@@ -25,7 +25,7 @@ final class Collector
     public function addFile(string $filename): void
     {
         $this->increment('files');
-        $this->addUnique('directories', dirname((string) $filename));
+        $this->addUnique('directories', dirname($filename));
     }
 
     public function incrementLines(int $number): void

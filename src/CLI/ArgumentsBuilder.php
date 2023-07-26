@@ -29,7 +29,7 @@ final class ArgumentsBuilder
         } catch (CliParserException $cliParserException) {
             throw new ShouldNotHappenException(
                 $cliParserException->getMessage(),
-                (int) $cliParserException->getCode(),
+                $cliParserException->getCode(),
                 $cliParserException
             );
         }

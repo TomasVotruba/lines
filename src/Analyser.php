@@ -11,7 +11,7 @@ use Webmozart\Assert\Assert;
  */
 final class Analyser
 {
-    private Collector $collector;
+    private readonly Collector $collector;
 
     public function __construct()
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\CLI;
 
+use Throwable;
 use SebastianBergmann\FileIterator\Facade;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Enum\StatusCode;
@@ -22,7 +23,7 @@ final class Application
 
         try {
             $arguments = $argumentsBuilder->build($argv);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             print PHP_EOL . $throwable->getMessage() . PHP_EOL;
 
             return StatusCode::ERROR;
@@ -40,7 +41,7 @@ final class Application
 
         foreach ($arguments->directories() as $directory) {
             $currentFiles = (new Facade())->getFilesAsArray($directory, $arguments->suffixes(), '', $arguments->exclude());
-            $files = array_merge($files, $currentFiles);
+            $files = [...$files, ...$currentFiles];
         }
 
         if ($files === []) {

@@ -17,7 +17,6 @@ final class ArgumentsBuilder
     {
         $cliParser = new CliParser();
 
-
         try {
             $options = $cliParser->parse($argv, '', [
                 'suffix=',
@@ -37,7 +36,8 @@ final class ArgumentsBuilder
 
         $exclude = [];
         $suffixes = ['.php'];
-        $jsonFormat = null;
+
+        $jsonFormat = false;
         $help = false;
 
         foreach ($options[0] as $option) {

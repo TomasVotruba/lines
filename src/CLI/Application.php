@@ -29,7 +29,6 @@ final class Application
             return StatusCode::ERROR;
         }
 
-
         if ($arguments->displayHelp()) {
             echo PHP_EOL;
             $this->help();

@@ -4,7 +4,9 @@ class SomeClass
 {
     public function someFunction($in)
     {
-        fn() => '';
+        $anonymousFunction = function () {
+            return 100;
+        };
     }
 
     public function someOtherFunction()

@@ -31,6 +31,9 @@ final class Analyser
         $this->collector = new Collector;
     }
 
+    /**
+     * @param string[] $files
+     */
     public function countFiles(array $files, bool $countTests): array
     {
         foreach ($files as $file) {
@@ -69,12 +72,7 @@ final class Analyser
         }
     }
 
-    /**
-     * Processes a single file.
-     *
-     * @param bool   $countTests
-     */
-    public function countFile(string $filename, $countTests): void
+    private function countFile(string $filename, bool $countTests): void
     {
         if ($countTests) {
             $this->preProcessFile($filename);
@@ -474,9 +472,6 @@ final class Analyser
         return strtolower((string) $className);
     }
 
-    /**
-     * @return bool
-     */
     private function isTestClass(string $className): bool
     {
         $parent = $this->classes[$className];

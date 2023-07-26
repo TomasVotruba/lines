@@ -39,15 +39,6 @@ Size
       Average Function Length               %10d
     Not in classes or functions             %10d (%.2f%%)
 
-Cyclomatic Complexity
-  Average Complexity per LLOC               %10.2f
-  Average Complexity per Class              %10.2f
-    Minimum Class Complexity                %10.2f
-    Maximum Class Complexity                %10.2f
-  Average Complexity per Method             %10.2f
-    Minimum Method Complexity               %10.2f
-    Maximum Method Complexity               %10.2f
-
 Dependencies
   Global Accesses                           %10d
     Global Constants                        %10d (%.2f%%)

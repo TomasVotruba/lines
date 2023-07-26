@@ -44,6 +44,7 @@ final class Analyser
 
     /**
      * @param string[] $files
+     * @param array<string, mixed>
      */
     public function countFiles(array $files): array
     {
@@ -52,35 +53,6 @@ final class Analyser
         }
 
         return $this->collector->getPublisher()->toArray();
-    }
-
-    public function preProcessFile(string $filename): void
-    {
-        $tokens    = token_get_all(file_get_contents($filename));
-        $numTokens = count($tokens);
-        $namespace = false;
-
-        for ($i = 0; $i < $numTokens; ++$i) {
-            if (is_string($tokens[$i])) {
-                continue;
-            }
-
-            if ($tokens[$i][0] == T_NAMESPACE) {
-                $namespace = $this->getNamespaceName($tokens, $i);
-            } elseif ($tokens[$i][0] == T_CLASS) {
-                if (!$this->isClassDeclaration($tokens, $i)) {
-                    break;
-                }
-                $className = $this->getClassName($namespace, $tokens, $i);
-                if (isset($tokens[$i + 4]) && is_array($tokens[$i + 4]) &&
-                    $tokens[$i + 4][0] === T_EXTENDS) {
-                    $parent = $this->getClassName($namespace, $tokens, $i + 4);
-                } else {
-                    $parent = null;
-                }
-                $this->classes[$className] = $parent;
-            }
-        }
     }
 
     private function countFile(string $filename): void

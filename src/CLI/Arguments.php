@@ -4,28 +4,22 @@ namespace TomasVotruba\Lines\CLI;
 
 final class Arguments
 {
+    /**
+     * @param string[] $directories
+     * @param string[] $suffixes
+     * @param string[] $exclude
+     */
     public function __construct(
-        /**
-         * @psalm-var list<string>
-         */
         private readonly array $directories,
-        /**
-         * @psalm-var list<string>
-         */
         private readonly array $suffixes,
-        /**
-         * @psalm-var list<string>
-         */
         private readonly array $exclude,
         private readonly ?string $jsonLogfile,
         private readonly bool $help,
-        private readonly bool $version
-    )
-    {
+    ) {
     }
 
     /**
-     * @psalm-return list<string>
+     * @return string[]
      */
     public function directories(): array
     {
@@ -33,7 +27,7 @@ final class Arguments
     }
 
     /**
-     * @psalm-return list<string>
+     * @return string[]
      */
     public function suffixes(): array
     {
@@ -41,7 +35,7 @@ final class Arguments
     }
 
     /**
-     * @psalm-return list<string>
+     * @return string[]
      */
     public function exclude(): array
     {
@@ -56,10 +50,5 @@ final class Arguments
     public function help(): bool
     {
         return $this->help;
-    }
-
-    public function version(): bool
-    {
-        return $this->version;
     }
 }

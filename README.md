@@ -35,15 +35,6 @@ Size
       Average Function Length                        0
     Not in classes or functions                     26 (6.90%)
 
-Cyclomatic Complexity
-  Average Complexity per LLOC                     0.49
-  Average Complexity per Class                   19.60
-    Minimum Class Complexity                      1.00
-    Maximum Class Complexity                    139.00
-  Average Complexity per Method                   2.43
-    Minimum Method Complexity                     1.00
-    Maximum Method Complexity                    96.00
-
 Dependencies
   Global Accesses                                    0
     Global Constants                                 0 (0.00%)

@@ -106,51 +106,6 @@ final class Publisher
         return $this->getLogicalLines() - $this->getClassLines() - $this->getFunctionLines();
     }
 
-    public function getComplexity()
-    {
-        return $this->getValue('complexity');
-    }
-
-    public function getMethodComplexity()
-    {
-        return $this->getValue('total method complexity');
-    }
-
-    public function getAverageComplexityPerLogicalLine()
-    {
-        return $this->divide($this->getComplexity(), $this->getLogicalLines());
-    }
-
-    public function getAverageComplexityPerClass()
-    {
-        return $this->getAverage('class complexity');
-    }
-
-    public function getMinimumClassComplexity()
-    {
-        return $this->getMinimum('class complexity');
-    }
-
-    public function getMaximumClassComplexity()
-    {
-        return $this->getMaximum('class complexity');
-    }
-
-    public function getAverageComplexityPerMethod()
-    {
-        return $this->getAverage('method complexity');
-    }
-
-    public function getMinimumMethodComplexity()
-    {
-        return $this->getMinimum('method complexity');
-    }
-
-    public function getMaximumMethodComplexity()
-    {
-        return $this->getMaximum('method complexity');
-    }
-
     public function getGlobalAccesses()
     {
         return $this->getGlobalConstantAccesses() + $this->getGlobalVariableAccesses() + $this->getSuperGlobalVariableAccesses();
@@ -326,6 +281,9 @@ final class Publisher
         return $this->getValue('test methods');
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [

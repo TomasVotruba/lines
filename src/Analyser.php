@@ -151,7 +151,7 @@ final class Analyser
                     }
 
                     $this->collector->currentClassReset();
-                    $className    = $this->getClassName($namespace, $tokens, $i);
+                    $className    = $this->getClassName($namespace ?: '', $tokens, $i);
                     $currentBlock = T_CLASS;
 
                     if ($token === T_TRAIT) {

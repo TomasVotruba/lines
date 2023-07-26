@@ -16,9 +16,6 @@ jobs:
                     php-version: 7.2
                     coverage: none
 
-            # composer install cache - https://github.com/ramsey/composer-install
-            -   uses: "ramsey/composer-install@v2"
-
             -   run: composer require symfony/console:^4.4 --ansi
 
             # make co-exist with other dependencies

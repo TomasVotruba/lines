@@ -19,4 +19,4 @@ if (!$loaded) {
 }
 
 // @todo
-exit((new \Cmgmyr\PHPLOC\Application)->run($_SERVER['argv']));
+exit((new \TomasVotruba\Lines\Application)->run($_SERVER['argv']));

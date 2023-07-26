@@ -1,4 +1,6 @@
 <?php
+
+use PHPUnit\Framework\Attributes\Test;
 class ATest extends PHPUnit_Framework_TestCase
 {
     public function testFoo()
@@ -6,9 +8,9 @@ class ATest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @dataProvider barProvider
      */
+    #[Test]
     public function bar()
     {
     }
@@ -17,7 +19,7 @@ class ATest extends PHPUnit_Framework_TestCase
     {
     }
 
-    public function barProvider()
+    public static function barProvider()
     {
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
-class BaseTest extends PHPUnit\Framework\TestCase {
+use PHPUnit\Framework\TestCase;
+class BaseTest extends TestCase {
 }
 
 class AIndirectExtendTest extends BaseTest {

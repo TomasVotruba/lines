@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use TomasVotruba\Lines\Analyser;
 use PHPUnit\Framework\TestCase;
 
@@ -255,7 +256,7 @@ final class AnalyserTest extends TestCase
         $this->assertSame(5, $result['loc']);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('issue126Provider')]
+    #[DataProvider('issue126Provider')]
     public function testIssue126IsFixed($fileNumber, $cloc): void
     {
         $file   = __DIR__ . '/../_files/issue_126/issue_126_' . $fileNumber . '.php';

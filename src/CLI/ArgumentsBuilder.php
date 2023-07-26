@@ -10,6 +10,9 @@ use TomasVotruba\Lines\Exception\ShouldNotHappenException;
 
 final class ArgumentsBuilder
 {
+    /**
+     * @param mixed[] $argv
+     */
     public function build(array $argv): Arguments
     {
         try {
@@ -24,7 +27,7 @@ final class ArgumentsBuilder
                 ]
             );
         } catch (CliParserException $cliParserException) {
-            throw new ArgumentsBuilderException(
+            throw new ShouldNotHappenException(
                 $cliParserException->getMessage(),
                 (int) $cliParserException->getCode(),
                 $cliParserException

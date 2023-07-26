@@ -13,25 +13,6 @@ final class Analyser
      */
     private array $classes = [];
 
-    /**
-     * @var array<string, bool>
-     */
-    private array $superGlobals = [
-        '$_ENV'             => true,
-        '$_POST'            => true,
-        '$_GET'             => true,
-        '$_COOKIE'          => true,
-        '$_SERVER'          => true,
-        '$_FILES'           => true,
-        '$_REQUEST'         => true,
-        '$HTTP_ENV_VARS'    => true,
-        '$HTTP_POST_VARS'   => true,
-        '$HTTP_GET_VARS'    => true,
-        '$HTTP_COOKIE_VARS' => true,
-        '$HTTP_SERVER_VARS' => true,
-        '$HTTP_POST_FILES'  => true,
-    ];
-
     public function __construct()
     {
         $this->collector = new Collector;
@@ -44,7 +25,8 @@ final class Analyser
 
     /**
      * @param string[] $files
-     * @param array<string, mixed>
+     *
+     * @return array<string, mixed>
      */
     public function countFiles(array $files): array
     {
@@ -477,6 +459,9 @@ final class Analyser
         return false;
     }
 
+    /**
+     * @param mixed[] $tokens
+     */
     private function getPreviousNonWhitespaceTokenPos(array $tokens, int $start): int|bool
     {
         if (isset($tokens[$start - 1])) {

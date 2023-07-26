@@ -6,6 +6,9 @@ namespace TomasVotruba\Lines;
 
 final class Publisher
 {
+    /**
+     * @param array<string, mixed> $counts
+     */
     public function __construct(
         private array $counts
     ) {
@@ -46,7 +49,7 @@ final class Publisher
         return $this->getSum('class lines');
     }
 
-    public function getAverageClassLength(): int
+    public function getAverageClassLength(): float
     {
         return $this->getAverage('class lines');
     }
@@ -61,7 +64,7 @@ final class Publisher
         return $this->getMaximum('class lines');
     }
 
-    public function getAverageMethodLength(): int
+    public function getAverageMethodLength(): float
     {
         return $this->getAverage('method lines');
     }
@@ -76,7 +79,7 @@ final class Publisher
         return $this->getMaximum('method lines');
     }
 
-    public function getAverageMethodsPerClass(): int
+    public function getAverageMethodsPerClass(): float
     {
         return $this->getAverage('methods per class');
     }
@@ -96,7 +99,7 @@ final class Publisher
         return $this->getValue('function lines');
     }
 
-    public function getAverageFunctionLength(): int
+    public function getAverageFunctionLength(): float
     {
         return $this->divide($this->getFunctionLines(), $this->getFunctions());
     }
@@ -290,7 +293,7 @@ final class Publisher
         ];
     }
 
-    private function getAverage(string $key)
+    private function getAverage(string $key): float
     {
         return $this->divide($this->getSum($key), $this->getCount($key));
     }
@@ -315,9 +318,9 @@ final class Publisher
         return isset($this->counts[$key]) ? min($this->counts[$key]) : 0;
     }
 
-    private function getValue(string $key, $default = 0)
+    private function getValue(string $key): mixed
     {
-        return $this->counts[$key] ?? $default;
+        return $this->counts[$key] ?? 0;
     }
 
     private function divide(int $x, int $y): float

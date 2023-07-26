@@ -22,18 +22,18 @@ final class Collector
         return new Publisher($this->counts);
     }
 
-    public function addFile($filename): void
+    public function addFile(string $filename): void
     {
         $this->increment('files');
         $this->addUnique('directories', dirname((string) $filename));
     }
 
-    public function incrementLines($number): void
+    public function incrementLines(int $number): void
     {
         $this->increment('lines', $number);
     }
 
-    public function incrementCommentLines($number): void
+    public function incrementCommentLines(int $number): void
     {
         $this->increment('comment lines', $number);
     }
@@ -84,7 +84,7 @@ final class Collector
         $this->increment('function lines');
     }
 
-    public function addConstant($name): void
+    public function addConstant(string $name): void
     {
         $this->addToArray('constant', $name);
     }
@@ -99,7 +99,7 @@ final class Collector
         $this->increment('static method calls');
     }
 
-    public function addNamespace($namespace): void
+    public function addNamespace(string $namespace): void
     {
         $this->addUnique('namespaces', $namespace);
     }
@@ -189,25 +189,25 @@ final class Collector
         $this->increment('test methods');
     }
 
-    private function addUnique(string $key, $name): void
+    private function addUnique(string $key, mixed $name): void
     {
         $this->check($key, []);
         $this->counts[$key][$name] = true;
     }
 
-    private function addToArray(string $key, $value): void
+    private function addToArray(string $key, mixed $value): void
     {
         $this->check($key, []);
         $this->counts[$key][] = $value;
     }
 
-    private function increment(string $key, $number = 1): void
+    private function increment(string $key, int $number = 1): void
     {
         $this->check($key, 0);
         $this->counts[$key] += $number;
     }
 
-    private function check(string $key, array|int $default): void
+    private function check(string $key, mixed $default): void
     {
         if (!isset($this->counts[$key])) {
             $this->counts[$key] = $default;

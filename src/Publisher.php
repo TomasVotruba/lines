@@ -306,7 +306,11 @@ final class Publisher
 
     private function getSum(string $key): int
     {
-        return isset($this->counts[$key]) ? array_sum($this->counts[$key]) : 0;
+        if (! isset($this->counts[$key])) {
+            return 0;
+        }
+
+        return (int) array_sum($this->counts[$key]);
     }
 
     private function getMaximum(string $key): int

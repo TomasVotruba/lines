@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace TomasVotruba\Lines;
 
 use Webmozart\Assert\Assert;
@@ -12,7 +15,7 @@ final class Analyser
 
     public function __construct()
     {
-        $this->collector = new Collector;
+        $this->collector = new Collector();
     }
 
     public function reset(): void
@@ -45,21 +48,21 @@ final class Analyser
         Assert::string($buffer);
 
         $this->collector->incrementLines(substr_count($buffer, "\n"));
-        $tokens    = token_get_all($buffer);
+        $tokens = token_get_all($buffer);
         $numTokens = count($tokens);
 
         unset($buffer);
 
         $this->collector->addFile($filename);
 
-        $blocks       = [];
+        $blocks = [];
         $currentBlock = false;
-        $namespace    = false;
-        $className    = null;
+        $namespace = false;
+        $className = null;
         $functionName = null;
         $this->collector->currentClassReset();
         $isLogicalLine = true;
-        $isInMethod    = false;
+        $isInMethod = false;
 
         for ($i = 0; $i < $numTokens; ++$i) {
             if (is_string($tokens[$i])) {
@@ -132,12 +135,12 @@ final class Analyser
                 case T_CLASS:
                 case T_INTERFACE:
                 case T_TRAIT:
-                    if (!$this->isClassDeclaration($tokens, $i)) {
+                    if (! $this->isClassDeclaration($tokens, $i)) {
                         break;
                     }
 
                     $this->collector->currentClassReset();
-                    $className    = $this->getClassName($namespace ?: '', $tokens, $i);
+                    $className = $this->getClassName($namespace ?: '', $tokens, $i);
                     $currentBlock = T_CLASS;
 
                     if ($token === T_TRAIT) {
@@ -192,7 +195,7 @@ final class Analyser
                             $functionName !== 'anonymous function') {
                             $this->collector->incrementNamedFunctions();
                         } else {
-                            $static     = false;
+                            $static = false;
                             $visibility = T_PUBLIC;
 
                             for ($j = $i; $j > 0; --$j) {
@@ -229,7 +232,7 @@ final class Analyser
 
                             $this->collector->currentClassIncrementMethods();
 
-                            if (!$static) {
+                            if (! $static) {
                                 $this->collector->incrementNonStaticMethods();
                             } else {
                                 $this->collector->incrementStaticMethods();
@@ -249,13 +252,13 @@ final class Analyser
 
                 case T_CURLY_OPEN:
                     $currentBlock = T_CURLY_OPEN;
-                    $blocks[]     = $currentBlock;
+                    $blocks[] = $currentBlock;
 
                     break;
 
                 case T_DOLLAR_OPEN_CURLY_BRACES:
                     $currentBlock = T_DOLLAR_OPEN_CURLY_BRACES;
-                    $blocks[]     = $currentBlock;
+                    $blocks[] = $currentBlock;
 
                     break;
 
@@ -315,7 +318,7 @@ final class Analyser
 
                 case T_DOUBLE_COLON:
                 case T_OBJECT_OPERATOR:
-                    $n  = $this->getNextNonWhitespaceTokenPos($tokens, $i);
+                    $n = $this->getNextNonWhitespaceTokenPos($tokens, $i);
                     Assert::integer($n);
 
                     $nn = $this->getNextNonWhitespaceTokenPos($tokens, $n);
@@ -372,7 +375,7 @@ final class Analyser
     {
         $i += 2;
 
-        if (!isset($tokens[$i][1])) {
+        if (! isset($tokens[$i][1])) {
             return 'invalid class name';
         }
 
@@ -384,7 +387,7 @@ final class Analyser
             $className .= $tokens[++$i][1];
         }
 
-        if (!$namespaced && $namespace !== false) {
+        if (! $namespaced && $namespace !== false) {
             $className = $namespace . '\\' . $className;
         }
 
@@ -457,8 +460,8 @@ final class Analyser
     {
         $n = $this->getPreviousNonWhitespaceTokenPos($tokens, $i);
 
-        return !isset($tokens[$n]) ||
-            !is_array($tokens[$n]) ||
-            !in_array($tokens[$n][0], [T_DOUBLE_COLON, T_NEW], true);
+        return ! isset($tokens[$n]) ||
+            ! is_array($tokens[$n]) ||
+            ! in_array($tokens[$n][0], [T_DOUBLE_COLON, T_NEW], true);
     }
 }

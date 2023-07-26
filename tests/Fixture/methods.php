@@ -2,7 +2,7 @@
 
 class Methods1
 {
-    function undefinedVisibilityBecomesPublicVisibility1()
+    public function undefinedVisibilityBecomesPublicVisibility1()
     {
     }
 
@@ -10,7 +10,8 @@ class Methods1
     {
     }
 
-    protected /* a comment here */ function protectedVisibility1()
+    /* a comment here */
+    protected function protectedVisibility1()
     {
     }
 
@@ -25,7 +26,8 @@ class Methods2
     {
     }
 
-    private /* a comment here */ function privateVisibility3()
+    /* a comment here */
+    private function privateVisibility3()
     {
     }
 }

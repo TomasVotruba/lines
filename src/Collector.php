@@ -46,10 +46,10 @@ final class Collector
     public function currentClassReset(): void
     {
         // if ($this->currentClassLines > 0) {
-            $this->addToArray('class lines', $this->currentClassLines);
+        $this->addToArray('class lines', $this->currentClassLines);
         //}
 
-        $this->currentClassLines      = 0;
+        $this->currentClassLines = 0;
         $this->currentNumberOfMethods = 0;
     }
 
@@ -65,7 +65,7 @@ final class Collector
 
     public function currentMethodStart(): void
     {
-        $this->currentMethodLines      = 0;
+        $this->currentMethodLines = 0;
     }
 
     public function currentClassIncrementMethods(): void
@@ -203,7 +203,7 @@ final class Collector
 
     private function check(string $key, mixed $default): void
     {
-        if (!isset($this->counts[$key])) {
+        if (! isset($this->counts[$key])) {
             $this->counts[$key] = $default;
         }
     }

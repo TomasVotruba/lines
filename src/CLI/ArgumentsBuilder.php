@@ -16,7 +16,7 @@ final class ArgumentsBuilder
     public function build(array $argv): Arguments
     {
         try {
-            $options = (new CliParser)->parse(
+            $options = (new CliParser())->parse(
                 $argv,
                 '',
                 [
@@ -35,10 +35,10 @@ final class ArgumentsBuilder
         }
 
         $directories = $options[1];
-        $exclude     = [];
-        $suffixes    = ['.php'];
+        $exclude = [];
+        $suffixes = ['.php'];
         $jsonLogfile = null;
-        $help        = false;
+        $help = false;
 
         foreach ($options[0] as $option) {
             switch ($option[0]) {
@@ -65,7 +65,7 @@ final class ArgumentsBuilder
             }
         }
 
-        if (empty($options[1]) && !$help) {
+        if (empty($options[1]) && ! $help) {
             throw new ShouldNotHappenException('No directory specified');
         }
 

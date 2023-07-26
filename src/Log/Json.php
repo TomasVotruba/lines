@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Log;
 
@@ -14,7 +16,7 @@ final class Json
         if ($count['directories'] > 0) {
             $directories = [
                 'directories' => $count['directories'],
-                'files'       => $count['files'],
+                'files' => $count['files'],
             ];
         }
 

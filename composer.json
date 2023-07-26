@@ -27,10 +27,7 @@
     "autoload-dev": {
         "psr-4": {
             "TomasVotruba\\Lines\\Tests\\": "tests/unit"
-        },
-        "classmap": [
-            "tests/_files"
-        ]
+        }
     },
     "scripts": {
         "check-cs": "vendor/bin/ecs check --ansi",

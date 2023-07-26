@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\CLI;
 
+use SebastianBergmann\FileIterator\Facade;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Enum\StatusCode;
 use TomasVotruba\Lines\Log\Json as JsonPrinter;
 use TomasVotruba\Lines\Log\Text as TextPrinter;
-use SebastianBergmann\FileIterator\Facade;
 
 final class Application
 {
@@ -35,7 +35,7 @@ final class Application
             return StatusCode::SUCCESS;
         }
 
-        $files = (new Facade)->getFilesAsArray(
+        $files = (new Facade())->getFilesAsArray(
             $arguments->directories(),
             $arguments->suffixes(),
             '',
@@ -50,11 +50,11 @@ final class Application
         $analyser = new Analyser();
         $result = $analyser->countFiles($files);
 
-        $textPrinter = new TextPrinter;
+        $textPrinter = new TextPrinter();
         $textPrinter->printResult($result);
 
         if ($arguments->jsonLogfile()) {
-            $printer = new JsonPrinter;
+            $printer = new JsonPrinter();
             $printer->printResult($arguments->jsonLogfile(), $result);
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace a\name\space;
 
 /*
@@ -10,7 +11,7 @@ define('A_GLOBAL_CONSTANT', 'foo');
 
 function &a_global_function()
 {
-    $a = AClass::CLASS;
+    $a = AClass::class;
 }
 
 interface AnInterface
@@ -73,7 +74,8 @@ class AClass extends AnAbstractClass implements AnInterface
     private function aPrivateMethod()
     {
         $great = null;
-        $function = function() {};
+        $function = function () {
+        };
         echo "This is {$great}";
         echo "This is ${great}";
     }

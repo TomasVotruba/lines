@@ -1,6 +1,9 @@
 parameters:
     paths:
         - src
-        - tests/unit
+        - tests
+
+    excludePaths:
+        - tests/Fixture/*
 
     level: 8

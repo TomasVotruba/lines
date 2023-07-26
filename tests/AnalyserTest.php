@@ -68,7 +68,7 @@ final class AnalyserTest extends TestCase
                 'maximumMethodsPerClass' => 4,
             ],
             $this->analyser->countFiles(
-                [__DIR__ . '/../Fixture/source.php'],
+                [__DIR__ . '/Fixture/source.php'],
             ),
             0.1
         );
@@ -77,7 +77,7 @@ final class AnalyserTest extends TestCase
     #[DataProvider('issue126Provider')]
     public function testIssue126IsFixed(int $fileNumber, int $cloc): void
     {
-        $file = __DIR__ . '/../Fixture/issue_126/issue_126_' . $fileNumber . '.php';
+        $file = __DIR__ . '/Fixture/issue_126/issue_126_' . $fileNumber . '.php';
         $result = $this->analyser->countFiles([$file]);
 
         $assertString = sprintf(
@@ -111,7 +111,7 @@ final class AnalyserTest extends TestCase
     {
         $result = $this->analyser->countFiles(
             [
-                __DIR__ . '/../Fixture/issue_138.php',
+                __DIR__ . '/Fixture/issue_138.php',
             ],
         );
 
@@ -120,28 +120,28 @@ final class AnalyserTest extends TestCase
 
     public function testDeclareIsNotLogicalLine(): void
     {
-        $result = $this->analyser->countFiles([__DIR__ . '/../Fixture/with_declare.php']);
+        $result = $this->analyser->countFiles([__DIR__ . '/Fixture/with_declare.php']);
 
         $this->assertSame(0, $result['llocGlobal']);
     }
 
     public function testNamespaceIsNotLogicalLine(): void
     {
-        $result = $this->analyser->countFiles([__DIR__ . '/../Fixture/with_namespace.php']);
+        $result = $this->analyser->countFiles([__DIR__ . '/Fixture/with_namespace.php']);
 
         $this->assertSame(0, $result['llocGlobal']);
     }
 
     public function testImportIsNotLogicalLine(): void
     {
-        $result = $this->analyser->countFiles([__DIR__ . '/../Fixture/with_import.php']);
+        $result = $this->analyser->countFiles([__DIR__ . '/Fixture/with_import.php']);
 
         $this->assertSame(0, $result['llocGlobal']);
     }
 
     public function test_it_makes_a_distinction_between_public_and_non_public_class_constants(): void
     {
-        $result = $this->analyser->countFiles([__DIR__ . '/../Fixture/class_constants.php']);
+        $result = $this->analyser->countFiles([__DIR__ . '/Fixture/class_constants.php']);
         $this->assertSame(2, $result['publicClassConstants']);
         $this->assertSame(3, $result['nonPublicClassConstants']);
         $this->assertSame(5, $result['classConstants']);
@@ -150,7 +150,7 @@ final class AnalyserTest extends TestCase
 
     public function test_it_collects_the_number_of_final_non_final_and_abstract_classes(): void
     {
-        $result = $this->analyser->countFiles([__DIR__ . '/../Fixture/classes.php']);
+        $result = $this->analyser->countFiles([__DIR__ . '/Fixture/classes.php']);
         $this->assertSame(9, $result['classes']);
         $this->assertSame(2, $result['finalClasses']);
         $this->assertSame(3, $result['nonFinalClasses']);
@@ -159,7 +159,7 @@ final class AnalyserTest extends TestCase
 
     public function test_it_makes_a_distinction_between_protected_and_private_methods(): void
     {
-        $result = $this->analyser->countFiles([__DIR__ . '/../Fixture/methods.php']);
+        $result = $this->analyser->countFiles([__DIR__ . '/Fixture/methods.php']);
         $this->assertSame(2, $result['publicMethods']);
         $this->assertSame(1, $result['protectedMethods']);
         $this->assertSame(3, $result['privateMethods']);
@@ -168,7 +168,7 @@ final class AnalyserTest extends TestCase
 
     public function test_it_provides_average_minimum_and_maximum_number_of_methods_per_class(): void
     {
-        $result = $this->analyser->countFiles([__DIR__ . '/../Fixture/methods_per_class.php']);
+        $result = $this->analyser->countFiles([__DIR__ . '/Fixture/methods_per_class.php']);
         $this->assertSame(2.0, $result['averageMethodsPerClass']);
         $this->assertSame(0, $result['minimumMethodsPerClass']);
         $this->assertSame(4, $result['maximumMethodsPerClass']);
@@ -176,7 +176,7 @@ final class AnalyserTest extends TestCase
 
     public function test_use_trait_is_not_counted_as_logical_line(): void
     {
-        $result = $this->analyser->countFiles([__DIR__ . '/../Fixture/class_using_trait.php']);
+        $result = $this->analyser->countFiles([__DIR__ . '/Fixture/class_using_trait.php']);
         $this->assertSame(1, $result['lloc']);
         $this->assertSame(1, $result['llocClasses']);
     }

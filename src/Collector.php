@@ -45,9 +45,9 @@ final class Collector
 
     public function currentClassReset(): void
     {
-        if ($this->currentClassLines > 0) {
+        // if ($this->currentClassLines > 0) {
             $this->addToArray('class lines', $this->currentClassLines);
-        }
+        //}
 
         $this->currentClassLines      = 0;
         $this->currentNumberOfMethods = 0;

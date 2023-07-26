@@ -19,5 +19,6 @@ jobs:
             -   run: composer require symfony/console:^4.4 --ansi
 
             # make co-exist with other dependencies
-            -   run: composer require tomasvotruba/lines
-            -   run: vendor/bin/lines
+            -   run: composer require tomasvotruba/lines --ansi
+
+            -   run: vendor/bin/lines --ansi

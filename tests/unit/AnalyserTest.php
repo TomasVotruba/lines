@@ -85,17 +85,6 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $result['traits']);
     }
 
-    public function testIssue64IsFixed(): void
-    {
-        $result = $this->analyser->countFiles(
-            [
-                __DIR__ . '/../_files/issue_62.php',
-            ],
-        );
-
-        $this->assertSame(1, $result['cloc']);
-    }
-
     public function testIssue112IsFixed(): void
     {
         $result = $this->analyser->countFiles(

@@ -127,21 +127,6 @@ final class Measurements
         ++$this->functionLineCount;
     }
 
-    public function addConstant(string $name): void
-    {
-        $this->addToArray(CounterName::CONSTANT_NAMES, $name);
-    }
-
-    public function incrementNonStaticMethodCalls(): void
-    {
-        $this->increment(CounterName::NON_STATIC_METHOD_CALLS);
-    }
-
-    public function incrementStaticMethodCalls(): void
-    {
-        $this->increment(key: CounterName::STATIC_METHOD_CALLS);
-    }
-
     public function addNamespace(string $namespace): void
     {
         $this->addUnique(CounterName::NAMESPACES, $namespace);
@@ -159,52 +144,52 @@ final class Measurements
 
     public function incrementNonStaticMethods(): void
     {
-        $this->increment(CounterName::NON_STATIC_METHODS);
+        $this->nonStaticMethodCount++;
     }
 
     public function incrementStaticMethods(): void
     {
-        $this->increment(CounterName::STATIC_METHODS);
+        ++$this->staticMethodCount;
     }
 
     public function incrementPublicMethods(): void
     {
-        $this->increment(CounterName::PUBLIC_METHODS);
+        $this->publicMethodCount++;
     }
 
     public function incrementProtectedMethods(): void
     {
-        $this->increment(CounterName::PROTECTED_METHODS);
+        $this->protectedMethodCount++;
     }
 
     public function incrementPrivateMethods(): void
     {
-        $this->increment(CounterName::PRIVATE_METHODS);
+        $this->privateMethodCount++;
     }
 
     public function incrementNamedFunctions(): void
     {
-        $this->increment(CounterName::NAMED_FUNCTIONS);
+        $this->namedFunctionCount++;
     }
 
     public function incrementAnonymousFunctions(): void
     {
-        $this->increment(CounterName::ANONYMOUS_FUNCTIONS);
+        $this->anonymousFunctionCount++;
     }
 
     public function incrementGlobalConstants(): void
     {
-        $this->increment(CounterName::GLOBAL_CONSTANTS);
+        $this->globalConstantCount++;
     }
 
     public function incrementPublicClassConstants(): void
     {
-        $this->increment(CounterName::PUBLIC_CLASS_CONSTANTS);
+        ++$this->publicClassConstantCount;
     }
 
     public function incrementNonPublicClassConstants(): void
     {
-        $this->increment(CounterName::NON_PUBLIC_CLASS_CONSTATNTS);
+        ++$this->nonPublicClassConstantCount;
     }
 
     /**
@@ -225,14 +210,14 @@ final class Measurements
         $this->counts[$key][] = $value;
     }
 
-    /**
-     * @param CounterName::* $key
-     */
-    private function increment(string $key, int $number = 1): void
-    {
-        $this->check($key, 0);
-        $this->counts[$key] += $number;
-    }
+    //    /**
+    //     * @param CounterName::* $key
+    //     */
+    //    private function increment(string $key, int $number = 1): void
+    //    {
+    //        $this->check($key, 0);
+    //        $this->counts[$key] += $number;
+    //    }
 
     /**
      * @param CounterName::* $key
@@ -373,17 +358,17 @@ final class Measurements
 
     public function getNonStaticMethods(): int
     {
-        return $this->getValue(CounterName::NON_STATIC_METHODS);
+        return $this->nonStaticMethodCount;
     }
 
     public function getStaticMethods(): int
     {
-        return $this->getValue(CounterName::STATIC_METHODS);
+        return $this->staticMethodCount;
     }
 
     public function getPublicMethods(): int
     {
-        return $this->getValue(CounterName::PUBLIC_METHODS);
+        return $this->publicMethodCount;
     }
 
     /**
@@ -396,12 +381,12 @@ final class Measurements
 
     public function getProtectedMethods(): int
     {
-        return $this->getValue(CounterName::PROTECTED_METHODS);
+        return $this->protectedMethodCount;
     }
 
     public function getPrivateMethods(): int
     {
-        return $this->getValue(CounterName::PRIVATE_METHODS);
+        return $this->privateMethodCount;
     }
 
     public function getFunctions(): int
@@ -411,12 +396,12 @@ final class Measurements
 
     public function getNamedFunctions(): int
     {
-        return $this->getValue(CounterName::NAMED_FUNCTIONS);
+        return $this->namedFunctionCount;
     }
 
     public function getAnonymousFunctions(): int
     {
-        return $this->getValue(CounterName::ANONYMOUS_FUNCTIONS);
+        return $this->anonymousFunctionCount;
     }
 
     public function getConstants(): int
@@ -426,17 +411,17 @@ final class Measurements
 
     public function getGlobalConstants(): int
     {
-        return $this->getValue(CounterName::GLOBAL_CONSTANTS);
+        return $this->globalConstantCount;
     }
 
     public function getPublicClassConstants(): int
     {
-        return $this->getValue(CounterName::PUBLIC_CLASS_CONSTANTS);
+        return $this->publicClassConstantCount;
     }
 
     public function getNonPublicClassConstants(): int
     {
-        return $this->getValue(CounterName::NON_PUBLIC_CLASS_CONSTATNTS);
+        return $this->nonPublicClassConstantCount;
     }
 
     public function getClassConstants(): int
@@ -487,14 +472,6 @@ final class Measurements
     private function getMinimum(string $key): int
     {
         return isset($this->counts[$key]) ? min($this->counts[$key]) : 0;
-    }
-
-    /**
-     * @param CounterName::* $key
-     */
-    private function getValue(string $key): mixed
-    {
-        return $this->counts[$key] ?? 0;
     }
 
     private function divide(int $x, int $y): float

@@ -32,7 +32,8 @@ final class Analyser
             $this->countFile($file);
         }
 
-        return $this->metricsCollector->getPublisher()->toArray();
+        return $this->metricsCollector->getPublisher()
+            ->toArray();
     }
 
     private function countFile(string $filename): void
@@ -161,7 +162,9 @@ final class Analyser
 
                     $next = $this->getNextNonWhitespaceTokenPos($tokens, $i);
 
-                    if (is_int($next) && ($tokens[$next] === '&' || (is_array($tokens[$next]) && $tokens[$next][1] === '&'))) {
+                    if (is_int($next) && ($tokens[$next] === '&' || (is_array(
+                        $tokens[$next]
+                    ) && $tokens[$next][1] === '&'))) {
                         $next = $this->getNextNonWhitespaceTokenPos($tokens, $next);
                     }
 
@@ -421,11 +424,7 @@ final class Analyser
         $previousTokenIndex = $start - 1;
 
         if (isset($tokens[$previousTokenIndex])) {
-            if (in_array($tokens[$previousTokenIndex][0], [
-                T_WHITESPACE,
-                T_COMMENT,
-                T_DOC_COMMENT,
-            ], true)
+            if (in_array($tokens[$previousTokenIndex][0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)
             ) {
                 return $this->getPreviousNonWhitespaceNonCommentTokenPos($tokens, $previousTokenIndex);
             }

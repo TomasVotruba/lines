@@ -36,8 +36,20 @@ final class MeasureCommand extends Command
         $this->setDescription('Measure lines of code in given path(s)');
 
         $this->addArgument('paths', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Path to analyze');
-        $this->addOption('suffix', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Suffix of files to analyze', ['php']);
-        $this->addOption('exclude', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Paths to exclude', []);
+        $this->addOption(
+            'suffix',
+            null,
+            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+            'Suffix of files to analyze',
+            ['php']
+        );
+        $this->addOption(
+            'exclude',
+            null,
+            InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+            'Paths to exclude',
+            []
+        );
         $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');
     }
 

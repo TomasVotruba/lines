@@ -26,21 +26,11 @@ final class TextOutputFormatter
         $padLeftTableStyle->setPadType(STR_PAD_LEFT);
 
         if ($count['directories'] > 0) {
-            //            \printf(
-            //                'Directories                                 %10d' . PHP_EOL .
-            //                'Files                                       %10d' . PHP_EOL . PHP_EOL,
-            //                $count['directories'],
-            //                $count['files']
-            //            );
-
             $this->symfonyStyle->createTable()
                 ->setColumnWidth(0, 30)
                 ->setColumnWidth(1, 19)
                 ->setHeaders(['Metric', 'Count'])
-                ->setRows([
-                    ['Directories', $count['directories']],
-                    ['Files', $count['files']],
-                ])
+                ->setRows([['Directories', $count['directories']], ['Files', $count['files']]])
                 ->setColumnStyle(1, $padLeftTableStyle)
                 ->render();
 

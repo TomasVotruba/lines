@@ -63,9 +63,7 @@ final class AnalyserTest extends TestCase
                 'minimumMethodsPerClass' => 0,
                 'maximumMethodsPerClass' => 4,
             ],
-            $this->analyser->countFiles(
-                [__DIR__ . '/Fixture/source.php'],
-            ),
+            $this->analyser->countFiles([__DIR__ . '/Fixture/source.php']),
             0.1
         );
     }
@@ -91,15 +89,7 @@ final class AnalyserTest extends TestCase
      */
     public static function issue126Provider(): array
     {
-        return [
-            [1, 1],
-            [2, 1],
-            [3, 1],
-            [4, 2],
-            [5, 3],
-            [6, 3],
-            [7, 3],
-        ];
+        return [[1, 1], [2, 1], [3, 1], [4, 2], [5, 3], [6, 3], [7, 3]];
     }
 
     public function testIssue138IsFixed(): void

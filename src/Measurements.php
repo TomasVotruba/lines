@@ -4,16 +4,10 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines;
 
-use TomasVotruba\Lines\Enum\CounterName;
 use TomasVotruba\Lines\Helpers\NumberFormat;
 
 final class Measurements
 {
-    /**
-     * @var array<CounterName::*, mixed>
-     */
-    private array $counts = [];
-
     /**
      * @var int[]
      */
@@ -76,6 +70,11 @@ final class Measurements
      */
     private array $namespaceNames = [];
 
+    /**
+     * @var int[]
+     */
+    private array $methodCountsPerClass = [];
+
     public function addFile(string $filename): void
     {
         $this->directoryNames[] = dirname($filename);
@@ -102,15 +101,13 @@ final class Measurements
     {
         $this->classLineCountPerClass[] = $this->currentClassLines;
 
-        // $this->addToArray(CounterName::CLASS_LINES, $this->currentClassLines);
-
         $this->currentClassLines = 0;
         $this->currentClassMethodCount = 0;
     }
 
     public function currentClassStop(): void
     {
-        $this->addToArray(CounterName::METHOD_COUNT_PER_CLASS, $this->currentClassMethodCount);
+        $this->methodCountsPerClass[] = $this->currentClassMethodCount;
     }
 
     public function incrementCurrentClassLines(): void
@@ -136,7 +133,6 @@ final class Measurements
     public function currentMethodStop(): void
     {
         $this->methodLineCountPerMethod[] = $this->currentMethodLines;
-        //        $this->addToArray(CounterName::METHOD_LINES, $this->currentMethodLines);
     }
 
     public function incrementFunctionLines(): void
@@ -207,26 +203,6 @@ final class Measurements
     public function incrementNonPublicClassConstants(): void
     {
         ++$this->nonPublicClassConstantCount;
-    }
-
-    /**
-     * @param CounterName::* $key
-     */
-    private function addToArray(string $key, mixed $value): void
-    {
-        $this->check($key, []);
-        $this->counts[$key][] = $value;
-    }
-
-    /**
-     * @param CounterName::* $key
-     * @param int|mixed[] $default
-     */
-    private function check(string $key, int|array $default): void
-    {
-        if (! isset($this->counts[$key])) {
-            $this->counts[$key] = $default;
-        }
     }
 
     public function incrementClasses(): void
@@ -313,17 +289,25 @@ final class Measurements
 
     public function getAverageMethodCountPerClass(): float
     {
-        return $this->getAverage(CounterName::METHOD_COUNT_PER_CLASS);
+        if ($this->methodCountsPerClass === []) {
+            return 0.0;
+        }
+
+        $totalMethodCount = array_sum($this->methodCountsPerClass);
+
+        $average = $totalMethodCount / count($this->methodCountsPerClass);
+
+        return NumberFormat::singleDecimal($average);
     }
 
     public function getMinimumMethodsPerClass(): int
     {
-        return $this->getMinimum(CounterName::METHOD_COUNT_PER_CLASS);
+        return min($this->methodCountsPerClass);
     }
 
     public function getMaximumMethodsPerClass(): int
     {
-        return $this->getMaximum(CounterName::METHOD_COUNT_PER_CLASS);
+        return max($this->methodCountsPerClass);
     }
 
     public function getFunctionLines(): int
@@ -333,7 +317,12 @@ final class Measurements
 
     public function getAverageFunctionLength(): float
     {
-        return $this->divide($this->functionLineCount, $this->getFunctionCount());
+        if ($this->getFunctionCount() === 0) {
+            return 0.0;
+        }
+
+        $average = $this->functionLineCount / $this->getFunctionCount();
+        return NumberFormat::singleDecimal($average);
     }
 
     public function getNotInClassesOrFunctions(): int
@@ -438,55 +427,5 @@ final class Measurements
     public function getClassConstants(): int
     {
         return $this->publicClassConstantCount + $this->nonPublicClassConstantCount;
-    }
-
-    /**
-     * @param CounterName::* $key
-     */
-    private function getAverage(string $key): float
-    {
-        $result = $this->divide($this->getSum($key), $this->getCount($key));
-        return (float) number_format($result, 1);
-    }
-
-    /**
-     * @param CounterName::* $key
-     */
-    private function getCount(string $key): int
-    {
-        return isset($this->counts[$key]) ? is_countable($this->counts[$key]) ? count($this->counts[$key]) : 0 : 0;
-    }
-
-    /**
-     * @param CounterName::* $key
-     */
-    private function getSum(string $key): int
-    {
-        if (! isset($this->counts[$key])) {
-            return 0;
-        }
-
-        return (int) array_sum($this->counts[$key]);
-    }
-
-    /**
-     * @param CounterName::* $key
-     */
-    private function getMaximum(string $key): int
-    {
-        return isset($this->counts[$key]) ? max($this->counts[$key]) : 0;
-    }
-
-    /**
-     * @param CounterName::* $key
-     */
-    private function getMinimum(string $key): int
-    {
-        return isset($this->counts[$key]) ? min($this->counts[$key]) : 0;
-    }
-
-    private function divide(int $x, int $y): float
-    {
-        return $y != 0 ? $x / $y : 0;
     }
 }

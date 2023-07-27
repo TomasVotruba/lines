@@ -31,9 +31,9 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $measurements->getInterfaces());
         $this->assertSame(0, $measurements->getTraits());
         $this->assertSame(2, $measurements->getClasses());
-        $this->assertSame(2, $measurements->getFunctions());
-        $this->assertSame(1, $measurements->getNamedFunctions());
-        $this->assertSame(1, $measurements->getAnonymousFunctions());
+        $this->assertSame(2, $measurements->getFunctionCount());
+        $this->assertSame(1, $measurements->getNamedFunctionCount());
+        $this->assertSame(1, $measurements->getAnonymousFunctionCount());
         $this->assertSame(4, $measurements->getMethods());
         $this->assertSame(2, $measurements->getPublicMethods());
         $this->assertSame(2, $measurements->getNonPublicMethods());
@@ -41,11 +41,11 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $measurements->getPrivateMethods());
         $this->assertSame(3, $measurements->getNonStaticMethods());
         $this->assertSame(1, $measurements->getStaticMethods());
-        $this->assertSame(2, $measurements->getConstants());
+        $this->assertSame(2, $measurements->getConstantCount());
         $this->assertSame(1, $measurements->getClassConstants());
         $this->assertSame(1, $measurements->getPublicClassConstants());
         $this->assertSame(0, $measurements->getNonPublicClassConstants());
-        $this->assertSame(1, $measurements->getGlobalConstants());
+        $this->assertSame(1, $measurements->getGlobalConstantCount());
         $this->assertSame(0.5, $measurements->getAverageFunctionLength());
         $this->assertSame(0, $measurements->getDirectories());
         $this->assertSame(1, $measurements->getNamespaces());
@@ -56,7 +56,7 @@ final class AnalyserTest extends TestCase
         $this->assertSame(6, $measurements->getMinimumMethodLength());
         $this->assertSame(7.3, $measurements->getAverageMethodLength());
         $this->assertSame(9, $measurements->getMaximumMethodLength());
-        $this->assertSame(1.3, $measurements->getAverageMethodsPerClass());
+        $this->assertSame(1.3, $measurements->getAverageMethodCountPerClass());
         $this->assertSame(0, $measurements->getMinimumMethodsPerClass());
         $this->assertSame(4, $measurements->getMaximumMethodsPerClass());
     }
@@ -111,7 +111,7 @@ final class AnalyserTest extends TestCase
         $this->assertSame(3, $measurements->getNonPublicClassConstants());
 
         $this->assertSame(5, $measurements->getClassConstants());
-        $this->assertSame(5, $measurements->getConstants());
+        $this->assertSame(5, $measurements->getConstantCount());
     }
 
     public function testClasses(): void
@@ -134,7 +134,7 @@ final class AnalyserTest extends TestCase
     {
         $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/methods_per_class.php']);
 
-        $this->assertSame(2.0, $measurements->getAverageMethodsPerClass());
+        $this->assertSame(2.0, $measurements->getAverageMethodCountPerClass());
 
         $this->assertSame(0, $measurements->getMinimumMethodsPerClass());
         $this->assertSame(4, $measurements->getMaximumMethodsPerClass());

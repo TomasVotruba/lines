@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines;
 
 use TomasVotruba\Lines\Enum\CounterName;
+use TomasVotruba\Lines\Helpers\NumberFormat;
 
 final class Measurements
 {
@@ -17,6 +18,11 @@ final class Measurements
      * @var int[]
      */
     private array $classLineCountPerClass = [];
+
+    /**
+     * @var int[]
+     */
+    private array $methodLineCountPerMethod = [];
 
     private int $currentClassLines = 0;
 
@@ -129,7 +135,8 @@ final class Measurements
 
     public function currentMethodStop(): void
     {
-        $this->addToArray(CounterName::METHOD_LINES, $this->currentMethodLines);
+        $this->methodLineCountPerMethod[] = $this->currentMethodLines;
+        //        $this->addToArray(CounterName::METHOD_LINES, $this->currentMethodLines);
     }
 
     public function incrementFunctionLines(): void
@@ -284,20 +291,27 @@ final class Measurements
 
     public function getAverageMethodLength(): float
     {
-        return $this->getAverage(CounterName::METHOD_LINES);
+        if ($this->methodLineCountPerMethod === []) {
+            return 0.0;
+        }
+
+        $totalMethodLineCount = array_sum($this->methodLineCountPerMethod);
+        $average = $totalMethodLineCount / count($this->methodLineCountPerMethod);
+
+        return NumberFormat::singleDecimal($average);
     }
 
     public function getMinimumMethodLength(): int
     {
-        return $this->getMinimum(CounterName::METHOD_LINES);
+        return min($this->methodLineCountPerMethod);
     }
 
     public function getMaximumMethodLength(): int
     {
-        return $this->getMaximum(CounterName::METHOD_LINES);
+        return max($this->methodLineCountPerMethod);
     }
 
-    public function getAverageMethodsPerClass(): float
+    public function getAverageMethodCountPerClass(): float
     {
         return $this->getAverage(CounterName::METHOD_COUNT_PER_CLASS);
     }
@@ -319,7 +333,7 @@ final class Measurements
 
     public function getAverageFunctionLength(): float
     {
-        return $this->divide($this->functionLineCount, $this->getFunctions());
+        return $this->divide($this->functionLineCount, $this->getFunctionCount());
     }
 
     public function getNotInClassesOrFunctions(): int
@@ -386,27 +400,27 @@ final class Measurements
         return $this->privateMethodCount;
     }
 
-    public function getFunctions(): int
+    public function getFunctionCount(): int
     {
         return $this->namedFunctionCount + $this->anonymousFunctionCount;
     }
 
-    public function getNamedFunctions(): int
+    public function getNamedFunctionCount(): int
     {
         return $this->namedFunctionCount;
     }
 
-    public function getAnonymousFunctions(): int
+    public function getAnonymousFunctionCount(): int
     {
         return $this->anonymousFunctionCount;
     }
 
-    public function getConstants(): int
+    public function getConstantCount(): int
     {
         return $this->globalConstantCount + $this->getClassConstants();
     }
 
-    public function getGlobalConstants(): int
+    public function getGlobalConstantCount(): int
     {
         return $this->globalConstantCount;
     }

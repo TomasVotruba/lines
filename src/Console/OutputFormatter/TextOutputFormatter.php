@@ -122,7 +122,7 @@ END;
         $output->writeln($result);
     }
 
-    private function printFilesAndDirectories(Measurements $measurementResult): void
+    private function printFilesAndDirectories(Measurements $measurements): void
     {
         $padLeftTableStyle = new TableStyle();
         $padLeftTableStyle->setPadType(STR_PAD_LEFT);
@@ -132,7 +132,7 @@ END;
             ->setColumnWidth(1, 19)
             ->setHeaders(['Metric', 'Count'])
             ->setRows(
-                [['Directories', $measurementResult->getDirectories()], ['Files', $measurementResult->getFiles()]]
+                [['Directories', $measurements->getDirectories()], ['Files', $measurements->getFiles()]]
             )
             ->setColumnStyle(1, $padLeftTableStyle)
             ->render();
@@ -140,22 +140,22 @@ END;
         $this->symfonyStyle->newLine();
     }
 
-    private function printLinesOfCode(Measurements $measurementResult): void
+    private function printLinesOfCode(Measurements $measurements): void
     {
         $tableRows = [
             [
                 'Comments',
-                NumberFormat::pretty($measurementResult->getCommentLines()),
+                NumberFormat::pretty($measurements->getCommentLines()),
                 NumberFormat::percent(
-                    $measurementResult->getLines() > 0 ? ($measurementResult->getCommentLines() / $measurementResult->getLines()) * 100 : 0
+                    $measurements->getLines() > 0 ? ($measurements->getCommentLines() / $measurements->getLines()) * 100 : 0
                 ),
             ],
 
             [
                 'Code',
-                NumberFormat::pretty($measurementResult->getNonCommentLines()),
+                NumberFormat::pretty($measurements->getNonCommentLines()),
                 NumberFormat::percent(
-                    $measurementResult->getLines() > 0 ? ($measurementResult->getNonCommentLines() / $measurementResult->getLines()) * 100 : 0
+                    $measurements->getLines() > 0 ? ($measurements->getNonCommentLines() / $measurements->getLines()) * 100 : 0
                 ),
             ],
 
@@ -163,7 +163,7 @@ END;
 
             [
                 '<options=bold>Total</>',
-                '<options=bold>' . NumberFormat::pretty($measurementResult->getLines()) . '</>',
+                '<options=bold>' . NumberFormat::pretty($measurements->getLines()) . '</>',
                 '<options=bold>100.0 %</>',
             ],
         ];

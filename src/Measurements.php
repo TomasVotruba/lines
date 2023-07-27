@@ -13,11 +13,16 @@ final class Measurements
      */
     private array $counts = [];
 
+    /**
+     * @var int[]
+     */
+    private array $classLineCountPerClass = [];
+
     private int $currentClassLines = 0;
 
     private int $currentMethodLines = 0;
 
-    private int $currentNumberOfMethods = 0;
+    private int $currentClassMethodCount = 0;
 
     /**
      * @var string[]
@@ -87,22 +92,22 @@ final class Measurements
         ++$this->logicalLineCount;
     }
 
-    public function currentClassReset(): void
+    public function resetCurrentClass(): void
     {
-        // if ($this->currentClassLines > 0) {
-        $this->addToArray(CounterName::CLASS_LINES, $this->currentClassLines);
-        //}
+        $this->classLineCountPerClass[] = $this->currentClassLines;
+
+        // $this->addToArray(CounterName::CLASS_LINES, $this->currentClassLines);
 
         $this->currentClassLines = 0;
-        $this->currentNumberOfMethods = 0;
+        $this->currentClassMethodCount = 0;
     }
 
     public function currentClassStop(): void
     {
-        $this->addToArray(CounterName::METHODS_PER_CLASS, $this->currentNumberOfMethods);
+        $this->addToArray(CounterName::METHOD_COUNT_PER_CLASS, $this->currentClassMethodCount);
     }
 
-    public function currentClassIncrementLines(): void
+    public function incrementCurrentClassLines(): void
     {
         ++$this->currentClassLines;
     }
@@ -114,7 +119,7 @@ final class Measurements
 
     public function currentClassIncrementMethods(): void
     {
-        ++$this->currentNumberOfMethods;
+        ++$this->currentClassMethodCount;
     }
 
     public function currentMethodIncrementLines(): void
@@ -255,22 +260,26 @@ final class Measurements
 
     public function getClassLines(): int
     {
-        return $this->getSum(CounterName::CLASS_LINES);
+        return array_sum($this->classLineCountPerClass);
     }
 
     public function getAverageClassLength(): float
     {
-        return $this->getAverage(CounterName::CLASS_LINES);
+        if ($this->classLineCountPerClass === []) {
+            return 0.0;
+        }
+
+        return $this->getClassLines() / count($this->classLineCountPerClass);
     }
 
     public function getMinimumClassLength(): int
     {
-        return $this->getMinimum(CounterName::CLASS_LINES);
+        return min($this->classLineCountPerClass);
     }
 
     public function getMaximumClassLength(): int
     {
-        return $this->getMaximum(CounterName::CLASS_LINES);
+        return max($this->classLineCountPerClass);
     }
 
     public function getAverageMethodLength(): float
@@ -290,17 +299,17 @@ final class Measurements
 
     public function getAverageMethodsPerClass(): float
     {
-        return $this->getAverage(CounterName::METHODS_PER_CLASS);
+        return $this->getAverage(CounterName::METHOD_COUNT_PER_CLASS);
     }
 
     public function getMinimumMethodsPerClass(): int
     {
-        return $this->getMinimum(CounterName::METHODS_PER_CLASS);
+        return $this->getMinimum(CounterName::METHOD_COUNT_PER_CLASS);
     }
 
     public function getMaximumMethodsPerClass(): int
     {
-        return $this->getMaximum(CounterName::METHODS_PER_CLASS);
+        return $this->getMaximum(CounterName::METHOD_COUNT_PER_CLASS);
     }
 
     public function getFunctionLines(): int

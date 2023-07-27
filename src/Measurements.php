@@ -410,7 +410,7 @@ final class Measurements
 
     public function getCommentLinesRelative(): float
     {
-        if ($this->lineCount) {
+        if ($this->lineCount !== 0) {
             $relative = ($this->commentLineCount / $this->lineCount) * 100;
             return NumberFormat::singleDecimal($relative);
         }
@@ -420,7 +420,7 @@ final class Measurements
 
     public function getNonCommentLinesRelative(): float
     {
-        if ($this->lineCount) {
+        if ($this->lineCount !== 0) {
             return $this->relative($this->getNonCommentLines(), $this->lineCount);
         }
 

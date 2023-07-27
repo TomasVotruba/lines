@@ -14,7 +14,7 @@ use TomasVotruba\Lines\Measurements;
 
 final class TextOutputFormatter implements OutputFormatterInterface
 {
-    private TableStyle $padLeftTableStyle;
+    private readonly TableStyle $padLeftTableStyle;
 
     public function __construct(
         private readonly SymfonyStyle $symfonyStyle,
@@ -86,7 +86,7 @@ Structure
                 Non-Public                  %10d (%.2f%%)
 END;
 
-        $result = sprintf(
+        sprintf(
             $format,
             $measurements->getClassLines(),
             $measurements->getClassLinesRelative(),

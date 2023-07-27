@@ -14,9 +14,15 @@ use TomasVotruba\Lines\Measurements;
 
 final class TextOutputFormatter implements OutputFormatterInterface
 {
+    private TableStyle $padLeftTableStyle;
+
     public function __construct(
         private readonly SymfonyStyle $symfonyStyle,
     ) {
+        $padLeftTableStyle = new TableStyle();
+        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
+
+        $this->padLeftTableStyle = $padLeftTableStyle;
     }
 
     public function printResult(Measurements $measurements, OutputInterface $output): void
@@ -71,23 +77,31 @@ END;
         $result = sprintf(
             $format,
             $measurements->getClassLines(),
-            $measurements->getLogicalLines() > 0 ? ($measurements->getClassLines() / $measurements->getLogicalLines()) * 100 : 0,
-
-            // Replace array dim fetch with method calls
+            $measurements->getClassLinesRelative(),
             $measurements->getAverageClassLength(),
             $measurements->getMinimumClassLength(),
             $measurements->getMaximumClassLength(),
+
+            // method length
             $measurements->getAverageMethodLength(),
             $measurements->getMinimumMethodLength(),
             $measurements->getMaximumMethodLength(),
+
+            // method count
             $measurements->getAverageMethodCountPerClass(),
-            $measurements->getMinimumMethodsPerClass(),
-            $measurements->getMaximumMethodsPerClass(),
-            $llocFunctions = $measurements->getFunctionLines(),
-            $measurements->getLogicalLines() > 0 ? ($llocFunctions / $measurements->getLogicalLines()) * 100 : 0,
+            $measurements->getMinimumMethodCountPerClass(),
+            $measurements->getMaximumMethodCountPerClass(),
+
+            // functions
+            $measurements->getFunctionLines(),
+            $measurements->getFunctionLinesRelative(),
             $measurements->getAverageFunctionLength(),
-            $llocGlobal = $measurements->getNotInClassesOrFunctions(),
-            $measurements->getLogicalLines() > 0 ? ($llocGlobal / $measurements->getLogicalLines()) * 100 : 0,
+
+            // non-class & non-function code
+            $measurements->getNotInClassesOrFunctions(),
+            $measurements->getNotInClassesOrFunctionsRelative(),
+
+            // elements
             $measurements->getNamespaces(),
             $measurements->getInterfaces(),
             $measurements->getTraits(),
@@ -124,15 +138,12 @@ END;
 
     private function printFilesAndDirectories(Measurements $measurements): void
     {
-        $padLeftTableStyle = new TableStyle();
-        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
-
         $this->symfonyStyle->createTable()
             ->setColumnWidth(0, 30)
             ->setColumnWidth(1, 19)
             ->setHeaders(['Metric', 'Count'])
             ->setRows([['Directories', $measurements->getDirectories()], ['Files', $measurements->getFiles()]])
-            ->setColumnStyle(1, $padLeftTableStyle)
+            ->setColumnStyle(1, $this->padLeftTableStyle)
             ->render();
 
         $this->symfonyStyle->newLine();
@@ -144,17 +155,13 @@ END;
             [
                 'Comments',
                 NumberFormat::pretty($measurements->getCommentLines()),
-                NumberFormat::percent(
-                    $measurements->getLines() > 0 ? ($measurements->getCommentLines() / $measurements->getLines()) * 100 : 0
-                ),
+                $measurements->getCommentLinesRelative() . ' %',
             ],
 
             [
                 'Code',
                 NumberFormat::pretty($measurements->getNonCommentLines()),
-                NumberFormat::percent(
-                    $measurements->getLines() > 0 ? ($measurements->getNonCommentLines() / $measurements->getLines()) * 100 : 0
-                ),
+                $measurements->getNonCommentLinesRelative() . ' %',
             ],
 
             [new TableSeparator(), new TableSeparator(), new TableSeparator()],
@@ -166,17 +173,14 @@ END;
             ],
         ];
 
-        $padLeftTableStyle = new TableStyle();
-        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
-
         $this->symfonyStyle->createTable()
             ->setColumnWidth(0, 30)
             ->setColumnWidth(1, 8)
             ->setColumnWidth(2, 7)
             ->setHeaders(['Lines of code', 'Count', 'Relative'])
             ->setRows($tableRows)
-            ->setColumnStyle(1, $padLeftTableStyle)
-            ->setColumnStyle(2, $padLeftTableStyle)
+            ->setColumnStyle(1, $this->padLeftTableStyle)
+            ->setColumnStyle(2, $this->padLeftTableStyle)
             ->render();
 
         $this->symfonyStyle->newLine(2);

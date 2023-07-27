@@ -57,8 +57,15 @@ final class AnalyserTest extends TestCase
         $this->assertSame(7.3, $measurements->getAverageMethodLength());
         $this->assertSame(9, $measurements->getMaximumMethodLength());
         $this->assertSame(1.3, $measurements->getAverageMethodCountPerClass());
-        $this->assertSame(0, $measurements->getMinimumMethodsPerClass());
-        $this->assertSame(4, $measurements->getMaximumMethodsPerClass());
+        $this->assertSame(0, $measurements->getMinimumMethodCountPerClass());
+        $this->assertSame(4, $measurements->getMaximumMethodCountPerClass());
+
+        // relative
+        $this->assertSame(8.5, $measurements->getCommentLinesRelative());
+        $this->assertSame(3.3, $measurements->getFunctionLinesRelative());
+        $this->assertSame(93.3, $measurements->getClassLinesRelative());
+        $this->assertSame(91.5, $measurements->getNonCommentLinesRelative());
+        $this->assertSame(3.3, $measurements->getNotInClassesOrFunctionsRelative());
     }
 
     #[DataProvider('issue126Provider')]
@@ -136,8 +143,8 @@ final class AnalyserTest extends TestCase
 
         $this->assertSame(2.0, $measurements->getAverageMethodCountPerClass());
 
-        $this->assertSame(0, $measurements->getMinimumMethodsPerClass());
-        $this->assertSame(4, $measurements->getMaximumMethodsPerClass());
+        $this->assertSame(0, $measurements->getMinimumMethodCountPerClass());
+        $this->assertSame(4, $measurements->getMaximumMethodCountPerClass());
     }
 
     public function testSkipTraitFromLogicalLines(): void

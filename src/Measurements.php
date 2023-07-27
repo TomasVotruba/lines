@@ -236,9 +236,22 @@ final class Measurements
         return $this->lineCount - $this->commentLineCount;
     }
 
+    /**
+     * @api used in tests
+     */
     public function getLogicalLines(): int
     {
         return $this->logicalLineCount;
+    }
+
+    public function getClassLinesRelative(): float
+    {
+        if ($this->logicalLineCount > 0) {
+            $relative = ($this->getClassLines() / $this->logicalLineCount) * 100;
+            return NumberFormat::singleDecimal($relative);
+        }
+
+        return 0.0;
     }
 
     public function getClassLines(): int
@@ -300,12 +313,12 @@ final class Measurements
         return NumberFormat::singleDecimal($average);
     }
 
-    public function getMinimumMethodsPerClass(): int
+    public function getMinimumMethodCountPerClass(): int
     {
         return min($this->methodCountsPerClass);
     }
 
-    public function getMaximumMethodsPerClass(): int
+    public function getMaximumMethodCountPerClass(): int
     {
         return max($this->methodCountsPerClass);
     }
@@ -427,5 +440,48 @@ final class Measurements
     public function getClassConstants(): int
     {
         return $this->publicClassConstantCount + $this->nonPublicClassConstantCount;
+    }
+
+    public function getCommentLinesRelative(): float
+    {
+        if ($this->lineCount) {
+            $relative = ($this->commentLineCount / $this->lineCount) * 100;
+            return NumberFormat::singleDecimal($relative);
+        }
+
+        return 0.0;
+    }
+
+    public function getNonCommentLinesRelative(): float
+    {
+        if ($this->lineCount) {
+            return $this->relative($this->getNonCommentLines(), $this->lineCount);
+        }
+
+        return 0.0;
+    }
+
+    public function getFunctionLinesRelative(): float
+    {
+        if ($this->logicalLineCount > 0) {
+            return $this->relative($this->functionLineCount, $this->logicalLineCount);
+        }
+
+        return 0.0;
+    }
+
+    public function getNotInClassesOrFunctionsRelative(): float
+    {
+        if ($this->logicalLineCount > 0) {
+            return $this->relative($this->getNotInClassesOrFunctions(), $this->logicalLineCount);
+        }
+
+        return 0.0;
+    }
+
+    private function relative(int $partialNumber, int $sumNumber): float
+    {
+        $relative = ($partialNumber / $sumNumber) * 100;
+        return NumberFormat::singleDecimal($relative);
     }
 }

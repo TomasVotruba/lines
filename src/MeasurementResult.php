@@ -20,22 +20,22 @@ final class MeasurementResult
 
     public function getDirectories(): int
     {
-        return $this->getCount('directories') - 1;
+        return $this->getCount(CounterName::DIRECTORIES) - 1;
     }
 
     public function getFiles(): int
     {
-        return $this->getValue('files');
+        return $this->getValue(CounterName::FILES);
     }
 
     public function getLines(): int
     {
-        return $this->getValue('lines');
+        return $this->getValue(CounterName::LINES);
     }
 
     public function getCommentLines(): int
     {
-        return $this->getValue('comment lines');
+        return $this->getValue(CounterName::COMMENT_LINES);
     }
 
     public function getNonCommentLines(): int
@@ -45,62 +45,62 @@ final class MeasurementResult
 
     public function getLogicalLines(): int
     {
-        return $this->getValue('logical lines');
+        return $this->getValue(CounterName::LOGICAL_LINES);
     }
 
     public function getClassLines(): int
     {
-        return $this->getSum('class lines');
+        return $this->getSum(CounterName::CLASS_LINES);
     }
 
     public function getAverageClassLength(): float
     {
-        return $this->getAverage('class lines');
+        return $this->getAverage(CounterName::CLASS_LINES);
     }
 
     public function getMinimumClassLength(): int
     {
-        return $this->getMinimum('class lines');
+        return $this->getMinimum(CounterName::CLASS_LINES);
     }
 
     public function getMaximumClassLength(): int
     {
-        return $this->getMaximum('class lines');
+        return $this->getMaximum(CounterName::CLASS_LINES);
     }
 
     public function getAverageMethodLength(): float
     {
-        return $this->getAverage('method lines');
+        return $this->getAverage(CounterName::METHOD_LINES);
     }
 
     public function getMinimumMethodLength(): int
     {
-        return $this->getMinimum('method lines');
+        return $this->getMinimum(CounterName::METHOD_LINES);
     }
 
     public function getMaximumMethodLength(): int
     {
-        return $this->getMaximum('method lines');
+        return $this->getMaximum(CounterName::METHOD_LINES);
     }
 
     public function getAverageMethodsPerClass(): float
     {
-        return $this->getAverage('methods per class');
+        return $this->getAverage(CounterName::METHODS_PER_CLASS);
     }
 
     public function getMinimumMethodsPerClass(): int
     {
-        return $this->getMinimum('methods per class');
+        return $this->getMinimum(CounterName::METHODS_PER_CLASS);
     }
 
     public function getMaximumMethodsPerClass(): int
     {
-        return $this->getMaximum('methods per class');
+        return $this->getMaximum(CounterName::METHODS_PER_CLASS);
     }
 
     public function getFunctionLines(): int
     {
-        return $this->getValue('function lines');
+        return $this->getValue(CounterName::FUNCTION_LINES);
     }
 
     public function getAverageFunctionLength(): float
@@ -115,17 +115,17 @@ final class MeasurementResult
 
     public function getNamespaces(): int
     {
-        return $this->getCount('namespaces');
+        return $this->getCount(CounterName::NAMESPACES);
     }
 
     public function getInterfaces(): int
     {
-        return $this->getValue('interfaces');
+        return $this->getValue(CounterName::INTERFACES);
     }
 
     public function getTraits(): int
     {
-        return $this->getValue('traits');
+        return $this->getValue(CounterName::TRAITS);
     }
 
     public function getClasses(): int
@@ -140,17 +140,17 @@ final class MeasurementResult
 
     public function getNonStaticMethods(): int
     {
-        return $this->getValue('non-static methods');
+        return $this->getValue(CounterName::NON_STATIC_METHODS);
     }
 
     public function getStaticMethods(): int
     {
-        return $this->getValue('static methods');
+        return $this->getValue(CounterName::STATIC_METHODS);
     }
 
     public function getPublicMethods(): int
     {
-        return $this->getValue('public methods');
+        return $this->getValue(CounterName::PUBLIC_METHODS);
     }
 
     /**
@@ -163,12 +163,12 @@ final class MeasurementResult
 
     public function getProtectedMethods(): int
     {
-        return $this->getValue('protected methods');
+        return $this->getValue(CounterName::PROTECTED_METHODS);
     }
 
     public function getPrivateMethods(): int
     {
-        return $this->getValue('private methods');
+        return $this->getValue(CounterName::PRIVATE_METHODS);
     }
 
     public function getFunctions(): int
@@ -178,12 +178,12 @@ final class MeasurementResult
 
     public function getNamedFunctions(): int
     {
-        return $this->getValue('named functions');
+        return $this->getValue(CounterName::NAMED_FUNCTIONS);
     }
 
     public function getAnonymousFunctions(): int
     {
-        return $this->getValue('anonymous functions');
+        return $this->getValue(CounterName::ANONYMOUS_FUNCTIONS);
     }
 
     public function getConstants(): int
@@ -193,17 +193,17 @@ final class MeasurementResult
 
     public function getGlobalConstants(): int
     {
-        return $this->getValue('global constants');
+        return $this->getValue(CounterName::GLOBAL_CONSTANTS);
     }
 
     public function getPublicClassConstants(): int
     {
-        return $this->getValue('public class constants');
+        return $this->getValue(CounterName::PUBLIC_CLASS_CONSTANTS);
     }
 
     public function getNonPublicClassConstants(): int
     {
-        return $this->getValue('non-public class constants');
+        return $this->getValue(CounterName::NON_PUBLIC_CLASS_CONSTATNTS);
     }
 
     public function getClassConstants(): int
@@ -211,17 +211,26 @@ final class MeasurementResult
         return $this->getPublicClassConstants() + $this->getNonPublicClassConstants();
     }
 
+    /**
+     * @param CounterName::* $key
+     */
     private function getAverage(string $key): float
     {
         $result = $this->divide($this->getSum($key), $this->getCount($key));
         return (float) number_format($result, 1);
     }
 
+    /**
+     * @param CounterName::* $key
+     */
     private function getCount(string $key): int
     {
         return isset($this->counts[$key]) ? is_countable($this->counts[$key]) ? count($this->counts[$key]) : 0 : 0;
     }
 
+    /**
+     * @param CounterName::* $key
+     */
     private function getSum(string $key): int
     {
         if (! isset($this->counts[$key])) {
@@ -231,16 +240,25 @@ final class MeasurementResult
         return (int) array_sum($this->counts[$key]);
     }
 
+    /**
+     * @param CounterName::* $key
+     */
     private function getMaximum(string $key): int
     {
         return isset($this->counts[$key]) ? max($this->counts[$key]) : 0;
     }
 
+    /**
+     * @param CounterName::* $key
+     */
     private function getMinimum(string $key): int
     {
         return isset($this->counts[$key]) ? min($this->counts[$key]) : 0;
     }
 
+    /**
+     * @param CounterName::* $key
+     */
     private function getValue(string $key): mixed
     {
         return $this->counts[$key] ?? 0;

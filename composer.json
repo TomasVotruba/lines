@@ -27,10 +27,7 @@
     "autoload": {
         "psr-4": {
             "TomasVotruba\\Lines\\": "src"
-        },
-        "files": [
-            "src/functions.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {

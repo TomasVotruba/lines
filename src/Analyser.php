@@ -39,14 +39,15 @@ final class Analyser
     {
         Assert::fileExists($filename);
 
-        $buffer = file_get_contents($filename);
-        Assert::string($buffer);
+        $fileContents = file_get_contents($filename);
+        Assert::string($fileContents);
 
-        $this->metricsCollector->incrementLines(substr_count($buffer, "\n"));
-        $tokens = token_get_all($buffer);
+        $this->metricsCollector->incrementLines(substr_count($fileContents, "\n"));
+        $tokens = token_get_all($fileContents);
         $numTokens = count($tokens);
 
-        unset($buffer);
+        // performance?
+        unset($fileContents);
 
         $this->metricsCollector->addFile($filename);
 
@@ -174,8 +175,7 @@ final class Analyser
                     }
 
                     if ($currentBlock === T_FUNCTION) {
-                        if ($className === null &&
-                            $functionName !== 'anonymous function') {
+                        if ($className === null && $functionName !== 'anonymous function') {
                             $this->metricsCollector->incrementNamedFunctions();
                         } else {
                             $static = false;

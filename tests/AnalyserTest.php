@@ -73,8 +73,8 @@ final class AnalyserTest extends TestCase
     #[DataProvider('issue126Provider')]
     public function testIssue126IsFixed(int $fileNumber, int $cloc): void
     {
-        $file = __DIR__ . '/Fixture/issue_126/issue_126_' . $fileNumber . '.php';
-        $result = $this->analyser->countFiles([$file]);
+        $filePath = __DIR__ . '/Fixture/issue_126/issue_126_' . $fileNumber . '.php';
+        $result = $this->analyser->countFiles([$filePath]);
 
         $assertString = sprintf(
             'Failed asserting that %s matches expected %s in issue_126_%d.php',
@@ -91,7 +91,6 @@ final class AnalyserTest extends TestCase
      */
     public static function issue126Provider(): array
     {
-        // issue_126_X.php => CLOC
         return [
             [1, 1],
             [2, 1],
@@ -105,12 +104,7 @@ final class AnalyserTest extends TestCase
 
     public function testIssue138IsFixed(): void
     {
-        $result = $this->analyser->countFiles(
-            [
-                __DIR__ . '/Fixture/issue_138.php',
-            ],
-        );
-
+        $result = $this->analyser->countFiles([__DIR__ . '/Fixture/issue_138.php']);
         $this->assertSame(1, $result['classes']);
     }
 

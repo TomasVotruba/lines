@@ -8,6 +8,7 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TomasVotruba\Lines\Helpers\NumberFormat;
 
 final class TextOutputFormatter
 {
@@ -49,21 +50,21 @@ final class TextOutputFormatter
         $tableRows = [
             [
                 'Comments',
-                pretty_number($count['cloc']),
-                percent($count['loc'] > 0 ? ($count['cloc'] / $count['loc']) * 100 : 0),
+                NumberFormat::pretty($count['cloc']),
+                NumberFormat::percent($count['loc'] > 0 ? ($count['cloc'] / $count['loc']) * 100 : 0),
             ],
 
             [
                 'Code',
-                pretty_number($count['ncloc']),
-                percent($count['loc'] > 0 ? ($count['ncloc'] / $count['loc']) * 100 : 0),
+                NumberFormat::pretty($count['ncloc']),
+                NumberFormat::percent($count['loc'] > 0 ? ($count['ncloc'] / $count['loc']) * 100 : 0),
             ],
 
             [new TableSeparator(), new TableSeparator(), new TableSeparator()],
 
             [
                 '<options=bold>Total</>',
-                '<options=bold>' . pretty_number($count['loc']) . '</>',
+                '<options=bold>' . NumberFormat::pretty($count['loc']) . '</>',
                 '<options=bold>100.0 %</>',
             ],
         ];

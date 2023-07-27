@@ -30,26 +30,56 @@ final class Measurements
 
     private int $interfaceCount = 0;
 
+    private int $lineCount = 0;
+
+    private int $fileCount = 0;
+
+    private int $nonStaticMethodCount = 0;
+
+    private int $staticMethodCount = 0;
+
+    private int $publicMethodCount = 0;
+
+    private int $protectedMethodCount = 0;
+
+    private int $privateMethodCount = 0;
+
+    private int $namedFunctionCount = 0;
+
+    private int $anonymousFunctionCount = 0;
+
+    private int $globalConstantCount = 0;
+
+    private int $publicClassConstantCount = 0;
+
+    private int $nonPublicClassConstantCount = 0;
+
+    private int $logicalLineCount = 0;
+
+    private int $commentLineCount = 0;
+
+    private int $functionLineCount = 0;
+
     public function addFile(string $filename): void
     {
         $this->directoryNames[] = dirname($filename);
 
-        $this->increment(CounterName::FILES);
+        ++$this->fileCount;
     }
 
     public function incrementLines(int $number): void
     {
-        $this->increment(CounterName::LINES, $number);
+        $this->lineCount += $number;
     }
 
     public function incrementCommentLines(int $number): void
     {
-        $this->increment(CounterName::COMMENT_LINES, $number);
+        $this->commentLineCount += $number;
     }
 
     public function incrementLogicalLines(): void
     {
-        $this->increment(CounterName::LOGICAL_LINES);
+        ++$this->logicalLineCount;
     }
 
     public function currentClassReset(): void
@@ -94,7 +124,7 @@ final class Measurements
 
     public function incrementFunctionLines(): void
     {
-        $this->increment(CounterName::FUNCTION_LINES);
+        ++$this->functionLineCount;
     }
 
     public function addConstant(string $name): void
@@ -228,17 +258,17 @@ final class Measurements
 
     public function getFiles(): int
     {
-        return $this->getValue(CounterName::FILES);
+        return $this->fileCount;
     }
 
     public function getLines(): int
     {
-        return $this->getValue(CounterName::LINES);
+        return $this->lineCount;
     }
 
     public function getCommentLines(): int
     {
-        return $this->getValue(CounterName::COMMENT_LINES);
+        return $this->commentLineCount;
     }
 
     public function getNonCommentLines(): int
@@ -248,7 +278,7 @@ final class Measurements
 
     public function getLogicalLines(): int
     {
-        return $this->getValue(CounterName::LOGICAL_LINES);
+        return $this->logicalLineCount;
     }
 
     public function getClassLines(): int
@@ -303,7 +333,7 @@ final class Measurements
 
     public function getFunctionLines(): int
     {
-        return $this->getValue(CounterName::FUNCTION_LINES);
+        return $this->functionLineCount;
     }
 
     public function getAverageFunctionLength(): float

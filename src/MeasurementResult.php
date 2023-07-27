@@ -168,6 +168,9 @@ final class MeasurementResult
         return $this->getValue('public methods');
     }
 
+    /**
+     * @api
+     */
     public function getNonPublicMethods(): int
     {
         return $this->getProtectedMethods() + $this->getPrivateMethods();

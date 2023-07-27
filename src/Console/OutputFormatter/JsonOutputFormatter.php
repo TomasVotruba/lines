@@ -12,20 +12,15 @@ final class JsonOutputFormatter
 {
     public function printResult(MeasurementResult $measurementResult, OutputInterface $output): void
     {
-        $directories = [];
+        $arrayData = [
+            'directories' => $measurementResult->getDirectories(),
+            'files' => $measurementResult->getFiles(),
+        ];
 
-        if ($measurementResult['directories'] > 0) {
-            $directories = [
-                'directories' => $measurementResult['directories'],
-                'files' => $measurementResult['files'],
-            ];
-        }
+        // @todo
+        //$completeReport = array_merge($directories, $measurementResult);
 
-        unset($measurementResult['directories'], $measurementResult['files']);
-
-        $completeReport = array_merge($directories, $measurementResult);
-
-        $jsonString = json_encode($completeReport, JSON_PRETTY_PRINT);
+        $jsonString = json_encode($arrayData, JSON_PRETTY_PRINT);
         Assert::string($jsonString);
 
         $output->writeln($jsonString);

@@ -113,20 +113,20 @@ final class MeasurementResult
         return $this->getLogicalLines() - $this->getClassLines() - $this->getFunctionLines();
     }
 
-    public function getMethodCalls(): int
-    {
-        return $this->getNonStaticMethodCalls() + $this->getStaticMethodCalls();
-    }
+    //    public function getMethodCalls(): int
+    //    {
+    //        return $this->getNonStaticMethodCalls() + $this->getStaticMethodCalls();
+    //    }
 
-    public function getNonStaticMethodCalls(): int
-    {
-        return $this->getValue('non-static method calls');
-    }
-
-    public function getStaticMethodCalls(): int
-    {
-        return $this->getValue('static method calls');
-    }
+    //    public function getNonStaticMethodCalls(): int
+    //    {
+    //        return $this->getValue('non-static method calls');
+    //    }
+    //
+    //    public function getStaticMethodCalls(): int
+    //    {
+    //        return $this->getValue('static method calls');
+    //    }
 
     public function getNamespaces(): int
     {
@@ -223,55 +223,55 @@ final class MeasurementResult
         return $this->getPublicClassConstants() + $this->getNonPublicClassConstants();
     }
 
-    //    /**
-    //     * @return array<string, mixed>
-    //     */
-    //    public function toArray(): array
-    //    {
-    //        return [
-    //            'files' => $this->getFiles(),
-    //            'loc' => $this->getLines(),
-    //            'lloc' => $this->getLogicalLines(),
-    //            'llocClasses' => $this->getClassLines(),
-    //            'llocFunctions' => $this->getFunctionLines(),
-    //            'llocGlobal' => $this->getNotInClassesOrFunctions(),
-    //            'cloc' => $this->getCommentLines(),
-    //            'interfaces' => $this->getInterfaces(),
-    //            'traits' => $this->getTraits(),
-    //            'classes' => $this->getClasses(),
-    //            'functions' => $this->getFunctions(),
-    //            'namedFunctions' => $this->getNamedFunctions(),
-    //            'anonymousFunctions' => $this->getAnonymousFunctions(),
-    //            'methods' => $this->getMethods(),
-    //            'publicMethods' => $this->getPublicMethods(),
-    //            'nonPublicMethods' => $this->getNonPublicMethods(),
-    //            'protectedMethods' => $this->getProtectedMethods(),
-    //            'privateMethods' => $this->getPrivateMethods(),
-    //            'nonStaticMethods' => $this->getNonStaticMethods(),
-    //            'staticMethods' => $this->getStaticMethods(),
-    //            'constants' => $this->getConstants(),
-    //            'classConstants' => $this->getClassConstants(),
-    //            'publicClassConstants' => $this->getPublicClassConstants(),
-    //            'nonPublicClassConstants' => $this->getNonPublicClassConstants(),
-    //            'globalConstants' => $this->getGlobalConstants(),
-    //            'llocByNof' => $this->getAverageFunctionLength(),
-    //            'methodCalls' => $this->getMethodCalls(),
-    //            'staticMethodCalls' => $this->getStaticMethodCalls(),
-    //            'instanceMethodCalls' => $this->getNonStaticMethodCalls(),
-    //            'directories' => $this->getDirectories(),
-    //            'classLlocMin' => $this->getMinimumClassLength(),
-    //            'classLlocAvg' => $this->getAverageClassLength(),
-    //            'classLlocMax' => $this->getMaximumClassLength(),
-    //            'methodLlocMin' => $this->getMinimumMethodLength(),
-    //            'methodLlocAvg' => $this->getAverageMethodLength(),
-    //            'methodLlocMax' => $this->getMaximumMethodLength(),
-    //            'averageMethodsPerClass' => $this->getAverageMethodsPerClass(),
-    //            'minimumMethodsPerClass' => $this->getMinimumMethodsPerClass(),
-    //            'maximumMethodsPerClass' => $this->getMaximumMethodsPerClass(),
-    //            'namespaces' => $this->getNamespaces(),
-    //            'ncloc' => $this->getNonCommentLines(),
-    //        ];
-    //    }
+    //        /**
+    //         * @return array<string, mixed>
+    //         */
+    //        public function toArray(): array
+    //        {
+    //            return [
+    //                'files' => $this->getFiles(),
+    //                'loc' => $this->getLines(),
+    //                'lloc' => $this->getLogicalLines(),
+    //                'llocClasses' => $this->getClassLines(),
+    //                'llocFunctions' => $this->getFunctionLines(),
+    //                'llocGlobal' => $this->getNotInClassesOrFunctions(),
+    //                'cloc' => $this->getCommentLines(),
+    //                'interfaces' => $this->getInterfaces(),
+    //                'traits' => $this->getTraits(),
+    //                'classes' => $this->getClasses(),
+    //                'functions' => $this->getFunctions(),
+    //                'namedFunctions' => $this->getNamedFunctions(),
+    //                'anonymousFunctions' => $this->getAnonymousFunctions(),
+    //                'methods' => $this->getMethods(),
+    //                'publicMethods' => $this->getPublicMethods(),
+    //                'nonPublicMethods' => $this->getNonPublicMethods(),
+    //                'protectedMethods' => $this->getProtectedMethods(),
+    //                'privateMethods' => $this->getPrivateMethods(),
+    //                'nonStaticMethods' => $this->getNonStaticMethods(),
+    //                'staticMethods' => $this->getStaticMethods(),
+    //                'constants' => $this->getConstants(),
+    //                'classConstants' => $this->getClassConstants(),
+    //                'publicClassConstants' => $this->getPublicClassConstants(),
+    //                'nonPublicClassConstants' => $this->getNonPublicClassConstants(),
+    //                'globalConstants' => $this->getGlobalConstants(),
+    //                'llocByNof' => $this->getAverageFunctionLength(),
+    //                'methodCalls' => $this->getMethodCalls(),
+    //                'staticMethodCalls' => $this->getStaticMethodCalls(),
+    //                'instanceMethodCalls' => $this->getNonStaticMethodCalls(),
+    //                'directories' => $this->getDirectories(),
+    //                'classLlocMin' => $this->getMinimumClassLength(),
+    //                'classLlocAvg' => $this->getAverageClassLength(),
+    //                'classLlocMax' => $this->getMaximumClassLength(),
+    //                'methodLlocMin' => $this->getMinimumMethodLength(),
+    //                'methodLlocAvg' => $this->getAverageMethodLength(),
+    //                'methodLlocMax' => $this->getMaximumMethodLength(),
+    //                'averageMethodsPerClass' => $this->getAverageMethodsPerClass(),
+    //                'minimumMethodsPerClass' => $this->getMinimumMethodsPerClass(),
+    //                'maximumMethodsPerClass' => $this->getMaximumMethodsPerClass(),
+    //                'namespaces' => $this->getNamespaces(),
+    //                'ncloc' => $this->getNonCommentLines(),
+    //            ];
+    //        }
 
     private function getAverage(string $key): float
     {

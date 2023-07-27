@@ -19,9 +19,9 @@ final class MetricsCollector
 
     private int $currentNumberOfMethods = 0;
 
-    public function getPublisher(): Publisher
+    public function getPublisher(): MeasurementResult
     {
-        return new Publisher($this->counts);
+        return new MeasurementResult($this->counts);
     }
 
     public function addFile(string $filename): void

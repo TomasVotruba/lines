@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines;
 
 use TomasVotruba\Lines\Enum\CounterName;
+use Webmozart\Assert\Assert;
 
-final class Publisher
+final class MeasurementResult
 {
     /**
      * @param array<string, mixed> $counts
@@ -14,6 +15,7 @@ final class Publisher
     public function __construct(
         private array $counts
     ) {
+        Assert::allString(array_keys($counts));
     }
 
     public function getDirectories(): int
@@ -221,55 +223,55 @@ final class Publisher
         return $this->getPublicClassConstants() + $this->getNonPublicClassConstants();
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    public function toArray(): array
-    {
-        return [
-            'files' => $this->getFiles(),
-            'loc' => $this->getLines(),
-            'lloc' => $this->getLogicalLines(),
-            'llocClasses' => $this->getClassLines(),
-            'llocFunctions' => $this->getFunctionLines(),
-            'llocGlobal' => $this->getNotInClassesOrFunctions(),
-            'cloc' => $this->getCommentLines(),
-            'interfaces' => $this->getInterfaces(),
-            'traits' => $this->getTraits(),
-            'classes' => $this->getClasses(),
-            'functions' => $this->getFunctions(),
-            'namedFunctions' => $this->getNamedFunctions(),
-            'anonymousFunctions' => $this->getAnonymousFunctions(),
-            'methods' => $this->getMethods(),
-            'publicMethods' => $this->getPublicMethods(),
-            'nonPublicMethods' => $this->getNonPublicMethods(),
-            'protectedMethods' => $this->getProtectedMethods(),
-            'privateMethods' => $this->getPrivateMethods(),
-            'nonStaticMethods' => $this->getNonStaticMethods(),
-            'staticMethods' => $this->getStaticMethods(),
-            'constants' => $this->getConstants(),
-            'classConstants' => $this->getClassConstants(),
-            'publicClassConstants' => $this->getPublicClassConstants(),
-            'nonPublicClassConstants' => $this->getNonPublicClassConstants(),
-            'globalConstants' => $this->getGlobalConstants(),
-            'llocByNof' => $this->getAverageFunctionLength(),
-            'methodCalls' => $this->getMethodCalls(),
-            'staticMethodCalls' => $this->getStaticMethodCalls(),
-            'instanceMethodCalls' => $this->getNonStaticMethodCalls(),
-            'directories' => $this->getDirectories(),
-            'classLlocMin' => $this->getMinimumClassLength(),
-            'classLlocAvg' => $this->getAverageClassLength(),
-            'classLlocMax' => $this->getMaximumClassLength(),
-            'methodLlocMin' => $this->getMinimumMethodLength(),
-            'methodLlocAvg' => $this->getAverageMethodLength(),
-            'methodLlocMax' => $this->getMaximumMethodLength(),
-            'averageMethodsPerClass' => $this->getAverageMethodsPerClass(),
-            'minimumMethodsPerClass' => $this->getMinimumMethodsPerClass(),
-            'maximumMethodsPerClass' => $this->getMaximumMethodsPerClass(),
-            'namespaces' => $this->getNamespaces(),
-            'ncloc' => $this->getNonCommentLines(),
-        ];
-    }
+    //    /**
+    //     * @return array<string, mixed>
+    //     */
+    //    public function toArray(): array
+    //    {
+    //        return [
+    //            'files' => $this->getFiles(),
+    //            'loc' => $this->getLines(),
+    //            'lloc' => $this->getLogicalLines(),
+    //            'llocClasses' => $this->getClassLines(),
+    //            'llocFunctions' => $this->getFunctionLines(),
+    //            'llocGlobal' => $this->getNotInClassesOrFunctions(),
+    //            'cloc' => $this->getCommentLines(),
+    //            'interfaces' => $this->getInterfaces(),
+    //            'traits' => $this->getTraits(),
+    //            'classes' => $this->getClasses(),
+    //            'functions' => $this->getFunctions(),
+    //            'namedFunctions' => $this->getNamedFunctions(),
+    //            'anonymousFunctions' => $this->getAnonymousFunctions(),
+    //            'methods' => $this->getMethods(),
+    //            'publicMethods' => $this->getPublicMethods(),
+    //            'nonPublicMethods' => $this->getNonPublicMethods(),
+    //            'protectedMethods' => $this->getProtectedMethods(),
+    //            'privateMethods' => $this->getPrivateMethods(),
+    //            'nonStaticMethods' => $this->getNonStaticMethods(),
+    //            'staticMethods' => $this->getStaticMethods(),
+    //            'constants' => $this->getConstants(),
+    //            'classConstants' => $this->getClassConstants(),
+    //            'publicClassConstants' => $this->getPublicClassConstants(),
+    //            'nonPublicClassConstants' => $this->getNonPublicClassConstants(),
+    //            'globalConstants' => $this->getGlobalConstants(),
+    //            'llocByNof' => $this->getAverageFunctionLength(),
+    //            'methodCalls' => $this->getMethodCalls(),
+    //            'staticMethodCalls' => $this->getStaticMethodCalls(),
+    //            'instanceMethodCalls' => $this->getNonStaticMethodCalls(),
+    //            'directories' => $this->getDirectories(),
+    //            'classLlocMin' => $this->getMinimumClassLength(),
+    //            'classLlocAvg' => $this->getAverageClassLength(),
+    //            'classLlocMax' => $this->getMaximumClassLength(),
+    //            'methodLlocMin' => $this->getMinimumMethodLength(),
+    //            'methodLlocAvg' => $this->getAverageMethodLength(),
+    //            'methodLlocMax' => $this->getMaximumMethodLength(),
+    //            'averageMethodsPerClass' => $this->getAverageMethodsPerClass(),
+    //            'minimumMethodsPerClass' => $this->getMinimumMethodsPerClass(),
+    //            'maximumMethodsPerClass' => $this->getMaximumMethodsPerClass(),
+    //            'namespaces' => $this->getNamespaces(),
+    //            'ncloc' => $this->getNonCommentLines(),
+    //        ];
+    //    }
 
     private function getAverage(string $key): float
     {

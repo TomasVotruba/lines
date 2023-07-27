@@ -9,6 +9,7 @@ use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Helpers\NumberFormat;
+use TomasVotruba\Lines\MeasurementResult;
 
 final class TextOutputFormatter
 {
@@ -17,20 +18,17 @@ final class TextOutputFormatter
     ) {
     }
 
-    /**
-     * @param array<string, mixed> $count
-     */
-    public function printResult(array $count, OutputInterface $output): void
+    public function printResult(MeasurementResult $measurementResult, OutputInterface $output): void
     {
         $padLeftTableStyle = new TableStyle();
         $padLeftTableStyle->setPadType(STR_PAD_LEFT);
 
-        if ($count['directories'] > 0) {
+        if ($measurementResult['directories'] > 0) {
             $this->symfonyStyle->createTable()
                 ->setColumnWidth(0, 30)
                 ->setColumnWidth(1, 19)
                 ->setHeaders(['Metric', 'Count'])
-                ->setRows([['Directories', $count['directories']], ['Files', $count['files']]])
+                ->setRows([['Directories', $measurementResult['directories']], ['Files', $measurementResult['files']]])
                 ->setColumnStyle(1, $padLeftTableStyle)
                 ->render();
 
@@ -40,21 +38,25 @@ final class TextOutputFormatter
         $tableRows = [
             [
                 'Comments',
-                NumberFormat::pretty($count['cloc']),
-                NumberFormat::percent($count['loc'] > 0 ? ($count['cloc'] / $count['loc']) * 100 : 0),
+                NumberFormat::pretty($measurementResult['cloc']),
+                NumberFormat::percent(
+                    $measurementResult['loc'] > 0 ? ($measurementResult['cloc'] / $measurementResult['loc']) * 100 : 0
+                ),
             ],
 
             [
                 'Code',
-                NumberFormat::pretty($count['ncloc']),
-                NumberFormat::percent($count['loc'] > 0 ? ($count['ncloc'] / $count['loc']) * 100 : 0),
+                NumberFormat::pretty($measurementResult['ncloc']),
+                NumberFormat::percent(
+                    $measurementResult['loc'] > 0 ? ($measurementResult['ncloc'] / $measurementResult['loc']) * 100 : 0
+                ),
             ],
 
             [new TableSeparator(), new TableSeparator(), new TableSeparator()],
 
             [
                 '<options=bold>Total</>',
-                '<options=bold>' . NumberFormat::pretty($count['loc']) . '</>',
+                '<options=bold>' . NumberFormat::pretty($measurementResult['loc']) . '</>',
                 '<options=bold>100.0 %</>',
             ],
         ];
@@ -117,51 +119,51 @@ END;
 
         $result = sprintf(
             $format,
-            $count['llocClasses'],
-            $count['lloc'] > 0 ? ($count['llocClasses'] / $count['lloc']) * 100 : 0,
-            $count['classLlocAvg'],
-            $count['classLlocMin'],
-            $count['classLlocMax'],
-            $count['methodLlocAvg'],
-            $count['methodLlocMin'],
-            $count['methodLlocMax'],
-            $count['averageMethodsPerClass'],
-            $count['minimumMethodsPerClass'],
-            $count['maximumMethodsPerClass'],
-            $count['llocFunctions'],
-            $count['lloc'] > 0 ? ($count['llocFunctions'] / $count['lloc']) * 100 : 0,
-            $count['llocByNof'],
-            $count['llocGlobal'],
-            $count['lloc'] > 0 ? ($count['llocGlobal'] / $count['lloc']) * 100 : 0,
-            $count['namespaces'],
-            $count['interfaces'],
-            $count['traits'],
-            $count['classes'],
-            $count['methods'],
-            $count['nonStaticMethods'],
-            $count['methods'] > 0 ? ($count['nonStaticMethods'] / $count['methods']) * 100 : 0,
-            $count['staticMethods'],
-            $count['methods'] > 0 ? ($count['staticMethods'] / $count['methods']) * 100 : 0,
-            $count['publicMethods'],
-            $count['methods'] > 0 ? ($count['publicMethods'] / $count['methods']) * 100 : 0,
-            $count['protectedMethods'],
-            $count['methods'] > 0 ? ($count['protectedMethods'] / $count['methods']) * 100 : 0,
-            $count['privateMethods'],
-            $count['methods'] > 0 ? ($count['privateMethods'] / $count['methods']) * 100 : 0,
-            $count['functions'],
-            $count['namedFunctions'],
-            $count['functions'] > 0 ? ($count['namedFunctions'] / $count['functions']) * 100 : 0,
-            $count['anonymousFunctions'],
-            $count['functions'] > 0 ? ($count['anonymousFunctions'] / $count['functions']) * 100 : 0,
-            $count['constants'],
-            $count['globalConstants'],
-            $count['constants'] > 0 ? ($count['globalConstants'] / $count['constants']) * 100 : 0,
-            $count['classConstants'],
-            $count['constants'] > 0 ? ($count['classConstants'] / $count['constants']) * 100 : 0,
-            $count['publicClassConstants'],
-            $count['classConstants'] > 0 ? ($count['publicClassConstants'] / $count['classConstants']) * 100 : 0,
-            $count['nonPublicClassConstants'],
-            $count['classConstants'] > 0 ? ($count['nonPublicClassConstants'] / $count['classConstants']) * 100 : 0
+            $measurementResult['llocClasses'],
+            $measurementResult['lloc'] > 0 ? ($measurementResult['llocClasses'] / $measurementResult['lloc']) * 100 : 0,
+            $measurementResult['classLlocAvg'],
+            $measurementResult['classLlocMin'],
+            $measurementResult['classLlocMax'],
+            $measurementResult['methodLlocAvg'],
+            $measurementResult['methodLlocMin'],
+            $measurementResult['methodLlocMax'],
+            $measurementResult['averageMethodsPerClass'],
+            $measurementResult['minimumMethodsPerClass'],
+            $measurementResult['maximumMethodsPerClass'],
+            $measurementResult['llocFunctions'],
+            $measurementResult['lloc'] > 0 ? ($measurementResult['llocFunctions'] / $measurementResult['lloc']) * 100 : 0,
+            $measurementResult['llocByNof'],
+            $measurementResult['llocGlobal'],
+            $measurementResult['lloc'] > 0 ? ($measurementResult['llocGlobal'] / $measurementResult['lloc']) * 100 : 0,
+            $measurementResult['namespaces'],
+            $measurementResult['interfaces'],
+            $measurementResult['traits'],
+            $measurementResult['classes'],
+            $measurementResult['methods'],
+            $measurementResult['nonStaticMethods'],
+            $measurementResult['methods'] > 0 ? ($measurementResult['nonStaticMethods'] / $measurementResult['methods']) * 100 : 0,
+            $measurementResult['staticMethods'],
+            $measurementResult['methods'] > 0 ? ($measurementResult['staticMethods'] / $measurementResult['methods']) * 100 : 0,
+            $measurementResult['publicMethods'],
+            $measurementResult['methods'] > 0 ? ($measurementResult['publicMethods'] / $measurementResult['methods']) * 100 : 0,
+            $measurementResult['protectedMethods'],
+            $measurementResult['methods'] > 0 ? ($measurementResult['protectedMethods'] / $measurementResult['methods']) * 100 : 0,
+            $measurementResult['privateMethods'],
+            $measurementResult['methods'] > 0 ? ($measurementResult['privateMethods'] / $measurementResult['methods']) * 100 : 0,
+            $measurementResult['functions'],
+            $measurementResult['namedFunctions'],
+            $measurementResult['functions'] > 0 ? ($measurementResult['namedFunctions'] / $measurementResult['functions']) * 100 : 0,
+            $measurementResult['anonymousFunctions'],
+            $measurementResult['functions'] > 0 ? ($measurementResult['anonymousFunctions'] / $measurementResult['functions']) * 100 : 0,
+            $measurementResult['constants'],
+            $measurementResult['globalConstants'],
+            $measurementResult['constants'] > 0 ? ($measurementResult['globalConstants'] / $measurementResult['constants']) * 100 : 0,
+            $measurementResult['classConstants'],
+            $measurementResult['constants'] > 0 ? ($measurementResult['classConstants'] / $measurementResult['constants']) * 100 : 0,
+            $measurementResult['publicClassConstants'],
+            $measurementResult['classConstants'] > 0 ? ($measurementResult['publicClassConstants'] / $measurementResult['classConstants']) * 100 : 0,
+            $measurementResult['nonPublicClassConstants'],
+            $measurementResult['classConstants'] > 0 ? ($measurementResult['nonPublicClassConstants'] / $measurementResult['classConstants']) * 100 : 0
         );
 
         $output->writeln($result);

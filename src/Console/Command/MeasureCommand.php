@@ -69,15 +69,15 @@ final class MeasureCommand extends Command
             return Command::FAILURE;
         }
 
-        $analysisResult = $this->analyser->countFiles($filePaths);
+        $measurmentResult = $this->analyser->countFiles($filePaths);
 
         // print results
         if ($isJson) {
             $jsonOutputFormatter = new JsonOutputFormatter();
-            $jsonOutputFormatter->printResult($analysisResult, $output);
+            $jsonOutputFormatter->printResult($measurmentResult, $output);
         } else {
             $textOutputFormatter = new TextOutputFormatter($symfonyStyle);
-            $textOutputFormatter->printResult($analysisResult, $output);
+            $textOutputFormatter->printResult($measurmentResult, $output);
         }
 
         return Command::SUCCESS;

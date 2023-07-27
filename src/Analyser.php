@@ -20,10 +20,8 @@ final class Analyser
 
     /**
      * @param string[] $files
-     *
-     * @return array<string, mixed>
      */
-    public function countFiles(array $files): array
+    public function countFiles(array $files): MeasurementResult
     {
         Assert::allString($files);
         Assert::allFileExists($files);
@@ -32,8 +30,8 @@ final class Analyser
             $this->countFile($file);
         }
 
-        return $this->metricsCollector->getPublisher()
-            ->toArray();
+        return $this->metricsCollector->getPublisher();
+        //            ->toArray();
     }
 
     private function countFile(string $filename): void

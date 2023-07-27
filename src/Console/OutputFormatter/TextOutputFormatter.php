@@ -21,13 +21,28 @@ final class TextOutputFormatter
      */
     public function printResult(array $count, OutputInterface $output): void
     {
+        $padLeftTableStyle = new TableStyle();
+        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
+
         if ($count['directories'] > 0) {
-            \printf(
-                'Directories                                 %10d' . PHP_EOL .
-                'Files                                       %10d' . PHP_EOL . PHP_EOL,
-                $count['directories'],
-                $count['files']
-            );
+            //            \printf(
+            //                'Directories                                 %10d' . PHP_EOL .
+            //                'Files                                       %10d' . PHP_EOL . PHP_EOL,
+            //                $count['directories'],
+            //                $count['files']
+            //            );
+
+            $this->symfonyStyle->createTable()
+                ->setColumnWidth(0, 30)
+                ->setHeaders(['Metric', 'Count'])
+                ->setRows([
+                    ['Directories', $count['directories']],
+                    ['Files', $count['files']],
+                ])
+                ->setColumnStyle(1, $padLeftTableStyle)
+                ->render();
+
+            $this->symfonyStyle->newLine(2);
         }
 
         $tableRows = [
@@ -52,9 +67,6 @@ final class TextOutputFormatter
             ],
         ];
 
-        $padLeftTableStyle = new TableStyle();
-        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
-
         $this->symfonyStyle->createTable()
             ->setColumnWidth(0, 30)
             ->setHeaders(['Metric', 'Lines', 'Relative'])
@@ -62,6 +74,8 @@ final class TextOutputFormatter
             ->setColumnStyle(1, $padLeftTableStyle)
             ->setColumnStyle(2, $padLeftTableStyle)
             ->render();
+
+        $this->symfonyStyle->newLine(2);
 
         $format = <<<'END'
 Size
@@ -80,9 +94,9 @@ Size
                 Average                     %10d
                 Minimum                     %10d
                 Maximum                     %10d
-    Functions                           %10d (%.2f%%)
-        Average Length                  %10d
-        Not in classes or functions     %10d (%.2f%%)
+    Functions                               %10d (%.2f%%)
+        Average Length                      %10d
+    Not in classes or functions             %10d (%.2f%%)
 
 Structure
     Namespaces                              %10d

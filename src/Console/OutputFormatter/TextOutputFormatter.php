@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -30,17 +31,36 @@ final class TextOutputFormatter
         }
 
         $tableRows = [
-            ['Total lines', number_format($count['loc'], 0, '.', ' ')],
-            ['Comments', $count['cloc']],
-            ['Non-comment', $count['ncloc']],
+            [
+                'Comment Lines',
+                pretty_number($count['cloc']),
+                percent($count['loc'] > 0 ? ($count['cloc'] / $count['loc']) * 100 : 0),
+            ],
+
+            [
+                'Code Lines',
+                pretty_number($count['ncloc']),
+                percent($count['loc'] > 0 ? ($count['ncloc'] / $count['loc']) * 100 : 0),
+            ],
+
+            [new TableSeparator(), new TableSeparator(), new TableSeparator()],
+
+            [
+                '<options=bold>Total Lines</>',
+                '<options=bold>' . pretty_number($count['loc']) . '</>',
+                '<options=bold>100.0 %</>',
+            ],
         ];
 
-        $tableStyle = new TableStyle();
-        $tableStyle->setPadType(STR_PAD_LEFT);
+        $padLeftTableStyle = new TableStyle();
+        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
 
         $this->symfonyStyle->createTable()
+            ->setColumnWidth(0, 30)
+            ->setHeaders(['Metric', 'Lines', 'Relative'])
             ->setRows($tableRows)
-            ->setColumnStyle(1, $tableStyle)
+            ->setColumnStyle(1, $padLeftTableStyle)
+            ->setColumnStyle(2, $padLeftTableStyle)
             ->render();
 
         $format = <<<'END'

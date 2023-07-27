@@ -19,6 +19,8 @@ final class AnalyserTest extends TestCase
 
     public function test(): void
     {
+        $measurementResult = $this->analyser->countFiles([__DIR__ . '/Fixture/source.php']);
+
         $this->assertEqualsWithDelta(
             [
                 'files' => 1,
@@ -63,7 +65,7 @@ final class AnalyserTest extends TestCase
                 'minimumMethodsPerClass' => 0,
                 'maximumMethodsPerClass' => 4,
             ],
-            $this->analyser->countFiles([__DIR__ . '/Fixture/source.php']),
+            $measurementResult,
             0.1
         );
     }

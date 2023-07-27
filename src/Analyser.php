@@ -20,10 +20,8 @@ final class Analyser
 
     /**
      * @param string[] $files
-     *
-     * @return array<string, mixed>
      */
-    public function countFiles(array $files): array
+    public function countFiles(array $files): MeasurementResult
     {
         Assert::allString($files);
         Assert::allFileExists($files);
@@ -32,21 +30,22 @@ final class Analyser
             $this->countFile($file);
         }
 
-        return $this->metricsCollector->getPublisher()->toArray();
+        return $this->metricsCollector->getPublisher();
     }
 
     private function countFile(string $filename): void
     {
         Assert::fileExists($filename);
 
-        $buffer = file_get_contents($filename);
-        Assert::string($buffer);
+        $fileContents = file_get_contents($filename);
+        Assert::string($fileContents);
 
-        $this->metricsCollector->incrementLines(substr_count($buffer, "\n"));
-        $tokens = token_get_all($buffer);
+        $this->metricsCollector->incrementLines(substr_count($fileContents, "\n"));
+        $tokens = token_get_all($fileContents);
         $numTokens = count($tokens);
 
-        unset($buffer);
+        // performance?
+        unset($fileContents);
 
         $this->metricsCollector->addFile($filename);
 
@@ -143,20 +142,8 @@ final class Analyser
                     } elseif ($token === T_INTERFACE) {
                         $this->metricsCollector->incrementInterfaces();
                     } else {
-                        $classModifierToken = $this->getPreviousNonWhitespaceNonCommentTokenPos($tokens, $i);
-
-                        if ($classModifierToken &&
-                            $tokens[$classModifierToken][0] === T_ABSTRACT
-                        ) {
-                            $this->metricsCollector->incrementAbstractClasses();
-                        } elseif (
-                            $classModifierToken &&
-                            $tokens[$classModifierToken][0] === T_FINAL
-                        ) {
-                            $this->metricsCollector->incrementFinalClasses();
-                        } else {
-                            $this->metricsCollector->incrementNonFinalClasses();
-                        }
+                        // @todo add enum support
+                        $this->metricsCollector->incrementClasses();
                     }
 
                     break;
@@ -172,7 +159,9 @@ final class Analyser
 
                     $next = $this->getNextNonWhitespaceTokenPos($tokens, $i);
 
-                    if (is_int($next) && ($tokens[$next] === '&' || (is_array($tokens[$next]) && $tokens[$next][1] === '&'))) {
+                    if (is_int($next) && ($tokens[$next] === '&' || (is_array(
+                        $tokens[$next]
+                    ) && $tokens[$next][1] === '&'))) {
                         $next = $this->getNextNonWhitespaceTokenPos($tokens, $next);
                     }
 
@@ -186,8 +175,7 @@ final class Analyser
                     }
 
                     if ($currentBlock === T_FUNCTION) {
-                        if ($className === null &&
-                            $functionName !== 'anonymous function') {
+                        if ($className === null && $functionName !== 'anonymous function') {
                             $this->metricsCollector->incrementNamedFunctions();
                         } else {
                             $static = false;
@@ -433,11 +421,7 @@ final class Analyser
         $previousTokenIndex = $start - 1;
 
         if (isset($tokens[$previousTokenIndex])) {
-            if (in_array($tokens[$previousTokenIndex][0], [
-                T_WHITESPACE,
-                T_COMMENT,
-                T_DOC_COMMENT,
-            ], true)
+            if (in_array($tokens[$previousTokenIndex][0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)
             ) {
                 return $this->getPreviousNonWhitespaceNonCommentTokenPos($tokens, $previousTokenIndex);
             }

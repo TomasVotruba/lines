@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines;
 
-final class Publisher
+use TomasVotruba\Lines\Enum\CounterName;
+use Webmozart\Assert\Assert;
+
+final class MeasurementResult
 {
     /**
      * @param array<string, mixed> $counts
@@ -12,6 +15,7 @@ final class Publisher
     public function __construct(
         private array $counts
     ) {
+        Assert::allString(array_keys($counts));
     }
 
     public function getDirectories(): int
@@ -109,21 +113,6 @@ final class Publisher
         return $this->getLogicalLines() - $this->getClassLines() - $this->getFunctionLines();
     }
 
-    public function getMethodCalls(): int
-    {
-        return $this->getNonStaticMethodCalls() + $this->getStaticMethodCalls();
-    }
-
-    public function getNonStaticMethodCalls(): int
-    {
-        return $this->getValue('non-static method calls');
-    }
-
-    public function getStaticMethodCalls(): int
-    {
-        return $this->getValue('static method calls');
-    }
-
     public function getNamespaces(): int
     {
         return $this->getCount('namespaces');
@@ -141,27 +130,7 @@ final class Publisher
 
     public function getClasses(): int
     {
-        return $this->getAbstractClasses() + $this->getConcreteClasses();
-    }
-
-    public function getAbstractClasses(): int
-    {
-        return $this->getValue('abstract classes');
-    }
-
-    public function getConcreteClasses(): int
-    {
-        return $this->getFinalClasses() + $this->getNonFinalClasses();
-    }
-
-    public function getFinalClasses(): int
-    {
-        return $this->getValue('final classes');
-    }
-
-    public function getNonFinalClasses(): int
-    {
-        return $this->getValue('non-final classes');
+        return $this->getValue(CounterName::CLASSES);
     }
 
     public function getMethods(): int
@@ -184,6 +153,9 @@ final class Publisher
         return $this->getValue('public methods');
     }
 
+    /**
+     * @api
+     */
     public function getNonPublicMethods(): int
     {
         return $this->getProtectedMethods() + $this->getPrivateMethods();
@@ -237,60 +209,6 @@ final class Publisher
     public function getClassConstants(): int
     {
         return $this->getPublicClassConstants() + $this->getNonPublicClassConstants();
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function toArray(): array
-    {
-        return [
-            'files' => $this->getFiles(),
-            'loc' => $this->getLines(),
-            'lloc' => $this->getLogicalLines(),
-            'llocClasses' => $this->getClassLines(),
-            'llocFunctions' => $this->getFunctionLines(),
-            'llocGlobal' => $this->getNotInClassesOrFunctions(),
-            'cloc' => $this->getCommentLines(),
-            'interfaces' => $this->getInterfaces(),
-            'traits' => $this->getTraits(),
-            'classes' => $this->getClasses(),
-            'abstractClasses' => $this->getAbstractClasses(),
-            'concreteClasses' => $this->getConcreteClasses(),
-            'finalClasses' => $this->getFinalClasses(),
-            'nonFinalClasses' => $this->getNonFinalClasses(),
-            'functions' => $this->getFunctions(),
-            'namedFunctions' => $this->getNamedFunctions(),
-            'anonymousFunctions' => $this->getAnonymousFunctions(),
-            'methods' => $this->getMethods(),
-            'publicMethods' => $this->getPublicMethods(),
-            'nonPublicMethods' => $this->getNonPublicMethods(),
-            'protectedMethods' => $this->getProtectedMethods(),
-            'privateMethods' => $this->getPrivateMethods(),
-            'nonStaticMethods' => $this->getNonStaticMethods(),
-            'staticMethods' => $this->getStaticMethods(),
-            'constants' => $this->getConstants(),
-            'classConstants' => $this->getClassConstants(),
-            'publicClassConstants' => $this->getPublicClassConstants(),
-            'nonPublicClassConstants' => $this->getNonPublicClassConstants(),
-            'globalConstants' => $this->getGlobalConstants(),
-            'llocByNof' => $this->getAverageFunctionLength(),
-            'methodCalls' => $this->getMethodCalls(),
-            'staticMethodCalls' => $this->getStaticMethodCalls(),
-            'instanceMethodCalls' => $this->getNonStaticMethodCalls(),
-            'directories' => $this->getDirectories(),
-            'classLlocMin' => $this->getMinimumClassLength(),
-            'classLlocAvg' => $this->getAverageClassLength(),
-            'classLlocMax' => $this->getMaximumClassLength(),
-            'methodLlocMin' => $this->getMinimumMethodLength(),
-            'methodLlocAvg' => $this->getAverageMethodLength(),
-            'methodLlocMax' => $this->getMaximumMethodLength(),
-            'averageMethodsPerClass' => $this->getAverageMethodsPerClass(),
-            'minimumMethodsPerClass' => $this->getMinimumMethodsPerClass(),
-            'maximumMethodsPerClass' => $this->getMaximumMethodsPerClass(),
-            'namespaces' => $this->getNamespaces(),
-            'ncloc' => $this->getNonCommentLines(),
-        ];
     }
 
     private function getAverage(string $key): float

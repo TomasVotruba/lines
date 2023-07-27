@@ -70,4 +70,36 @@ final class CounterName
      * @var string
      */
     public const CLASSES = 'classes';
+
+    /**
+     * @var string
+     */
+    public const TRAITS = 'traits';
+
+    /**
+     * @var string
+     */
+    public const PUBLIC_METHODS = 'public methods';
+
+    public const PRIVATE_METHODS = 'private methods';
+
+    public const PROTECTED_METHODS = 'protected methods';
+
+    public const NAMED_FUNCTIONS = 'named functions';
+
+    public const ANONYMOUS_FUNCTIONS = 'anonymous functions';
+
+    public const GLOBAL_CONSTANTS = 'global constants';
+
+    public const PUBLIC_CLASS_CONSTANTS = 'public class constants';
+
+    public const NON_PUBLIC_CLASS_CONSTATNTS = 'non-public class constants';
+
+    public const CLASS_LINES = 'class lines';
+
+    public const METHODS_PER_CLASS = 'methods per class';
+
+    public const CONSTANT_NAMES = 'constant';
+
+    public const NAMESPACES = 'namespaces';
 }

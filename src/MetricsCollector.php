@@ -9,7 +9,7 @@ use TomasVotruba\Lines\Enum\CounterName;
 final class MetricsCollector
 {
     /**
-     * @var array<string, mixed>
+     * @var array<CounterName::*, mixed>
      */
     private array $counts = [];
 
@@ -48,7 +48,7 @@ final class MetricsCollector
     public function currentClassReset(): void
     {
         // if ($this->currentClassLines > 0) {
-        $this->addToArray('class lines', $this->currentClassLines);
+        $this->addToArray(CounterName::CLASS_LINES, $this->currentClassLines);
         //}
 
         $this->currentClassLines = 0;
@@ -57,7 +57,7 @@ final class MetricsCollector
 
     public function currentClassStop(): void
     {
-        $this->addToArray('methods per class', $this->currentNumberOfMethods);
+        $this->addToArray(CounterName::METHODS_PER_CLASS, $this->currentNumberOfMethods);
     }
 
     public function currentClassIncrementLines(): void
@@ -92,7 +92,7 @@ final class MetricsCollector
 
     public function addConstant(string $name): void
     {
-        $this->addToArray('constant', $name);
+        $this->addToArray(CounterName::CONSTANT_NAMES, $name);
     }
 
     public function incrementNonStaticMethodCalls(): void
@@ -107,7 +107,7 @@ final class MetricsCollector
 
     public function addNamespace(string $namespace): void
     {
-        $this->addUnique('namespaces', $namespace);
+        $this->addUnique(CounterName::NAMESPACES, $namespace);
     }
 
     public function incrementInterfaces(): void
@@ -117,7 +117,7 @@ final class MetricsCollector
 
     public function incrementTraits(): void
     {
-        $this->increment('traits');
+        $this->increment(CounterName::TRAITS);
     }
 
     public function incrementNonStaticMethods(): void
@@ -132,56 +132,65 @@ final class MetricsCollector
 
     public function incrementPublicMethods(): void
     {
-        $this->increment('public methods');
+        $this->increment(CounterName::PUBLIC_METHODS);
     }
 
     public function incrementProtectedMethods(): void
     {
-        $this->increment('protected methods');
+        $this->increment(CounterName::PROTECTED_METHODS);
     }
 
     public function incrementPrivateMethods(): void
     {
-        $this->increment('private methods');
+        $this->increment(CounterName::PRIVATE_METHODS);
     }
 
     public function incrementNamedFunctions(): void
     {
-        $this->increment('named functions');
+        $this->increment(CounterName::NAMED_FUNCTIONS);
     }
 
     public function incrementAnonymousFunctions(): void
     {
-        $this->increment('anonymous functions');
+        $this->increment(CounterName::ANONYMOUS_FUNCTIONS);
     }
 
     public function incrementGlobalConstants(): void
     {
-        $this->increment('global constants');
+        $this->increment(CounterName::GLOBAL_CONSTANTS);
     }
 
     public function incrementPublicClassConstants(): void
     {
-        $this->increment('public class constants');
+        $this->increment(CounterName::PUBLIC_CLASS_CONSTANTS);
     }
 
     public function incrementNonPublicClassConstants(): void
     {
-        $this->increment('non-public class constants');
+        $this->increment(CounterName::NON_PUBLIC_CLASS_CONSTATNTS);
     }
 
+    /**
+     * @param CounterName::* $key
+     */
     private function addUnique(string $key, mixed $name): void
     {
         $this->check($key, []);
         $this->counts[$key][$name] = true;
     }
 
+    /**
+     * @param CounterName::* $key
+     */
     private function addToArray(string $key, mixed $value): void
     {
         $this->check($key, []);
         $this->counts[$key][] = $value;
     }
 
+    /**
+     * @param CounterName::* $key
+     */
     private function increment(string $key, int $number = 1): void
     {
         $this->check($key, 0);
@@ -189,6 +198,7 @@ final class MetricsCollector
     }
 
     /**
+     * @param CounterName::* $key
      * @param int|mixed[] $default
      */
     private function check(string $key, int|array $default): void

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines\Contract;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use TomasVotruba\Lines\MeasurementResult;
+use TomasVotruba\Lines\Measurements;
 
 interface OutputFormatterInterface
 {
-    public function printResult(MeasurementResult $measurementResult, OutputInterface $output): void;
+    public function printResult(Measurements $measurements, OutputInterface $output): void;
 }

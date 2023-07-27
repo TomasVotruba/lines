@@ -11,11 +11,11 @@ use Webmozart\Assert\Assert;
  */
 final class Analyser
 {
-    private readonly MetricsCollector $metricsCollector;
+    private readonly Measurements $metricsCollector;
 
     public function __construct()
     {
-        $this->metricsCollector = new MetricsCollector();
+        $this->metricsCollector = new Measurements();
     }
 
     /**
@@ -30,7 +30,7 @@ final class Analyser
             $this->measureFile($filePath);
         }
 
-        return $this->metricsCollector->fetchResult();
+        return $this->metricsCollector;
     }
 
     private function measureFile(string $filePath): void

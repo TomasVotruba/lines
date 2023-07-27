@@ -14,11 +14,6 @@ final class CounterName
     /**
      * @var string
      */
-    public const DIRECTORIES = 'directories';
-
-    /**
-     * @var string
-     */
     public const LINES = 'lines';
 
     /**
@@ -54,27 +49,12 @@ final class CounterName
     /**
      * @var string
      */
-    public const INTERFACES = 'interfaces';
-
-    /**
-     * @var string
-     */
     public const NON_STATIC_METHODS = 'non-static methods';
 
     /**
      * @var string
      */
     public const STATIC_METHODS = 'static methods';
-
-    /**
-     * @var string
-     */
-    public const CLASSES = 'classes';
-
-    /**
-     * @var string
-     */
-    public const TRAITS = 'traits';
 
     /**
      * @var string

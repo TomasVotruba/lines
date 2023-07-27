@@ -11,50 +11,52 @@ use Webmozart\Assert\Assert;
  */
 final class Analyser
 {
-    private readonly MetricsCollector $metricsCollector;
+    private readonly Measurements $measurements;
 
     public function __construct()
     {
-        $this->metricsCollector = new MetricsCollector();
+        $this->measurements = new Measurements();
     }
 
     /**
-     * @param string[] $files
+     * @param string[] $filePaths
      */
-    public function countFiles(array $files): MeasurementResult
+    public function measureFiles(array $filePaths): Measurements
     {
-        Assert::allString($files);
-        Assert::allFileExists($files);
+        Assert::allString($filePaths);
+        Assert::allFileExists($filePaths);
 
-        foreach ($files as $file) {
-            $this->countFile($file);
+        foreach ($filePaths as $filePath) {
+            $this->measureFile($filePath);
         }
 
-        return $this->metricsCollector->getPublisher();
+        return $this->measurements;
     }
 
-    private function countFile(string $filename): void
+    private function measureFile(string $filePath): void
     {
-        Assert::fileExists($filename);
+        Assert::fileExists($filePath);
 
-        $fileContents = file_get_contents($filename);
+        $fileContents = file_get_contents($filePath);
         Assert::string($fileContents);
 
-        $this->metricsCollector->incrementLines(substr_count($fileContents, "\n"));
+        $newlinesCount = substr_count($fileContents, "\n");
+        $this->measurements->incrementLines($newlinesCount);
+
         $tokens = token_get_all($fileContents);
         $numTokens = count($tokens);
 
         // performance?
         unset($fileContents);
 
-        $this->metricsCollector->addFile($filename);
+        $this->measurements->addFile($filePath);
 
         $blocks = [];
         $currentBlock = false;
         $namespace = false;
         $className = null;
         $functionName = null;
-        $this->metricsCollector->currentClassReset();
+        $this->measurements->currentClassReset();
         $isLogicalLine = true;
         $isInMethod = false;
 
@@ -65,16 +67,16 @@ final class Analyser
                 if ($token === ';') {
                     if ($isLogicalLine) {
                         if ($className !== null) {
-                            $this->metricsCollector->currentClassIncrementLines();
+                            $this->measurements->currentClassIncrementLines();
 
                             if ($functionName !== null) {
-                                $this->metricsCollector->currentMethodIncrementLines();
+                                $this->measurements->currentMethodIncrementLines();
                             }
                         } elseif ($functionName !== null) {
-                            $this->metricsCollector->incrementFunctionLines();
+                            $this->measurements->incrementFunctionLines();
                         }
 
-                        $this->metricsCollector->incrementLogicalLines();
+                        $this->measurements->incrementLogicalLines();
                     }
 
                     $isLogicalLine = true;
@@ -98,13 +100,13 @@ final class Analyser
                             $functionName = null;
 
                             if ($isInMethod) {
-                                $this->metricsCollector->currentMethodStop();
+                                $this->measurements->currentMethodStop();
                                 $isInMethod = false;
                             }
                         } elseif ($block === $className) {
                             $className = null;
-                            $this->metricsCollector->currentClassStop();
-                            $this->metricsCollector->currentClassReset();
+                            $this->measurements->currentClassStop();
+                            $this->measurements->currentClassReset();
                         }
                     }
                 }
@@ -119,7 +121,7 @@ final class Analyser
                     $namespace = $this->getNamespaceName($tokens, $i);
 
                     if (is_string($namespace)) {
-                        $this->metricsCollector->addNamespace($namespace);
+                        $this->measurements->addNamespace($namespace);
                     }
 
                     $isLogicalLine = false;
@@ -133,17 +135,17 @@ final class Analyser
                         break;
                     }
 
-                    $this->metricsCollector->currentClassReset();
+                    $this->measurements->currentClassReset();
                     $className = $this->getClassName($namespace ?: '', $tokens, $i);
                     $currentBlock = T_CLASS;
 
                     if ($token === T_TRAIT) {
-                        $this->metricsCollector->incrementTraits();
+                        $this->measurements->incrementTraits();
                     } elseif ($token === T_INTERFACE) {
-                        $this->metricsCollector->incrementInterfaces();
+                        $this->measurements->incrementInterfaces();
                     } else {
                         // @todo add enum support
-                        $this->metricsCollector->incrementClasses();
+                        $this->measurements->incrementClasses();
                     }
 
                     break;
@@ -171,12 +173,12 @@ final class Analyser
                     } else {
                         $currentBlock = 'anonymous function';
                         $functionName = 'anonymous function';
-                        $this->metricsCollector->incrementAnonymousFunctions();
+                        $this->measurements->incrementAnonymousFunctions();
                     }
 
                     if ($currentBlock === T_FUNCTION) {
                         if ($className === null && $functionName !== 'anonymous function') {
-                            $this->metricsCollector->incrementNamedFunctions();
+                            $this->measurements->incrementNamedFunctions();
                         } else {
                             $static = false;
                             $visibility = T_PUBLIC;
@@ -211,22 +213,22 @@ final class Analyser
                             }
 
                             $isInMethod = true;
-                            $this->metricsCollector->currentMethodStart();
+                            $this->measurements->currentMethodStart();
 
-                            $this->metricsCollector->currentClassIncrementMethods();
+                            $this->measurements->currentClassIncrementMethods();
 
                             if (! $static) {
-                                $this->metricsCollector->incrementNonStaticMethods();
+                                $this->measurements->incrementNonStaticMethods();
                             } else {
-                                $this->metricsCollector->incrementStaticMethods();
+                                $this->measurements->incrementStaticMethods();
                             }
 
                             if ($visibility === T_PUBLIC) {
-                                $this->metricsCollector->incrementPublicMethods();
+                                $this->measurements->incrementPublicMethods();
                             } elseif ($visibility === T_PROTECTED) {
-                                $this->metricsCollector->incrementProtectedMethods();
+                                $this->measurements->incrementProtectedMethods();
                             } elseif ($visibility === T_PRIVATE) {
-                                $this->metricsCollector->incrementPrivateMethods();
+                                $this->measurements->incrementPrivateMethods();
                             }
                         }
                     }
@@ -263,7 +265,7 @@ final class Analyser
                     // We want to count all intermediate lines before the token ends
                     // But sometimes a new token starts after a newline, we don't want to count that.
                     // That happened with /* */ and /**  */, but not with // since it'll end at the end
-                    $this->metricsCollector->incrementCommentLines(substr_count(rtrim($value, "\n"), "\n") + 1);
+                    $this->measurements->incrementCommentLines(substr_count(rtrim($value, "\n"), "\n") + 1);
 
                     break;
                 case T_CONST:
@@ -272,23 +274,23 @@ final class Analyser
                     if ($possibleScopeToken &&
                         in_array($tokens[$possibleScopeToken][0], [T_PRIVATE, T_PROTECTED], true)
                     ) {
-                        $this->metricsCollector->incrementNonPublicClassConstants();
+                        $this->measurements->incrementNonPublicClassConstants();
                     } else {
-                        $this->metricsCollector->incrementPublicClassConstants();
+                        $this->measurements->incrementPublicClassConstants();
                     }
 
                     break;
 
                 case T_STRING:
                     if ($value === 'define') {
-                        $this->metricsCollector->incrementGlobalConstants();
+                        $this->measurements->incrementGlobalConstants();
 
                         $j = $i + 1;
 
                         while (isset($tokens[$j]) && $tokens[$j] !== ';') {
                             if (is_array($tokens[$j]) &&
                                 $tokens[$j][0] === T_CONSTANT_ENCAPSED_STRING) {
-                                $this->metricsCollector->addConstant(str_replace("'", '', $tokens[$j][1]));
+                                $this->measurements->addConstant(str_replace("'", '', $tokens[$j][1]));
 
                                 break;
                             }
@@ -312,9 +314,9 @@ final class Analyser
                          $tokens[$n][0] === T_VARIABLE) &&
                         $tokens[$nn] === '(') {
                         if ($token === T_DOUBLE_COLON) {
-                            $this->metricsCollector->incrementStaticMethodCalls();
+                            $this->measurements->incrementStaticMethodCalls();
                         } else {
-                            $this->metricsCollector->incrementNonStaticMethodCalls();
+                            $this->measurements->incrementNonStaticMethodCalls();
                         }
                     }
 

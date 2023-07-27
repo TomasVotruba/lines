@@ -69,7 +69,7 @@ final class MeasureCommand extends Command
             return Command::FAILURE;
         }
 
-        $measurmentResult = $this->analyser->countFiles($filePaths);
+        $measurmentResult = $this->analyser->measureFiles($filePaths);
 
         // print results
         if ($isJson) {

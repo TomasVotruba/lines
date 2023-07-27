@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
 use Symfony\Component\Console\Output\OutputInterface;
+use TomasVotruba\Lines\Contract\OutputFormatterInterface;
 use TomasVotruba\Lines\MeasurementResult;
 use Webmozart\Assert\Assert;
 
-final class JsonOutputFormatter
+final class JsonOutputFormatter implements OutputFormatterInterface
 {
     public function printResult(MeasurementResult $measurementResult, OutputInterface $output): void
     {

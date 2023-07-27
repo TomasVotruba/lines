@@ -8,10 +8,11 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TomasVotruba\Lines\Contract\OutputFormatterInterface;
 use TomasVotruba\Lines\Helpers\NumberFormat;
 use TomasVotruba\Lines\MeasurementResult;
 
-final class TextOutputFormatter
+final class TextOutputFormatter implements OutputFormatterInterface
 {
     public function __construct(
         private readonly SymfonyStyle $symfonyStyle,

@@ -31,7 +31,6 @@ final class Analyser
         }
 
         return $this->metricsCollector->getPublisher();
-        //            ->toArray();
     }
 
     private function countFile(string $filename): void

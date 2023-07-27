@@ -69,8 +69,8 @@ END;
 
         $result = sprintf(
             $format,
-            $measurementResult['llocClasses'],
-            $measurementResult['lloc'] > 0 ? ($measurementResult['llocClasses'] / $measurementResult['lloc']) * 100 : 0,
+            $measurementResult->getClassLines(),
+            $measurementResult->getLogicalLines() > 0 ? ($measurementResult->getClassLines() / $measurementResult->getLogicalLines()) * 100 : 0,
             $measurementResult['classLlocAvg'],
             $measurementResult['classLlocMin'],
             $measurementResult['classLlocMax'],

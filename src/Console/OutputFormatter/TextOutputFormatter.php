@@ -130,10 +130,7 @@ END;
 
     private function printFilesAndDirectories(Measurements $measurements): void
     {
-        $rows = [
-            ['Directories', $measurements->getDirectories()],
-            ['Files', $measurements->getFiles()]
-        ];
+        $rows = [['Directories', $measurements->getDirectories()], ['Files', $measurements->getFiles()]];
 
         $this->printItemValueTable($rows, 'Metric', 'Count');
     }

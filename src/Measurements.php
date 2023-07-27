@@ -70,11 +70,6 @@ final class Measurements
      */
     private array $namespaceNames = [];
 
-    /**
-     * @var int[]
-     */
-    private array $methodCountsPerClass = [];
-
     public function addFile(string $filename): void
     {
         $this->directoryNames[] = dirname($filename);
@@ -103,11 +98,6 @@ final class Measurements
 
         $this->currentClassLines = 0;
         $this->currentClassMethodCount = 0;
-    }
-
-    public function currentClassStop(): void
-    {
-        $this->methodCountsPerClass[] = $this->currentClassMethodCount;
     }
 
     public function incrementCurrentClassLines(): void
@@ -236,9 +226,22 @@ final class Measurements
         return $this->lineCount - $this->commentLineCount;
     }
 
+    /**
+     * @api used in tests
+     */
     public function getLogicalLines(): int
     {
         return $this->logicalLineCount;
+    }
+
+    public function getClassLinesRelative(): float
+    {
+        if ($this->logicalLineCount > 0) {
+            $relative = ($this->getClassLines() / $this->logicalLineCount) * 100;
+            return NumberFormat::singleDecimal($relative);
+        }
+
+        return 0.0;
     }
 
     public function getClassLines(): int
@@ -246,68 +249,44 @@ final class Measurements
         return array_sum($this->classLineCountPerClass);
     }
 
-    public function getAverageClassLength(): float
+    public function getAvgClassLength(): float
     {
         if ($this->classLineCountPerClass === []) {
             return 0.0;
         }
 
-        return $this->getClassLines() / count($this->classLineCountPerClass);
+        return $this->average($this->getClassLines(), count($this->classLineCountPerClass));
     }
 
-    public function getMinimumClassLength(): int
+    public function getMinClassLength(): int
     {
         return min($this->classLineCountPerClass);
     }
 
-    public function getMaximumClassLength(): int
+    public function getMaxClassLength(): int
     {
         return max($this->classLineCountPerClass);
     }
 
-    public function getAverageMethodLength(): float
+    public function getAvgMethodLength(): float
     {
         if ($this->methodLineCountPerMethod === []) {
             return 0.0;
         }
 
         $totalMethodLineCount = array_sum($this->methodLineCountPerMethod);
-        $average = $totalMethodLineCount / count($this->methodLineCountPerMethod);
 
-        return NumberFormat::singleDecimal($average);
+        return $this->average($totalMethodLineCount, count($this->methodLineCountPerMethod));
     }
 
-    public function getMinimumMethodLength(): int
+    public function getMinMethodLength(): int
     {
         return min($this->methodLineCountPerMethod);
     }
 
-    public function getMaximumMethodLength(): int
+    public function getMaxMethodLength(): int
     {
         return max($this->methodLineCountPerMethod);
-    }
-
-    public function getAverageMethodCountPerClass(): float
-    {
-        if ($this->methodCountsPerClass === []) {
-            return 0.0;
-        }
-
-        $totalMethodCount = array_sum($this->methodCountsPerClass);
-
-        $average = $totalMethodCount / count($this->methodCountsPerClass);
-
-        return NumberFormat::singleDecimal($average);
-    }
-
-    public function getMinimumMethodsPerClass(): int
-    {
-        return min($this->methodCountsPerClass);
-    }
-
-    public function getMaximumMethodsPerClass(): int
-    {
-        return max($this->methodCountsPerClass);
     }
 
     public function getFunctionLines(): int
@@ -427,5 +406,54 @@ final class Measurements
     public function getClassConstants(): int
     {
         return $this->publicClassConstantCount + $this->nonPublicClassConstantCount;
+    }
+
+    public function getCommentLinesRelative(): float
+    {
+        if ($this->lineCount) {
+            $relative = ($this->commentLineCount / $this->lineCount) * 100;
+            return NumberFormat::singleDecimal($relative);
+        }
+
+        return 0.0;
+    }
+
+    public function getNonCommentLinesRelative(): float
+    {
+        if ($this->lineCount) {
+            return $this->relative($this->getNonCommentLines(), $this->lineCount);
+        }
+
+        return 0.0;
+    }
+
+    public function getFunctionLinesRelative(): float
+    {
+        if ($this->logicalLineCount > 0) {
+            return $this->relative($this->functionLineCount, $this->logicalLineCount);
+        }
+
+        return 0.0;
+    }
+
+    public function getNotInClassesOrFunctionsRelative(): float
+    {
+        if ($this->logicalLineCount > 0) {
+            return $this->relative($this->getNotInClassesOrFunctions(), $this->logicalLineCount);
+        }
+
+        return 0.0;
+    }
+
+    private function relative(int $partialNumber, int $totalNumber): float
+    {
+        $relative = ($partialNumber / $totalNumber) * 100;
+        return NumberFormat::singleDecimal($relative);
+    }
+
+    private function average(int $partialNumber, int $totalNumber): float
+    {
+        $relative = ($partialNumber / $totalNumber);
+        return NumberFormat::singleDecimal($relative);
     }
 }

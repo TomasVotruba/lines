@@ -11,11 +11,6 @@ final class NumberFormat
         return number_format($number, 0, '.', ' ');
     }
 
-    public static function percent(int|float $number): string
-    {
-        return number_format($number, 1, '.', ' ') . ' %';
-    }
-
     public static function singleDecimal(float|int $number): float
     {
         return (float) number_format($number, 1);

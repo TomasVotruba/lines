@@ -14,9 +14,15 @@ use TomasVotruba\Lines\Measurements;
 
 final class TextOutputFormatter implements OutputFormatterInterface
 {
+    private TableStyle $padLeftTableStyle;
+
     public function __construct(
         private readonly SymfonyStyle $symfonyStyle,
     ) {
+        $padLeftTableStyle = new TableStyle();
+        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
+
+        $this->padLeftTableStyle = $padLeftTableStyle;
     }
 
     public function printResult(Measurements $measurements, OutputInterface $output): void
@@ -24,23 +30,35 @@ final class TextOutputFormatter implements OutputFormatterInterface
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
 
+        $rows = [];
+
+        $rows[] = [
+            'Class Length',
+            $measurements->getMinClassLength(),
+            $measurements->getMaxClassLength(),
+            $measurements->getAvgClassLength(),
+        ];
+
+        $rows[] = [
+            'Method Length',
+            $measurements->getMinMethodLength(),
+            $measurements->getMaxMethodLength(),
+            $measurements->getAvgMethodLength(),
+        ];
+
+        $this->symfonyStyle->createTable()
+            ->setHeaders(['Lenght in Lines', 'Min', 'Max', 'Average'])
+            ->setColumnWidth(0, 30)
+            ->setRows($rows)
+            ->setColumnStyle(1, $this->padLeftTableStyle)
+            ->setColumnStyle(2, $this->padLeftTableStyle)
+            ->setColumnStyle(3, $this->padLeftTableStyle)
+            ->render();
+
         $format = <<<'END'
 Size
     Classes
         Lines                       %10d (%.2f%%)
-        Length
-            Average                 %10d
-            Minimum                 %10d
-            Maximum                 %10d
-    Methods
-        Length
-            Average                 %10d
-            Min                     %10d
-            Max                     %10d
-        Methods Per Class
-                Average                     %10d
-                Minimum                     %10d
-                Maximum                     %10d
     Functions                               %10d (%.2f%%)
         Average Length                      %10d
     Not in classes or functions             %10d (%.2f%%)
@@ -71,27 +89,24 @@ END;
         $result = sprintf(
             $format,
             $measurements->getClassLines(),
-            $measurements->getLogicalLines() > 0 ? ($measurements->getClassLines() / $measurements->getLogicalLines()) * 100 : 0,
+            $measurements->getClassLinesRelative(),
 
-            // Replace array dim fetch with method calls
-            $measurements->getAverageClassLength(),
-            $measurements->getMinimumClassLength(),
-            $measurements->getMaximumClassLength(),
-            $measurements->getAverageMethodLength(),
-            $measurements->getMinimumMethodLength(),
-            $measurements->getMaximumMethodLength(),
-            $measurements->getAverageMethodCountPerClass(),
-            $measurements->getMinimumMethodsPerClass(),
-            $measurements->getMaximumMethodsPerClass(),
-            $llocFunctions = $measurements->getFunctionLines(),
-            $measurements->getLogicalLines() > 0 ? ($llocFunctions / $measurements->getLogicalLines()) * 100 : 0,
+            // functions
+            $measurements->getFunctionLines(),
+            $measurements->getFunctionLinesRelative(),
             $measurements->getAverageFunctionLength(),
-            $llocGlobal = $measurements->getNotInClassesOrFunctions(),
-            $measurements->getLogicalLines() > 0 ? ($llocGlobal / $measurements->getLogicalLines()) * 100 : 0,
+
+            // non-class & non-function code
+            $measurements->getNotInClassesOrFunctions(),
+            $measurements->getNotInClassesOrFunctionsRelative(),
+
+            // elements
             $measurements->getNamespaces(),
             $measurements->getInterfaces(),
             $measurements->getTraits(),
             $measurements->getClasses(),
+
+            // methods
             $methods = $measurements->getMethods(),
             $nonStaticMethods = $measurements->getNonStaticMethods(),
             $methods > 0 ? ($nonStaticMethods / $methods) * 100 : 0,
@@ -103,11 +118,15 @@ END;
             $methods > 0 ? ($protectedMethods / $methods) * 100 : 0,
             $privateMethods = $measurements->getPrivateMethods(),
             $methods > 0 ? ($privateMethods / $methods) * 100 : 0,
+
+            // functions
             $functions = $measurements->getFunctionCount(),
             $namedFunctions = $measurements->getNamedFunctionCount(),
             $functions > 0 ? ($namedFunctions / $functions) * 100 : 0,
             $anonymousFunctions = $measurements->getAnonymousFunctionCount(),
             $functions > 0 ? ($anonymousFunctions / $functions) * 100 : 0,
+
+            // constants
             $constants = $measurements->getConstantCount(),
             $globalConstants = $measurements->getGlobalConstantCount(),
             $constants > 0 ? ($globalConstants / $constants) * 100 : 0,
@@ -119,20 +138,17 @@ END;
             $classConstants > 0 ? ($nonPublicClassConstants / $classConstants) * 100 : 0
         );
 
-        $output->writeln($result);
+        //        $output->writeln($result);
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void
     {
-        $padLeftTableStyle = new TableStyle();
-        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
-
         $this->symfonyStyle->createTable()
             ->setColumnWidth(0, 30)
             ->setColumnWidth(1, 19)
             ->setHeaders(['Metric', 'Count'])
             ->setRows([['Directories', $measurements->getDirectories()], ['Files', $measurements->getFiles()]])
-            ->setColumnStyle(1, $padLeftTableStyle)
+            ->setColumnStyle(1, $this->padLeftTableStyle)
             ->render();
 
         $this->symfonyStyle->newLine();
@@ -144,17 +160,13 @@ END;
             [
                 'Comments',
                 NumberFormat::pretty($measurements->getCommentLines()),
-                NumberFormat::percent(
-                    $measurements->getLines() > 0 ? ($measurements->getCommentLines() / $measurements->getLines()) * 100 : 0
-                ),
+                $measurements->getCommentLinesRelative() . ' %',
             ],
 
             [
                 'Code',
                 NumberFormat::pretty($measurements->getNonCommentLines()),
-                NumberFormat::percent(
-                    $measurements->getLines() > 0 ? ($measurements->getNonCommentLines() / $measurements->getLines()) * 100 : 0
-                ),
+                $measurements->getNonCommentLinesRelative() . ' %',
             ],
 
             [new TableSeparator(), new TableSeparator(), new TableSeparator()],
@@ -166,17 +178,14 @@ END;
             ],
         ];
 
-        $padLeftTableStyle = new TableStyle();
-        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
-
         $this->symfonyStyle->createTable()
             ->setColumnWidth(0, 30)
             ->setColumnWidth(1, 8)
             ->setColumnWidth(2, 7)
             ->setHeaders(['Lines of code', 'Count', 'Relative'])
             ->setRows($tableRows)
-            ->setColumnStyle(1, $padLeftTableStyle)
-            ->setColumnStyle(2, $padLeftTableStyle)
+            ->setColumnStyle(1, $this->padLeftTableStyle)
+            ->setColumnStyle(2, $this->padLeftTableStyle)
             ->render();
 
         $this->symfonyStyle->newLine(2);

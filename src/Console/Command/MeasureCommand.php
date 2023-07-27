@@ -57,13 +57,12 @@ final class MeasureCommand extends Command
     {
         $symfonyStyle = new SymfonyStyle($input, $output);
 
-        $paths = $input->getArgument('paths');
-        $suffixes = $input->getOption('suffix');
-        $excludes = $input->getOption('exclude');
+        $paths = (array) $input->getArgument('paths');
+        $suffixes = (array) $input->getOption('suffix');
+        $excludes = (array) $input->getOption('exclude');
         $isJson = (bool) $input->getOption('json');
 
         $filePaths = $this->phpFilesFinder->findInDirectories($paths, $suffixes, $excludes);
-
         if ($filePaths === []) {
             $output->writeln('<error>No files found to scan</error>');
             return Command::FAILURE;

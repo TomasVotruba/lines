@@ -60,6 +60,11 @@ final class Measurements
 
     private int $functionLineCount = 0;
 
+    /**
+     * @var string[]
+     */
+    private array $namespaceNames = [];
+
     public function addFile(string $filename): void
     {
         $this->directoryNames[] = dirname($filename);
@@ -129,22 +134,22 @@ final class Measurements
 
     public function addNamespace(string $namespace): void
     {
-        $this->addUnique(CounterName::NAMESPACES, $namespace);
+        $this->namespaceNames[] = $namespace;
     }
 
     public function incrementInterfaces(): void
     {
-        $this->interfaceCount++;
+        ++$this->interfaceCount;
     }
 
     public function incrementTraits(): void
     {
-        $this->traitCount++;
+        ++$this->traitCount;
     }
 
     public function incrementNonStaticMethods(): void
     {
-        $this->nonStaticMethodCount++;
+        ++$this->nonStaticMethodCount;
     }
 
     public function incrementStaticMethods(): void
@@ -154,32 +159,32 @@ final class Measurements
 
     public function incrementPublicMethods(): void
     {
-        $this->publicMethodCount++;
+        ++$this->publicMethodCount;
     }
 
     public function incrementProtectedMethods(): void
     {
-        $this->protectedMethodCount++;
+        ++$this->protectedMethodCount;
     }
 
     public function incrementPrivateMethods(): void
     {
-        $this->privateMethodCount++;
+        ++$this->privateMethodCount;
     }
 
     public function incrementNamedFunctions(): void
     {
-        $this->namedFunctionCount++;
+        ++$this->namedFunctionCount;
     }
 
     public function incrementAnonymousFunctions(): void
     {
-        $this->anonymousFunctionCount++;
+        ++$this->anonymousFunctionCount;
     }
 
     public function incrementGlobalConstants(): void
     {
-        $this->globalConstantCount++;
+        ++$this->globalConstantCount;
     }
 
     public function incrementPublicClassConstants(): void
@@ -195,29 +200,11 @@ final class Measurements
     /**
      * @param CounterName::* $key
      */
-    private function addUnique(string $key, mixed $name): void
-    {
-        $this->check($key, []);
-        $this->counts[$key][$name] = true;
-    }
-
-    /**
-     * @param CounterName::* $key
-     */
     private function addToArray(string $key, mixed $value): void
     {
         $this->check($key, []);
         $this->counts[$key][] = $value;
     }
-
-    //    /**
-    //     * @param CounterName::* $key
-    //     */
-    //    private function increment(string $key, int $number = 1): void
-    //    {
-    //        $this->check($key, 0);
-    //        $this->counts[$key] += $number;
-    //    }
 
     /**
      * @param CounterName::* $key
@@ -232,7 +219,7 @@ final class Measurements
 
     public function incrementClasses(): void
     {
-        $this->classCount++;
+        ++$this->classCount;
     }
 
     public function getDirectories(): int
@@ -258,7 +245,7 @@ final class Measurements
 
     public function getNonCommentLines(): int
     {
-        return $this->getLines() - $this->getCommentLines();
+        return $this->lineCount - $this->commentLineCount;
     }
 
     public function getLogicalLines(): int
@@ -323,17 +310,18 @@ final class Measurements
 
     public function getAverageFunctionLength(): float
     {
-        return $this->divide($this->getFunctionLines(), $this->getFunctions());
+        return $this->divide($this->functionLineCount, $this->getFunctions());
     }
 
     public function getNotInClassesOrFunctions(): int
     {
-        return $this->getLogicalLines() - $this->getClassLines() - $this->getFunctionLines();
+        return $this->logicalLineCount - $this->getClassLines() - $this->functionLineCount;
     }
 
     public function getNamespaces(): int
     {
-        return $this->getCount(CounterName::NAMESPACES);
+        $uniqueNamespaceNames = array_unique($this->namespaceNames);
+        return count($uniqueNamespaceNames);
     }
 
     public function getInterfaces(): int
@@ -353,7 +341,7 @@ final class Measurements
 
     public function getMethods(): int
     {
-        return $this->getNonStaticMethods() + $this->getStaticMethods();
+        return $this->nonStaticMethodCount + $this->staticMethodCount;
     }
 
     public function getNonStaticMethods(): int
@@ -376,7 +364,7 @@ final class Measurements
      */
     public function getNonPublicMethods(): int
     {
-        return $this->getProtectedMethods() + $this->getPrivateMethods();
+        return $this->protectedMethodCount + $this->privateMethodCount;
     }
 
     public function getProtectedMethods(): int
@@ -391,7 +379,7 @@ final class Measurements
 
     public function getFunctions(): int
     {
-        return $this->getNamedFunctions() + $this->getAnonymousFunctions();
+        return $this->namedFunctionCount + $this->anonymousFunctionCount;
     }
 
     public function getNamedFunctions(): int
@@ -406,7 +394,7 @@ final class Measurements
 
     public function getConstants(): int
     {
-        return $this->getGlobalConstants() + $this->getClassConstants();
+        return $this->globalConstantCount + $this->getClassConstants();
     }
 
     public function getGlobalConstants(): int
@@ -426,7 +414,7 @@ final class Measurements
 
     public function getClassConstants(): int
     {
-        return $this->getPublicClassConstants() + $this->getNonPublicClassConstants();
+        return $this->publicClassConstantCount + $this->nonPublicClassConstantCount;
     }
 
     /**

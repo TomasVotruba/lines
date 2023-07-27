@@ -11,6 +11,4 @@ final class CounterName
     public const CLASS_LINES = 'class lines';
 
     public const METHODS_PER_CLASS = 'methods per class';
-
-    public const NAMESPACES = 'namespaces';
 }

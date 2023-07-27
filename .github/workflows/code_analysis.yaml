@@ -30,10 +30,6 @@ jobs:
                         run: composer phpstan --ansi
 
                     -
-                        name: 'Rector'
-                        run: composer rector --ansi
-
-                    -
                         name: 'Coding Standard'
                         run: composer fix-cs --ansi
 

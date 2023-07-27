@@ -31,29 +31,16 @@ final class TextOutputFormatter implements OutputFormatterInterface
         $this->printLinesOfCode($measurements);
 
         $rows = [];
+        $rows[] = ['Min', $measurements->getMinClassLength()];
+        $rows[] = ['Max ', $measurements->getMaxClassLength()];
+        $rows[] = ['Average ', $measurements->getAverageClassLength()];
+        $this->printItemValueTable($rows, 'Class length', 'Lines');
 
-        $rows[] = [
-            'Class Length',
-            $measurements->getMinClassLength(),
-            $measurements->getMaxClassLength(),
-            $measurements->getAvgClassLength(),
-        ];
-
-        $rows[] = [
-            'Method Length',
-            $measurements->getMinMethodLength(),
-            $measurements->getMaxMethodLength(),
-            $measurements->getAvgMethodLength(),
-        ];
-
-        $this->symfonyStyle->createTable()
-            ->setHeaders(['Lenght in Lines', 'Min', 'Max', 'Average'])
-            ->setColumnWidth(0, 30)
-            ->setRows($rows)
-            ->setColumnStyle(1, $this->padLeftTableStyle)
-            ->setColumnStyle(2, $this->padLeftTableStyle)
-            ->setColumnStyle(3, $this->padLeftTableStyle)
-            ->render();
+        $rows = [];
+        $rows[] = ['Min', $measurements->getMinMethodLength()];
+        $rows[] = ['Max', $measurements->getMaxMethodLength()];
+        $rows[] = ['Average', $measurements->getAverageMethodLength()];
+        $this->printItemValueTable($rows, 'Method length', 'Lines');
 
         $format = <<<'END'
 Size
@@ -143,15 +130,12 @@ END;
 
     private function printFilesAndDirectories(Measurements $measurements): void
     {
-        $this->symfonyStyle->createTable()
-            ->setColumnWidth(0, 30)
-            ->setColumnWidth(1, 19)
-            ->setHeaders(['Metric', 'Count'])
-            ->setRows([['Directories', $measurements->getDirectories()], ['Files', $measurements->getFiles()]])
-            ->setColumnStyle(1, $this->padLeftTableStyle)
-            ->render();
+        $rows = [
+            ['Directories', $measurements->getDirectories()],
+            ['Files', $measurements->getFiles()]
+        ];
 
-        $this->symfonyStyle->newLine();
+        $this->printItemValueTable($rows, 'Metric', 'Count');
     }
 
     private function printLinesOfCode(Measurements $measurements): void
@@ -189,5 +173,20 @@ END;
             ->render();
 
         $this->symfonyStyle->newLine(2);
+    }
+
+    /**
+     * @param mixed[] $rows
+     */
+    private function printItemValueTable(array $rows, string $titleHeader, string $countHeader): void
+    {
+        $this->symfonyStyle->createTable()
+            ->setHeaders([$titleHeader, $countHeader])
+            ->setColumnWidth(0, 30)
+            ->setRows($rows)
+            ->setColumnStyle(1, $this->padLeftTableStyle)
+            ->render();
+
+        $this->symfonyStyle->newLine();
     }
 }

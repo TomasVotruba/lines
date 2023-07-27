@@ -249,7 +249,7 @@ final class Measurements
         return array_sum($this->classLineCountPerClass);
     }
 
-    public function getAvgClassLength(): float
+    public function getAverageClassLength(): float
     {
         if ($this->classLineCountPerClass === []) {
             return 0.0;
@@ -268,7 +268,7 @@ final class Measurements
         return max($this->classLineCountPerClass);
     }
 
-    public function getAvgMethodLength(): float
+    public function getAverageMethodLength(): float
     {
         if ($this->methodLineCountPerMethod === []) {
             return 0.0;

@@ -19,7 +19,7 @@ final class AnalyserTest extends TestCase
 
     public function test(): void
     {
-        $measurementResult = $this->analyser->countFiles([__DIR__ . '/Fixture/source.php']);
+        $measurementResult = $this->analyser->measureFiles([__DIR__ . '/Fixture/source.php']);
 
         $this->assertSame(1, $measurementResult->getFiles());
         $this->assertSame(82, $measurementResult->getLines());
@@ -64,7 +64,7 @@ final class AnalyserTest extends TestCase
     #[DataProvider('issue126Provider')]
     public function testIssue126IsFixed(int $fileNumber, int $expectedCommentLines): void
     {
-        $measurementResult = $this->analyser->countFiles([
+        $measurementResult = $this->analyser->measureFiles([
             __DIR__ . '/Fixture/issue_126/issue_126_' . $fileNumber . '.php',
         ]);
 
@@ -81,31 +81,31 @@ final class AnalyserTest extends TestCase
 
     public function testSkipAnonymousClass(): void
     {
-        $measurementResult = $this->analyser->countFiles([__DIR__ . '/Fixture/issue_138.php']);
+        $measurementResult = $this->analyser->measureFiles([__DIR__ . '/Fixture/issue_138.php']);
         $this->assertSame(1, $measurementResult->getClasses());
     }
 
     public function testDeclareIsNotLogicalLine(): void
     {
-        $measurementResult = $this->analyser->countFiles([__DIR__ . '/Fixture/with_declare.php']);
+        $measurementResult = $this->analyser->measureFiles([__DIR__ . '/Fixture/with_declare.php']);
         $this->assertSame(0, $measurementResult->getNotInClassesOrFunctions());
     }
 
     public function testNamespaceIsNotLogicalLine(): void
     {
-        $measurementResult = $this->analyser->countFiles([__DIR__ . '/Fixture/with_namespace.php']);
+        $measurementResult = $this->analyser->measureFiles([__DIR__ . '/Fixture/with_namespace.php']);
         $this->assertSame(0, $measurementResult->getNotInClassesOrFunctions());
     }
 
     public function testImportIsNotLogicalLine(): void
     {
-        $measurementResult = $this->analyser->countFiles([__DIR__ . '/Fixture/with_import.php']);
+        $measurementResult = $this->analyser->measureFiles([__DIR__ . '/Fixture/with_import.php']);
         $this->assertSame(0, $measurementResult->getNotInClassesOrFunctions());
     }
 
     public function testConstAndPublicClassConst(): void
     {
-        $measurementResult = $this->analyser->countFiles([__DIR__ . '/Fixture/class_constants.php']);
+        $measurementResult = $this->analyser->measureFiles([__DIR__ . '/Fixture/class_constants.php']);
 
         $this->assertSame(2, $measurementResult->getPublicClassConstants());
         $this->assertSame(3, $measurementResult->getNonPublicClassConstants());
@@ -116,13 +116,13 @@ final class AnalyserTest extends TestCase
 
     public function testClasses(): void
     {
-        $measurementResult = $this->analyser->countFiles([__DIR__ . '/Fixture/classes.php']);
+        $measurementResult = $this->analyser->measureFiles([__DIR__ . '/Fixture/classes.php']);
         $this->assertSame(9, $measurementResult->getClasses());
     }
 
     public function testMethodVisibility(): void
     {
-        $measurementResult = $this->analyser->countFiles([__DIR__ . '/Fixture/methods.php']);
+        $measurementResult = $this->analyser->measureFiles([__DIR__ . '/Fixture/methods.php']);
 
         $this->assertSame(2, $measurementResult->getPublicMethods());
         $this->assertSame(1, $measurementResult->getProtectedMethods());
@@ -132,7 +132,7 @@ final class AnalyserTest extends TestCase
 
     public function testAverageMethodsPerClass(): void
     {
-        $measurementResult = $this->analyser->countFiles([__DIR__ . '/Fixture/methods_per_class.php']);
+        $measurementResult = $this->analyser->measureFiles([__DIR__ . '/Fixture/methods_per_class.php']);
 
         $this->assertSame(2.0, $measurementResult->getAverageMethodsPerClass());
 
@@ -142,7 +142,7 @@ final class AnalyserTest extends TestCase
 
     public function testSkipTraitFromLogicalLines(): void
     {
-        $measurementResult = $this->analyser->countFiles([__DIR__ . '/Fixture/class_using_trait.php']);
+        $measurementResult = $this->analyser->measureFiles([__DIR__ . '/Fixture/class_using_trait.php']);
         $this->assertSame(1, $measurementResult->getClassLines());
     }
 }

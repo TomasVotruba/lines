@@ -19,35 +19,37 @@ final class Analyser
     }
 
     /**
-     * @param string[] $files
+     * @param string[] $filePaths
      */
-    public function countFiles(array $files): MeasurementResult
+    public function measureFiles(array $filePaths): MeasurementResult
     {
-        Assert::allString($files);
-        Assert::allFileExists($files);
+        Assert::allString($filePaths);
+        Assert::allFileExists($filePaths);
 
-        foreach ($files as $file) {
-            $this->countFile($file);
+        foreach ($filePaths as $filePath) {
+            $this->measureFile($filePath);
         }
 
-        return $this->metricsCollector->getPublisher();
+        return $this->metricsCollector->fetchResult();
     }
 
-    private function countFile(string $filename): void
+    private function measureFile(string $filePath): void
     {
-        Assert::fileExists($filename);
+        Assert::fileExists($filePath);
 
-        $fileContents = file_get_contents($filename);
+        $fileContents = file_get_contents($filePath);
         Assert::string($fileContents);
 
-        $this->metricsCollector->incrementLines(substr_count($fileContents, "\n"));
+        $newlinesCount = substr_count($fileContents, "\n");
+        $this->metricsCollector->incrementLines($newlinesCount);
+
         $tokens = token_get_all($fileContents);
         $numTokens = count($tokens);
 
         // performance?
         unset($fileContents);
 
-        $this->metricsCollector->addFile($filename);
+        $this->metricsCollector->addFile($filePath);
 
         $blocks = [];
         $currentBlock = false;

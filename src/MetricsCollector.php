@@ -19,7 +19,7 @@ final class MetricsCollector
 
     private int $currentNumberOfMethods = 0;
 
-    public function getPublisher(): MeasurementResult
+    public function fetchResult(): MeasurementResult
     {
         return new MeasurementResult($this->counts);
     }

@@ -30,19 +30,35 @@ final class TextOutputFormatter implements OutputFormatterInterface
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
 
+        $rows = [];
+
+        $rows[] = [
+            'Class Length',
+            $measurements->getMinClassLength(),
+            $measurements->getMaxClassLength(),
+            $measurements->getAvgClassLength(),
+        ];
+
+        $rows[] = [
+            'Method Length',
+            $measurements->getMinMethodLength(),
+            $measurements->getMaxMethodLength(),
+            $measurements->getAvgMethodLength(),
+        ];
+
+        $this->symfonyStyle->createTable()
+            ->setHeaders(['Lenght in Lines', 'Min', 'Max', 'Average'])
+            ->setColumnWidth(0, 30)
+            ->setRows($rows)
+            ->setColumnStyle(1, $this->padLeftTableStyle)
+            ->setColumnStyle(2, $this->padLeftTableStyle)
+            ->setColumnStyle(3, $this->padLeftTableStyle)
+            ->render();
+
         $format = <<<'END'
 Size
     Classes
         Lines                       %10d (%.2f%%)
-        Length
-            Average                 %10d
-            Minimum                 %10d
-            Maximum                 %10d
-    Methods
-        Length
-            Average                 %10d
-            Min                     %10d
-            Max                     %10d
     Functions                               %10d (%.2f%%)
         Average Length                      %10d
     Not in classes or functions             %10d (%.2f%%)
@@ -74,16 +90,6 @@ END;
             $format,
             $measurements->getClassLines(),
             $measurements->getClassLinesRelative(),
-
-            // class length
-            $measurements->getAverageClassLength(),
-            $measurements->getMinimumClassLength(),
-            $measurements->getMaximumClassLength(),
-
-            // method length
-            $measurements->getAverageMethodLength(),
-            $measurements->getMinimumMethodLength(),
-            $measurements->getMaximumMethodLength(),
 
             // functions
             $measurements->getFunctionLines(),
@@ -132,7 +138,7 @@ END;
             $classConstants > 0 ? ($nonPublicClassConstants / $classConstants) * 100 : 0
         );
 
-        $output->writeln($result);
+        //        $output->writeln($result);
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void

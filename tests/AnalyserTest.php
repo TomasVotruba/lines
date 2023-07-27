@@ -50,12 +50,12 @@ final class AnalyserTest extends TestCase
         $this->assertSame(0, $measurements->getDirectories());
         $this->assertSame(1, $measurements->getNamespaces());
         $this->assertSame(75, $measurements->getNonCommentLines());
-        $this->assertSame(0, $measurements->getMinimumClassLength());
-        $this->assertSame(4.0, $measurements->getAverageClassLength());
-        $this->assertSame(28, $measurements->getMaximumClassLength());
-        $this->assertSame(6, $measurements->getMinimumMethodLength());
-        $this->assertSame(7.3, $measurements->getAverageMethodLength());
-        $this->assertSame(9, $measurements->getMaximumMethodLength());
+        $this->assertSame(0, $measurements->getMinClassLength());
+        $this->assertSame(4.0, $measurements->getAvgClassLength());
+        $this->assertSame(28, $measurements->getMaxClassLength());
+        $this->assertSame(6, $measurements->getMinMethodLength());
+        $this->assertSame(7.3, $measurements->getAvgMethodLength());
+        $this->assertSame(9, $measurements->getMaxMethodLength());
 
         // relative
         $this->assertSame(8.5, $measurements->getCommentLinesRelative());

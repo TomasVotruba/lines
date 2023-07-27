@@ -249,43 +249,42 @@ final class Measurements
         return array_sum($this->classLineCountPerClass);
     }
 
-    public function getAverageClassLength(): float
+    public function getAvgClassLength(): float
     {
         if ($this->classLineCountPerClass === []) {
             return 0.0;
         }
 
-        return $this->getClassLines() / count($this->classLineCountPerClass);
+        return $this->average($this->getClassLines(), count($this->classLineCountPerClass));
     }
 
-    public function getMinimumClassLength(): int
+    public function getMinClassLength(): int
     {
         return min($this->classLineCountPerClass);
     }
 
-    public function getMaximumClassLength(): int
+    public function getMaxClassLength(): int
     {
         return max($this->classLineCountPerClass);
     }
 
-    public function getAverageMethodLength(): float
+    public function getAvgMethodLength(): float
     {
         if ($this->methodLineCountPerMethod === []) {
             return 0.0;
         }
 
         $totalMethodLineCount = array_sum($this->methodLineCountPerMethod);
-        $average = $totalMethodLineCount / count($this->methodLineCountPerMethod);
 
-        return NumberFormat::singleDecimal($average);
+        return $this->average($totalMethodLineCount, count($this->methodLineCountPerMethod));
     }
 
-    public function getMinimumMethodLength(): int
+    public function getMinMethodLength(): int
     {
         return min($this->methodLineCountPerMethod);
     }
 
-    public function getMaximumMethodLength(): int
+    public function getMaxMethodLength(): int
     {
         return max($this->methodLineCountPerMethod);
     }
@@ -446,9 +445,15 @@ final class Measurements
         return 0.0;
     }
 
-    private function relative(int $partialNumber, int $sumNumber): float
+    private function relative(int $partialNumber, int $totalNumber): float
     {
-        $relative = ($partialNumber / $sumNumber) * 100;
+        $relative = ($partialNumber / $totalNumber) * 100;
+        return NumberFormat::singleDecimal($relative);
+    }
+
+    private function average(int $partialNumber, int $totalNumber): float
+    {
+        $relative = ($partialNumber / $totalNumber);
         return NumberFormat::singleDecimal($relative);
     }
 }

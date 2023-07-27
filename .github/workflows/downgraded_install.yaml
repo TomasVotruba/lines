@@ -3,7 +3,8 @@ name: Downgraded Install
 on:
     push:
         branches:
-            - main
+            # @todo enable after release
+            - later
 
 jobs:
     downgraded_install:

@@ -284,42 +284,12 @@ final class Analyser
                 case T_STRING:
                     if ($value === 'define') {
                         $this->measurements->incrementGlobalConstants();
-
-                        $j = $i + 1;
-
-                        while (isset($tokens[$j]) && $tokens[$j] !== ';') {
-                            if (is_array($tokens[$j]) &&
-                                $tokens[$j][0] === T_CONSTANT_ENCAPSED_STRING) {
-                                $this->measurements->addConstant(str_replace("'", '', $tokens[$j][1]));
-
-                                break;
-                            }
-
-                            ++$j;
-                        }
                     }
 
                     break;
 
                 case T_DOUBLE_COLON:
                 case T_OBJECT_OPERATOR:
-                    $n = $this->getNextNonWhitespaceTokenPos($tokens, $i);
-                    Assert::integer($n);
-
-                    $nn = $this->getNextNonWhitespaceTokenPos($tokens, $n);
-
-                    if ($n && $nn &&
-                        isset($tokens[$n][0]) &&
-                        ($tokens[$n][0] === T_STRING ||
-                         $tokens[$n][0] === T_VARIABLE) &&
-                        $tokens[$nn] === '(') {
-                        if ($token === T_DOUBLE_COLON) {
-                            $this->measurements->incrementStaticMethodCalls();
-                        } else {
-                            $this->measurements->incrementNonStaticMethodCalls();
-                        }
-                    }
-
                     break;
 
                 case T_USE:

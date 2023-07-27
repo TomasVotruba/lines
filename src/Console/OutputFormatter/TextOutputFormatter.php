@@ -65,10 +65,6 @@ final class TextOutputFormatter
 
         $format = <<<'END'
 Size
-    Lines of Code               %10d
-    Comments                    %10d (%.2f%%)
-    Non-Comment                 %10d (%.2f%%)
-
     Classes
         Lines                       %10d (%.2f%%)
         Length
@@ -117,11 +113,6 @@ END;
 
         $result = sprintf(
             $format,
-            $count['loc'],
-            $count['cloc'],
-            $count['loc'] > 0 ? ($count['cloc'] / $count['loc']) * 100 : 0,
-            $count['ncloc'],
-            $count['loc'] > 0 ? ($count['ncloc'] / $count['loc']) * 100 : 0,
             $count['llocClasses'],
             $count['lloc'] > 0 ? ($count['llocClasses'] / $count['lloc']) * 100 : 0,
             $count['classLlocAvg'],

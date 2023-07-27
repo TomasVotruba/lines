@@ -34,6 +34,7 @@ final class TextOutputFormatter
 
             $this->symfonyStyle->createTable()
                 ->setColumnWidth(0, 30)
+                ->setColumnWidth(1, 19)
                 ->setHeaders(['Metric', 'Count'])
                 ->setRows([
                     ['Directories', $count['directories']],
@@ -42,18 +43,18 @@ final class TextOutputFormatter
                 ->setColumnStyle(1, $padLeftTableStyle)
                 ->render();
 
-            $this->symfonyStyle->newLine(2);
+            $this->symfonyStyle->newLine();
         }
 
         $tableRows = [
             [
-                'Comment Lines',
+                'Comments',
                 pretty_number($count['cloc']),
                 percent($count['loc'] > 0 ? ($count['cloc'] / $count['loc']) * 100 : 0),
             ],
 
             [
-                'Code Lines',
+                'Code',
                 pretty_number($count['ncloc']),
                 percent($count['loc'] > 0 ? ($count['ncloc'] / $count['loc']) * 100 : 0),
             ],
@@ -61,7 +62,7 @@ final class TextOutputFormatter
             [new TableSeparator(), new TableSeparator(), new TableSeparator()],
 
             [
-                '<options=bold>Total Lines</>',
+                '<options=bold>Total</>',
                 '<options=bold>' . pretty_number($count['loc']) . '</>',
                 '<options=bold>100.0 %</>',
             ],
@@ -69,7 +70,9 @@ final class TextOutputFormatter
 
         $this->symfonyStyle->createTable()
             ->setColumnWidth(0, 30)
-            ->setHeaders(['Metric', 'Lines', 'Relative'])
+            ->setColumnWidth(1, 8)
+            ->setColumnWidth(2, 7)
+            ->setHeaders(['Lines of code', 'Count', 'Relative'])
             ->setRows($tableRows)
             ->setColumnStyle(1, $padLeftTableStyle)
             ->setColumnStyle(2, $padLeftTableStyle)
@@ -103,10 +106,6 @@ Structure
     Interfaces                              %10d
     Traits                                  %10d
     Classes                                 %10d
-        Abstract Classes                    %10d (%.2f%%)
-        Concrete Classes                    %10d (%.2f%%)
-            Final Classes                   %10d (%.2f%%)
-            Non-Final Classes               %10d (%.2f%%)
         Methods                             %10d
             Scope
                 Non-Static                  %10d (%.2f%%)
@@ -147,14 +146,6 @@ END;
             $count['interfaces'],
             $count['traits'],
             $count['classes'],
-            $count['abstractClasses'],
-            $count['classes'] > 0 ? ($count['abstractClasses'] / $count['classes']) * 100 : 0,
-            $count['concreteClasses'],
-            $count['classes'] > 0 ? ($count['concreteClasses'] / $count['classes']) * 100 : 0,
-            $count['finalClasses'],
-            $count['concreteClasses'] > 0 ? ($count['finalClasses'] / $count['concreteClasses']) * 100 : 0,
-            $count['nonFinalClasses'],
-            $count['concreteClasses'] > 0 ? ($count['nonFinalClasses'] / $count['concreteClasses']) * 100 : 0,
             $count['methods'],
             $count['nonStaticMethods'],
             $count['methods'] > 0 ? ($count['nonStaticMethods'] / $count['methods']) * 100 : 0,

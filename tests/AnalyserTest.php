@@ -31,10 +31,6 @@ final class AnalyserTest extends TestCase
                 'interfaces' => 1,
                 'traits' => 0,
                 'classes' => 2,
-                'abstractClasses' => 1,
-                'concreteClasses' => 1,
-                'nonFinalClasses' => 1,
-                'finalClasses' => 0,
                 'functions' => 2,
                 'namedFunctions' => 1,
                 'anonymousFunctions' => 1,
@@ -152,9 +148,6 @@ final class AnalyserTest extends TestCase
     {
         $result = $this->analyser->countFiles([__DIR__ . '/Fixture/classes.php']);
         $this->assertSame(9, $result['classes']);
-        $this->assertSame(2, $result['finalClasses']);
-        $this->assertSame(3, $result['nonFinalClasses']);
-        $this->assertSame(4, $result['abstractClasses']);
     }
 
     public function test_it_makes_a_distinction_between_protected_and_private_methods(): void

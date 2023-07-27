@@ -120,21 +120,6 @@ final class MetricsCollector
         $this->increment('traits');
     }
 
-    public function incrementAbstractClasses(): void
-    {
-        $this->increment(CounterName::ABSTRACT_CLASSES);
-    }
-
-    public function incrementNonFinalClasses(): void
-    {
-        $this->increment(CounterName::NON_FINAL_CLASSES);
-    }
-
-    public function incrementFinalClasses(): void
-    {
-        $this->increment(CounterName::FINAL_CLASSES);
-    }
-
     public function incrementNonStaticMethods(): void
     {
         $this->increment(CounterName::NON_STATIC_METHODS);
@@ -211,5 +196,10 @@ final class MetricsCollector
         if (! isset($this->counts[$key])) {
             $this->counts[$key] = $default;
         }
+    }
+
+    public function incrementClasses(): void
+    {
+        $this->increment(CounterName::CLASSES);
     }
 }

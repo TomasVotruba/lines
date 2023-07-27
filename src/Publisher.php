@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines;
 
+use TomasVotruba\Lines\Enum\CounterName;
+
 final class Publisher
 {
     /**
@@ -141,27 +143,7 @@ final class Publisher
 
     public function getClasses(): int
     {
-        return $this->getAbstractClasses() + $this->getConcreteClasses();
-    }
-
-    public function getAbstractClasses(): int
-    {
-        return $this->getValue('abstract classes');
-    }
-
-    public function getConcreteClasses(): int
-    {
-        return $this->getFinalClasses() + $this->getNonFinalClasses();
-    }
-
-    public function getFinalClasses(): int
-    {
-        return $this->getValue('final classes');
-    }
-
-    public function getNonFinalClasses(): int
-    {
-        return $this->getValue('non-final classes');
+        return $this->getValue(CounterName::CLASSES);
     }
 
     public function getMethods(): int
@@ -255,10 +237,6 @@ final class Publisher
             'interfaces' => $this->getInterfaces(),
             'traits' => $this->getTraits(),
             'classes' => $this->getClasses(),
-            'abstractClasses' => $this->getAbstractClasses(),
-            'concreteClasses' => $this->getConcreteClasses(),
-            'finalClasses' => $this->getFinalClasses(),
-            'nonFinalClasses' => $this->getNonFinalClasses(),
             'functions' => $this->getFunctions(),
             'namedFunctions' => $this->getNamedFunctions(),
             'anonymousFunctions' => $this->getAnonymousFunctions(),

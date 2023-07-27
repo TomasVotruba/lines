@@ -143,20 +143,8 @@ final class Analyser
                     } elseif ($token === T_INTERFACE) {
                         $this->metricsCollector->incrementInterfaces();
                     } else {
-                        $classModifierToken = $this->getPreviousNonWhitespaceNonCommentTokenPos($tokens, $i);
-
-                        if ($classModifierToken &&
-                            $tokens[$classModifierToken][0] === T_ABSTRACT
-                        ) {
-                            $this->metricsCollector->incrementAbstractClasses();
-                        } elseif (
-                            $classModifierToken &&
-                            $tokens[$classModifierToken][0] === T_FINAL
-                        ) {
-                            $this->metricsCollector->incrementFinalClasses();
-                        } else {
-                            $this->metricsCollector->incrementNonFinalClasses();
-                        }
+                        // @todo add enum support
+                        $this->metricsCollector->incrementClasses();
                     }
 
                     break;

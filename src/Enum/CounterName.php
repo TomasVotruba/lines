@@ -59,25 +59,15 @@ final class CounterName
     /**
      * @var string
      */
-    public const ABSTRACT_CLASSES = 'abstract classes';
-
-    /**
-     * @var string
-     */
-    public const NON_FINAL_CLASSES = 'non-final classes';
-
-    /**
-     * @var string
-     */
-    public const FINAL_CLASSES = 'final classes';
-
-    /**
-     * @var string
-     */
     public const NON_STATIC_METHODS = 'non-static methods';
 
     /**
      * @var string
      */
     public const STATIC_METHODS = 'static methods';
+
+    /**
+     * @var string
+     */
+    public const CLASSES = 'classes';
 }

@@ -31,9 +31,8 @@ final class TextOutputFormatter
 
         $tableRows = [
             ['Total lines', number_format($count['loc'], 0, '.', ' ')],
-            ['Comment lines', $count['cloc']],
-            ['Non-comment lines', $count['ncloc']],
-            ['Logical lines', $count['lloc']],
+            ['Comments', $count['cloc']],
+            ['Non-comment', $count['ncloc']],
         ];
 
         $tableStyle = new TableStyle();
@@ -44,14 +43,11 @@ final class TextOutputFormatter
             ->setColumnStyle(1, $tableStyle)
             ->render();
 
-        return;
-
         $format = <<<'END'
 Size
-    Lines of Code                           %10d
-    Comment Lines of Code                   %10d (%.2f%%)
-    Non-Comment Lines of Code               %10d (%.2f%%)
-    Logical Lines of Code                   %10d (%.2f%%)
+    Lines of Code               %10d
+    Comments                    %10d (%.2f%%)
+    Non-Comment                 %10d (%.2f%%)
 
     Classes
         Lines                       %10d (%.2f%%)
@@ -106,8 +102,6 @@ END;
             $count['loc'] > 0 ? ($count['cloc'] / $count['loc']) * 100 : 0,
             $count['ncloc'],
             $count['loc'] > 0 ? ($count['ncloc'] / $count['loc']) * 100 : 0,
-            $count['lloc'],
-            $count['loc'] > 0 ? ($count['lloc'] / $count['loc']) * 100 : 0,
             $count['llocClasses'],
             $count['lloc'] > 0 ? ($count['llocClasses'] / $count['lloc']) * 100 : 0,
             $count['classLlocAvg'],

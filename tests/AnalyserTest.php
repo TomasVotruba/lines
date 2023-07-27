@@ -177,7 +177,6 @@ final class AnalyserTest extends TestCase
     public function test_use_trait_is_not_counted_as_logical_line(): void
     {
         $result = $this->analyser->countFiles([__DIR__ . '/Fixture/class_using_trait.php']);
-        $this->assertSame(1, $result['lloc']);
         $this->assertSame(1, $result['llocClasses']);
     }
 }

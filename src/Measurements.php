@@ -19,10 +19,22 @@ final class Measurements
 
     private int $currentNumberOfMethods = 0;
 
+    /**
+     * @var string[]
+     */
+    private array $directoryNames = [];
+
+    private int $classCount = 0;
+
+    private int $traitCount = 0;
+
+    private int $interfaceCount = 0;
+
     public function addFile(string $filename): void
     {
+        $this->directoryNames[] = dirname($filename);
+
         $this->increment(CounterName::FILES);
-        $this->addUnique(CounterName::DIRECTORIES, dirname($filename));
     }
 
     public function incrementLines(int $number): void
@@ -107,12 +119,12 @@ final class Measurements
 
     public function incrementInterfaces(): void
     {
-        $this->increment(CounterName::INTERFACES);
+        $this->interfaceCount++;
     }
 
     public function incrementTraits(): void
     {
-        $this->increment(CounterName::TRAITS);
+        $this->traitCount++;
     }
 
     public function incrementNonStaticMethods(): void
@@ -205,12 +217,13 @@ final class Measurements
 
     public function incrementClasses(): void
     {
-        $this->increment(CounterName::CLASSES);
+        $this->classCount++;
     }
 
     public function getDirectories(): int
     {
-        return $this->getCount(CounterName::DIRECTORIES) - 1;
+        $uniqueDirectoryNames = array_unique($this->directoryNames);
+        return count($uniqueDirectoryNames) - 1;
     }
 
     public function getFiles(): int
@@ -310,17 +323,17 @@ final class Measurements
 
     public function getInterfaces(): int
     {
-        return $this->getValue(CounterName::INTERFACES);
+        return $this->interfaceCount;
     }
 
     public function getTraits(): int
     {
-        return $this->getValue(CounterName::TRAITS);
+        return $this->traitCount;
     }
 
     public function getClasses(): int
     {
-        return $this->getValue(CounterName::CLASSES);
+        return $this->classCount;
     }
 
     public function getMethods(): int

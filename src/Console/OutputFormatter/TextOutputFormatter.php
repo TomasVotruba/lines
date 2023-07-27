@@ -131,9 +131,7 @@ END;
             ->setColumnWidth(0, 30)
             ->setColumnWidth(1, 19)
             ->setHeaders(['Metric', 'Count'])
-            ->setRows(
-                [['Directories', $measurements->getDirectories()], ['Files', $measurements->getFiles()]]
-            )
+            ->setRows([['Directories', $measurements->getDirectories()], ['Files', $measurements->getFiles()]])
             ->setColumnStyle(1, $padLeftTableStyle)
             ->render();
 

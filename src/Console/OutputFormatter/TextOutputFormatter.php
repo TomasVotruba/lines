@@ -4,10 +4,18 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
+use Symfony\Component\Console\Helper\TableSeparator;
+use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class TextOutputFormatter
 {
+    public function __construct(
+        private readonly SymfonyStyle $symfonyStyle,
+    ) {
+    }
+
     /**
      * @param array<string, mixed> $count
      */
@@ -22,12 +30,44 @@ final class TextOutputFormatter
             );
         }
 
+        $tableRows = [
+            [
+                'Comment Lines',
+                pretty_number($count['cloc']),
+                percent($count['loc'] > 0 ? ($count['cloc'] / $count['loc']) * 100 : 0),
+            ],
+
+            [
+                'Code Lines',
+                pretty_number($count['ncloc']),
+                percent($count['loc'] > 0 ? ($count['ncloc'] / $count['loc']) * 100 : 0),
+            ],
+
+            [new TableSeparator(), new TableSeparator(), new TableSeparator()],
+
+            [
+                '<options=bold>Total Lines</>',
+                '<options=bold>' . pretty_number($count['loc']) . '</>',
+                '<options=bold>100.0 %</>',
+            ],
+        ];
+
+        $padLeftTableStyle = new TableStyle();
+        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
+
+        $this->symfonyStyle->createTable()
+            ->setColumnWidth(0, 30)
+            ->setHeaders(['Metric', 'Lines', 'Relative'])
+            ->setRows($tableRows)
+            ->setColumnStyle(1, $padLeftTableStyle)
+            ->setColumnStyle(2, $padLeftTableStyle)
+            ->render();
+
         $format = <<<'END'
 Size
-    Lines of Code                           %10d
-    Comment Lines of Code                   %10d (%.2f%%)
-    Non-Comment Lines of Code               %10d (%.2f%%)
-    Logical Lines of Code                   %10d (%.2f%%)
+    Lines of Code               %10d
+    Comments                    %10d (%.2f%%)
+    Non-Comment                 %10d (%.2f%%)
 
     Classes
         Lines                       %10d (%.2f%%)
@@ -82,8 +122,6 @@ END;
             $count['loc'] > 0 ? ($count['cloc'] / $count['loc']) * 100 : 0,
             $count['ncloc'],
             $count['loc'] > 0 ? ($count['ncloc'] / $count['loc']) * 100 : 0,
-            $count['lloc'],
-            $count['loc'] > 0 ? ($count['lloc'] / $count['loc']) * 100 : 0,
             $count['llocClasses'],
             $count['lloc'] > 0 ? ($count['llocClasses'] / $count['lloc']) * 100 : 0,
             $count['classLlocAvg'],

@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
@@ -42,6 +43,8 @@ final class MeasureCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $symfonyStyle = new SymfonyStyle($input, $output);
+
         $paths = $input->getArgument('paths');
         $suffixes = $input->getOption('suffix');
         $excludes = $input->getOption('exclude');
@@ -61,7 +64,7 @@ final class MeasureCommand extends Command
             $jsonOutputFormatter = new JsonOutputFormatter();
             $jsonOutputFormatter->printResult($analysisResult, $output);
         } else {
-            $textOutputFormatter = new TextOutputFormatter();
+            $textOutputFormatter = new TextOutputFormatter($symfonyStyle);
             $textOutputFormatter->printResult($analysisResult, $output);
         }
 

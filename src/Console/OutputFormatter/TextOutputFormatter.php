@@ -20,58 +20,8 @@ final class TextOutputFormatter
 
     public function printResult(MeasurementResult $measurementResult, OutputInterface $output): void
     {
-        $padLeftTableStyle = new TableStyle();
-        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
-
-        if ($measurementResult['directories'] > 0) {
-            $this->symfonyStyle->createTable()
-                ->setColumnWidth(0, 30)
-                ->setColumnWidth(1, 19)
-                ->setHeaders(['Metric', 'Count'])
-                ->setRows([['Directories', $measurementResult['directories']], ['Files', $measurementResult['files']]])
-                ->setColumnStyle(1, $padLeftTableStyle)
-                ->render();
-
-            $this->symfonyStyle->newLine();
-        }
-
-        $tableRows = [
-            [
-                'Comments',
-                NumberFormat::pretty($measurementResult['cloc']),
-                NumberFormat::percent(
-                    $measurementResult['loc'] > 0 ? ($measurementResult['cloc'] / $measurementResult['loc']) * 100 : 0
-                ),
-            ],
-
-            [
-                'Code',
-                NumberFormat::pretty($measurementResult['ncloc']),
-                NumberFormat::percent(
-                    $measurementResult['loc'] > 0 ? ($measurementResult['ncloc'] / $measurementResult['loc']) * 100 : 0
-                ),
-            ],
-
-            [new TableSeparator(), new TableSeparator(), new TableSeparator()],
-
-            [
-                '<options=bold>Total</>',
-                '<options=bold>' . NumberFormat::pretty($measurementResult['loc']) . '</>',
-                '<options=bold>100.0 %</>',
-            ],
-        ];
-
-        $this->symfonyStyle->createTable()
-            ->setColumnWidth(0, 30)
-            ->setColumnWidth(1, 8)
-            ->setColumnWidth(2, 7)
-            ->setHeaders(['Lines of code', 'Count', 'Relative'])
-            ->setRows($tableRows)
-            ->setColumnStyle(1, $padLeftTableStyle)
-            ->setColumnStyle(2, $padLeftTableStyle)
-            ->render();
-
-        $this->symfonyStyle->newLine(2);
+        $this->printFilesAndDirectories($measurementResult);
+        $this->printLinesOfCode($measurementResult);
 
         $format = <<<'END'
 Size
@@ -167,5 +117,67 @@ END;
         );
 
         $output->writeln($result);
+    }
+
+    private function printFilesAndDirectories(MeasurementResult $measurementResult): void
+    {
+        $padLeftTableStyle = new TableStyle();
+        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
+
+        $this->symfonyStyle->createTable()
+            ->setColumnWidth(0, 30)
+            ->setColumnWidth(1, 19)
+            ->setHeaders(['Metric', 'Count'])
+            ->setRows(
+                [['Directories', $measurementResult->getDirectories()], ['Files', $measurementResult->getFiles()]]
+            )
+            ->setColumnStyle(1, $padLeftTableStyle)
+            ->render();
+
+        $this->symfonyStyle->newLine();
+    }
+
+    private function printLinesOfCode(MeasurementResult $measurementResult): void
+    {
+        $tableRows = [
+            [
+                'Comments',
+                NumberFormat::pretty($measurementResult['cloc']),
+                NumberFormat::percent(
+                    $measurementResult['loc'] > 0 ? ($measurementResult['cloc'] / $measurementResult['loc']) * 100 : 0
+                ),
+            ],
+
+            [
+                'Code',
+                NumberFormat::pretty($measurementResult['ncloc']),
+                NumberFormat::percent(
+                    $measurementResult['loc'] > 0 ? ($measurementResult['ncloc'] / $measurementResult['loc']) * 100 : 0
+                ),
+            ],
+
+            [new TableSeparator(), new TableSeparator(), new TableSeparator()],
+
+            [
+                '<options=bold>Total</>',
+                '<options=bold>' . NumberFormat::pretty($measurementResult['loc']) . '</>',
+                '<options=bold>100.0 %</>',
+            ],
+        ];
+
+        $padLeftTableStyle = new TableStyle();
+        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
+
+        $this->symfonyStyle->createTable()
+            ->setColumnWidth(0, 30)
+            ->setColumnWidth(1, 8)
+            ->setColumnWidth(2, 7)
+            ->setHeaders(['Lines of code', 'Count', 'Relative'])
+            ->setRows($tableRows)
+            ->setColumnStyle(1, $padLeftTableStyle)
+            ->setColumnStyle(2, $padLeftTableStyle)
+            ->render();
+
+        $this->symfonyStyle->newLine(2);
     }
 }

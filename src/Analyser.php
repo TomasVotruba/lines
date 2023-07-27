@@ -56,7 +56,7 @@ final class Analyser
         $namespace = false;
         $className = null;
         $functionName = null;
-        $this->measurements->currentClassReset();
+        $this->measurements->resetCurrentClass();
         $isLogicalLine = true;
         $isInMethod = false;
 
@@ -67,7 +67,7 @@ final class Analyser
                 if ($token === ';') {
                     if ($isLogicalLine) {
                         if ($className !== null) {
-                            $this->measurements->currentClassIncrementLines();
+                            $this->measurements->incrementCurrentClassLines();
 
                             if ($functionName !== null) {
                                 $this->measurements->currentMethodIncrementLines();
@@ -106,7 +106,7 @@ final class Analyser
                         } elseif ($block === $className) {
                             $className = null;
                             $this->measurements->currentClassStop();
-                            $this->measurements->currentClassReset();
+                            $this->measurements->resetCurrentClass();
                         }
                     }
                 }
@@ -135,7 +135,7 @@ final class Analyser
                         break;
                     }
 
-                    $this->measurements->currentClassReset();
+                    $this->measurements->resetCurrentClass();
                     $className = $this->getClassName($namespace ?: '', $tokens, $i);
                     $currentBlock = T_CLASS;
 

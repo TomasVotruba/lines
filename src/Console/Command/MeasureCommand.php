@@ -63,7 +63,6 @@ final class MeasureCommand extends Command
         $isJson = (bool) $input->getOption('json');
 
         $filePaths = $this->phpFilesFinder->findInDirectories($paths, $suffixes, $excludes);
-
         if ($filePaths === []) {
             $output->writeln('<error>No files found to scan</error>');
             return Command::FAILURE;

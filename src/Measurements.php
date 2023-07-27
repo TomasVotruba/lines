@@ -70,11 +70,6 @@ final class Measurements
      */
     private array $namespaceNames = [];
 
-    /**
-     * @var int[]
-     */
-    private array $methodCountsPerClass = [];
-
     public function addFile(string $filename): void
     {
         $this->directoryNames[] = dirname($filename);
@@ -103,11 +98,6 @@ final class Measurements
 
         $this->currentClassLines = 0;
         $this->currentClassMethodCount = 0;
-    }
-
-    public function currentClassStop(): void
-    {
-        $this->methodCountsPerClass[] = $this->currentClassMethodCount;
     }
 
     public function incrementCurrentClassLines(): void
@@ -298,29 +288,6 @@ final class Measurements
     public function getMaximumMethodLength(): int
     {
         return max($this->methodLineCountPerMethod);
-    }
-
-    public function getAverageMethodCountPerClass(): float
-    {
-        if ($this->methodCountsPerClass === []) {
-            return 0.0;
-        }
-
-        $totalMethodCount = array_sum($this->methodCountsPerClass);
-
-        $average = $totalMethodCount / count($this->methodCountsPerClass);
-
-        return NumberFormat::singleDecimal($average);
-    }
-
-    public function getMinimumMethodCountPerClass(): int
-    {
-        return min($this->methodCountsPerClass);
-    }
-
-    public function getMaximumMethodCountPerClass(): int
-    {
-        return max($this->methodCountsPerClass);
     }
 
     public function getFunctionLines(): int

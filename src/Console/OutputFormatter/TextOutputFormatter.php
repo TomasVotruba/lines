@@ -43,10 +43,6 @@ Size
             Average                 %10d
             Min                     %10d
             Max                     %10d
-        Methods Per Class
-                Average                     %10d
-                Minimum                     %10d
-                Maximum                     %10d
     Functions                               %10d (%.2f%%)
         Average Length                      %10d
     Not in classes or functions             %10d (%.2f%%)
@@ -78,6 +74,8 @@ END;
             $format,
             $measurements->getClassLines(),
             $measurements->getClassLinesRelative(),
+
+            // class length
             $measurements->getAverageClassLength(),
             $measurements->getMinimumClassLength(),
             $measurements->getMaximumClassLength(),
@@ -86,11 +84,6 @@ END;
             $measurements->getAverageMethodLength(),
             $measurements->getMinimumMethodLength(),
             $measurements->getMaximumMethodLength(),
-
-            // method count
-            $measurements->getAverageMethodCountPerClass(),
-            $measurements->getMinimumMethodCountPerClass(),
-            $measurements->getMaximumMethodCountPerClass(),
 
             // functions
             $measurements->getFunctionLines(),
@@ -106,6 +99,8 @@ END;
             $measurements->getInterfaces(),
             $measurements->getTraits(),
             $measurements->getClasses(),
+
+            // methods
             $methods = $measurements->getMethods(),
             $nonStaticMethods = $measurements->getNonStaticMethods(),
             $methods > 0 ? ($nonStaticMethods / $methods) * 100 : 0,
@@ -117,11 +112,15 @@ END;
             $methods > 0 ? ($protectedMethods / $methods) * 100 : 0,
             $privateMethods = $measurements->getPrivateMethods(),
             $methods > 0 ? ($privateMethods / $methods) * 100 : 0,
+
+            // functions
             $functions = $measurements->getFunctionCount(),
             $namedFunctions = $measurements->getNamedFunctionCount(),
             $functions > 0 ? ($namedFunctions / $functions) * 100 : 0,
             $anonymousFunctions = $measurements->getAnonymousFunctionCount(),
             $functions > 0 ? ($anonymousFunctions / $functions) * 100 : 0,
+
+            // constants
             $constants = $measurements->getConstantCount(),
             $globalConstants = $measurements->getGlobalConstantCount(),
             $constants > 0 ? ($globalConstants / $constants) * 100 : 0,

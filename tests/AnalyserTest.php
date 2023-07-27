@@ -56,9 +56,6 @@ final class AnalyserTest extends TestCase
         $this->assertSame(6, $measurements->getMinimumMethodLength());
         $this->assertSame(7.3, $measurements->getAverageMethodLength());
         $this->assertSame(9, $measurements->getMaximumMethodLength());
-        $this->assertSame(1.3, $measurements->getAverageMethodCountPerClass());
-        $this->assertSame(0, $measurements->getMinimumMethodCountPerClass());
-        $this->assertSame(4, $measurements->getMaximumMethodCountPerClass());
 
         // relative
         $this->assertSame(8.5, $measurements->getCommentLinesRelative());
@@ -135,16 +132,6 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $measurements->getProtectedMethods());
         $this->assertSame(3, $measurements->getPrivateMethods());
         $this->assertSame(6, $measurements->getMethods());
-    }
-
-    public function testAverageMethodsPerClass(): void
-    {
-        $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/methods_per_class.php']);
-
-        $this->assertSame(2.0, $measurements->getAverageMethodCountPerClass());
-
-        $this->assertSame(0, $measurements->getMinimumMethodCountPerClass());
-        $this->assertSame(4, $measurements->getMaximumMethodCountPerClass());
     }
 
     public function testSkipTraitFromLogicalLines(): void

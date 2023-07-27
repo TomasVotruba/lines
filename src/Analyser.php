@@ -105,7 +105,6 @@ final class Analyser
                             }
                         } elseif ($block === $className) {
                             $className = null;
-                            $this->measurements->currentClassStop();
                             $this->measurements->resetCurrentClass();
                         }
                     }

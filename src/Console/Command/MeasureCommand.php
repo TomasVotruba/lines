@@ -13,6 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
+use TomasVotruba\Lines\Console\TablePrinter;
 use TomasVotruba\Lines\PhpFilesFinder;
 
 final class MeasureCommand extends Command
@@ -75,7 +76,8 @@ final class MeasureCommand extends Command
             $jsonOutputFormatter = new JsonOutputFormatter();
             $jsonOutputFormatter->printResult($measurmentResult, $output);
         } else {
-            $textOutputFormatter = new TextOutputFormatter($symfonyStyle);
+            $tablePrinter = new TablePrinter($symfonyStyle);
+            $textOutputFormatter = new TextOutputFormatter($tablePrinter);
             $textOutputFormatter->printResult($measurmentResult, $output);
         }
 

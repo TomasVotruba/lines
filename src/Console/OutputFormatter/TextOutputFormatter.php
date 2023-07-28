@@ -30,12 +30,12 @@ final class TextOutputFormatter implements OutputFormatterInterface
         ], 'Length Stats', 'Lines');
 
         $this->tablePrinter->printItemValueTable([
-            ['Classes', $measurements->getClassLines(), $measurements->getClassLinesRelative() . ' %'],
-            ['Functions', $measurements->getFunctionLines(), $measurements->getFunctionLinesRelative() . ' %'],
+            ['Classes', $measurements->getClassLines(), $measurements->getClassLinesRelative()],
+            ['Functions', $measurements->getFunctionLines(), $measurements->getFunctionLinesRelative()],
             [
                 'Not in classes/functions',
                 $measurements->getNotInClassesOrFunctions(),
-                $measurements->getNotInClassesOrFunctionsRelative() . ' %',
+                $measurements->getNotInClassesOrFunctionsRelative(),
             ],
         ], 'Classes vs functions vs rest', 'Lines', true);
 
@@ -52,23 +52,15 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
         if ($measurements->getMethodCount() !== 0) {
             $this->tablePrinter->printItemValueTable([
-                [
-                    'Non-static',
-                    $measurements->getNonStaticMethods(),
-                    $measurements->getNonStaticMethodsRelative() . ' %',
-                ],
+                ['Non-static', $measurements->getNonStaticMethods(), $measurements->getNonStaticMethodsRelative()],
 
-                ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative() . ' %'],
+                ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative()],
 
                 [new TableSeparator(), new TableSeparator(), new TableSeparator()],
 
-                ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative() . ' %'],
-                [
-                    'Protected',
-                    $measurements->getProtectedMethods(),
-                    $measurements->getProtectedMethodsRelative() . ' %',
-                ],
-                ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative() . ' %'],
+                ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative()],
+                ['Protected', $measurements->getProtectedMethods(), $measurements->getProtectedMethodsRelative()],
+                ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative()],
 
             ], 'Methods', 'Count', true);
         }
@@ -78,13 +70,9 @@ final class TextOutputFormatter implements OutputFormatterInterface
                 [
                     'Global',
                     $measurements->getGlobalConstantCount(),
-                    $measurements->getGlobalConstantCountRelative() . ' %',
+                    $measurements->getGlobalConstantCountRelative(),
                 ],
-                [
-                    'Class',
-                    $measurements->getClassConstants(),
-                    $measurements->getClassConstantCountRelative() . ' %',
-                ],
+                ['Class', $measurements->getClassConstants(), $measurements->getClassConstantCountRelative()],
             ];
 
             if ($measurements->getClassConstants() !== 0) {
@@ -93,13 +81,13 @@ final class TextOutputFormatter implements OutputFormatterInterface
                 $constantsRows = [
                     'Public',
                     $measurements->getPublicClassConstants(),
-                    $measurements->getPublicClassConstantsRelative() . ' %',
+                    $measurements->getPublicClassConstantsRelative(),
                 ];
 
                 $constantsRows = [
                     'Non-public',
                     $measurements->getNonPublicClassConstants(),
-                    $measurements->getNonPublicClassConstantsRelative() . ' %',
+                    $measurements->getNonPublicClassConstantsRelative(),
                 ];
             }
 

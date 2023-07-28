@@ -49,9 +49,7 @@ final class Measurements
 
     private int $privateMethodCount = 0;
 
-    private int $namedFunctionCount = 0;
-
-    private int $anonymousFunctionCount = 0;
+    private int $functionCount = 0;
 
     private int $globalConstantCount = 0;
 
@@ -170,14 +168,9 @@ final class Measurements
         ++$this->privateMethodCount;
     }
 
-    public function incrementNamedFunctions(): void
+    public function incrementFunctions(): void
     {
-        ++$this->namedFunctionCount;
-    }
-
-    public function incrementAnonymousFunctions(): void
-    {
-        ++$this->anonymousFunctionCount;
+        ++$this->functionCount;
     }
 
     public function incrementGlobalConstants(): void
@@ -350,7 +343,7 @@ final class Measurements
 
     public function getFunctionCount(): int
     {
-        return $this->namedFunctionCount + $this->anonymousFunctionCount;
+        return $this->functionCount;
     }
 
     public function getConstantCount(): int

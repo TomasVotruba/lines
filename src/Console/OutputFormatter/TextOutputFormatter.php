@@ -61,12 +61,12 @@ END;
 
         $this->tablePrinter->printItemValueTable([
             ['Namespaces', $measurements->getNamespaces()],
-            ['Functions', $measurements->getFunctionCount()],
+            ['Classes', $measurements->getClasses()],
             ['Interfaces', $measurements->getInterfaces()],
             ['Traits', $measurements->getTraits()],
             // @todo enums
-            ['Classes', $measurements->getClasses()],
             ['Methods', $measurements->getMethods()],
+            ['Functions', $measurements->getFunctionCount()],
         ], 'Structure', 'Count');
 
         $methods = $measurements->getMethods();
@@ -85,13 +85,6 @@ END;
             $methods > 0 ? ($protectedMethods / $methods) * 100 : 0,
             $privateMethods = $measurements->getPrivateMethods(),
             $methods > 0 ? ($privateMethods / $methods) * 100 : 0,
-
-            // functions
-            //            $functions = $measurements->getFunctionCount(),
-            //            $namedFunctions = $measurements->getNamedFunctionCount(),
-            //            $functions > 0 ? ($namedFunctions / $functions) * 100 : 0,
-            //            $anonymousFunctions = $measurements->getAnonymousFunctionCount(),
-            //            $functions > 0 ? ($anonymousFunctions / $functions) * 100 : 0,
 
             // constants
             $constants = $measurements->getConstantCount(),

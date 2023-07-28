@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
@@ -29,7 +28,6 @@ final class MeasureCommand extends Command
     protected function configure(): void
     {
         $this->setName('measure');
-
         $this->setDescription('Measure lines of code in given path(s)');
 
         $this->addArgument('paths', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Path to analyze');
@@ -50,10 +48,11 @@ final class MeasureCommand extends Command
         $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');
     }
 
+    /**
+     * @return self::FAILURE|self::SUCCESS
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $symfonyStyle = new SymfonyStyle($input, $output);
-
         $paths = (array) $input->getArgument('paths');
         $suffixes = (array) $input->getOption('suffix');
         $excludes = (array) $input->getOption('exclude');

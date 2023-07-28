@@ -14,7 +14,7 @@ use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
 use TomasVotruba\Lines\Console\TablePrinter;
-use TomasVotruba\Lines\PhpFilesFinder;
+use TomasVotruba\Lines\Finder\PhpFilesFinder;
 
 final class MeasureCommand extends Command
 {

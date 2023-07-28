@@ -43,14 +43,6 @@ final class TextOutputFormatter implements OutputFormatterInterface
             ],
         ], 'Classes vs functions vs rest', 'Lines', true);
 
-        //        $format = <<<'END'
-        //        Constants                       %10d
-        //                Global                      %10d (%.2f%%)
-        //                Class                       %10d (%.2f%%)
-        //                Public                      %10d (%.2f%%)
-        //                Non-Public                  %10d (%.2f%%)
-        //END;
-
         $this->tablePrinter->printItemValueTable([
             ['Namespaces', $measurements->getNamespaces()],
             ['Classes', $measurements->getClassCount()],

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Tests;
 
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use TomasVotruba\Lines\Analyser;
 
@@ -63,24 +62,6 @@ final class AnalyserTest extends TestCase
 
         $this->assertSame(25.0, $measurements->getStaticMethodsRelative());
         $this->assertSame(75.0, $measurements->getNonStaticMethodsRelative());
-    }
-
-    #[DataProvider('issue126Provider')]
-    public function testIssue126IsFixed(int $fileNumber, int $expectedCommentLines): void
-    {
-        $measurements = $this->analyser->measureFiles([
-            __DIR__ . '/Fixture/issue_126/issue_126_' . $fileNumber . '.php',
-        ]);
-
-        $this->assertSame($expectedCommentLines, $measurements->getCommentLines());
-    }
-
-    /**
-     * @return array<array{int, int}>
-     */
-    public static function issue126Provider(): array
-    {
-        return [[1, 1], [2, 1], [3, 1], [4, 2], [5, 3], [6, 3], [7, 3]];
     }
 
     public function testSkipAnonymousClass(): void

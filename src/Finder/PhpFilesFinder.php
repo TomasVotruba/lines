@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TomasVotruba\Lines;
+namespace TomasVotruba\Lines\Finder;
 
 use SebastianBergmann\FileIterator\Facade;
 

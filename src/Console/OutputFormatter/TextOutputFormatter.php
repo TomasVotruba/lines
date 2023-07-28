@@ -44,14 +44,6 @@ final class TextOutputFormatter implements OutputFormatterInterface
         ], 'Classes vs functions vs rest', 'Lines', true);
 
         $format = <<<'END'
-Structure
-                Non-Static                  %10d (%.2f%%)
-                Static                      %10d (%.2f%%)
-            Visibility
-                Public                      %10d (%.2f%%)
-                Protected                   %10d (%.2f%%)
-                Private                     %10d (%.2f%%)
-
         Constants                       %10d
                 Global                      %10d (%.2f%%)
                 Class                       %10d (%.2f%%)
@@ -69,22 +61,23 @@ END;
             ['Functions', $measurements->getFunctionCount()],
         ], 'Structure', 'Count');
 
-        $methods = $measurements->getMethods();
+        $this->tablePrinter->printItemValueTable([
+            ['Non-static', $measurements->getNonStaticMethods(),
+                $measurements->getNonStaticMethodsRelative() . ' %', ],
+            ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative() . ' %'],
+
+            [new TableSeparator(), new TableSeparator(), new TableSeparator()],
+
+            ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative() . ' %'],
+            ['Protected', $measurements->getProtectedMethods(), $measurements->getProtectedMethodsRelative() . ' %'],
+            ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative() . ' %'],
+
+        ], 'Methods', 'Count', true);
 
         $result = sprintf(
             $format,
 
             // methods
-            $measurements->getNonStaticMethods(),
-            $measurements->getNonStaticMethodsRelative(),
-            $measurements->getStaticMethods(),
-            $measurements->getStaticMethodsRelative(),
-            $publicMethods = $measurements->getPublicMethods(),
-            $methods > 0 ? ($publicMethods / $methods) * 100 : 0,
-            $protectedMethods = $measurements->getProtectedMethods(),
-            $methods > 0 ? ($protectedMethods / $methods) * 100 : 0,
-            $privateMethods = $measurements->getPrivateMethods(),
-            $methods > 0 ? ($privateMethods / $methods) * 100 : 0,
 
             // constants
             $constants = $measurements->getConstantCount(),

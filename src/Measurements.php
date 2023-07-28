@@ -437,4 +437,31 @@ final class Measurements
 
         return 0.0;
     }
+
+    public function getPublicMethodsRelative(): float
+    {
+        if ($this->getMethods()) {
+            return $this->relative($this->getPublicMethods(), $this->getMethods());
+        }
+
+        return 0.0;
+    }
+
+    public function getProtectedMethodsRelative(): float
+    {
+        if ($this->getMethods()) {
+            return $this->relative($this->getProtectedMethods(), $this->getMethods());
+        }
+
+        return 0.0;
+    }
+
+    public function getPrivateMethodsRelative(): float
+    {
+        if ($this->getMethods()) {
+            return $this->relative($this->getPrivateMethods(), $this->getMethods());
+        }
+
+        return 0.0;
+    }
 }

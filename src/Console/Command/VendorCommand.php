@@ -37,6 +37,9 @@ final class VendorCommand extends Command
         $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');
     }
 
+    /**
+     * @return self::FAILURE|self::SUCCESS
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $isJson = (bool) $input->getOption('json');

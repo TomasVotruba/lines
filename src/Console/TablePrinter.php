@@ -36,7 +36,7 @@ final class TablePrinter
 
         $table = $this->symfonyStyle->createTable()
             ->setHeaders($headers)
-            ->setColumnWidth(0, 30)
+            ->setColumnWidth(0, 28)
             ->setRows($rows)
             ->setColumnStyle(1, $this->padLeftTableStyle);
 
@@ -44,6 +44,8 @@ final class TablePrinter
             $table->setColumnWidth(1, 8)
                 ->setColumnWidth(2, 7)
                 ->setColumnStyle(2, $this->padLeftTableStyle);
+        } else {
+            $table->setColumnWidth(1, 19);
         }
 
         $table->render();

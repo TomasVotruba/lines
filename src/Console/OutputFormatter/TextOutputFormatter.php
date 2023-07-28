@@ -34,14 +34,14 @@ final class TextOutputFormatter implements OutputFormatterInterface
         ], 'Method length', 'Lines');
 
         $this->tablePrinter->printItemValueTable([
-            ['Class lines', $measurements->getClassLines(), $measurements->getClassLinesRelative() . ' %'],
-            ['Function lines', $measurements->getFunctionLines(), $measurements->getFunctionLinesRelative() . ' %'],
+            ['Classes', $measurements->getClassLines(), $measurements->getClassLinesRelative() . ' %'],
+            ['Functions', $measurements->getFunctionLines(), $measurements->getFunctionLinesRelative() . ' %'],
             [
-                'Not in classes or functions',
+                'Not in classes/functions',
                 $measurements->getNotInClassesOrFunctions(),
                 $measurements->getNotInClassesOrFunctionsRelative() . ' %',
             ],
-        ], 'Lines', 'Count', true);
+        ], 'Classes vs functions vs rest', 'Lines', true);
 
         $format = <<<'END'
 Structure
@@ -121,15 +121,15 @@ END;
     {
         $tableRows = [
             [
-                'Comments',
-                NumberFormat::pretty($measurements->getCommentLines()),
-                $measurements->getCommentLinesRelative() . ' %',
-            ],
-
-            [
                 'Code',
                 NumberFormat::pretty($measurements->getNonCommentLines()),
                 $measurements->getNonCommentLinesRelative() . ' %',
+            ],
+
+            [
+                'Comments',
+                NumberFormat::pretty($measurements->getCommentLines()),
+                $measurements->getCommentLinesRelative() . ' %',
             ],
 
             [new TableSeparator(), new TableSeparator(), new TableSeparator()],

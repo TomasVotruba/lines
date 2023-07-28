@@ -408,18 +408,6 @@ final class Measurements
         return 0.0;
     }
 
-    private function relative(int $partialNumber, int $totalNumber): float
-    {
-        $relative = ($partialNumber / $totalNumber) * 100;
-        return NumberFormat::singleDecimal($relative);
-    }
-
-    private function average(int $partialNumber, int $totalNumber): float
-    {
-        $relative = ($partialNumber / $totalNumber);
-        return NumberFormat::singleDecimal($relative);
-    }
-
     public function getStaticMethodsRelative(): float
     {
         if ($this->getMethods() > 0) {
@@ -440,8 +428,8 @@ final class Measurements
 
     public function getPublicMethodsRelative(): float
     {
-        if ($this->getMethods()) {
-            return $this->relative($this->getPublicMethods(), $this->getMethods());
+        if ($this->getMethods() !== 0) {
+            return $this->relative($this->publicMethodCount, $this->getMethods());
         }
 
         return 0.0;
@@ -449,8 +437,8 @@ final class Measurements
 
     public function getProtectedMethodsRelative(): float
     {
-        if ($this->getMethods()) {
-            return $this->relative($this->getProtectedMethods(), $this->getMethods());
+        if ($this->getMethods() !== 0) {
+            return $this->relative($this->protectedMethodCount, $this->getMethods());
         }
 
         return 0.0;
@@ -458,10 +446,22 @@ final class Measurements
 
     public function getPrivateMethodsRelative(): float
     {
-        if ($this->getMethods()) {
-            return $this->relative($this->getPrivateMethods(), $this->getMethods());
+        if ($this->getMethods() !== 0) {
+            return $this->relative($this->privateMethodCount, $this->getMethods());
         }
 
         return 0.0;
+    }
+
+    private function relative(int $partialNumber, int $totalNumber): float
+    {
+        $relative = ($partialNumber / $totalNumber) * 100;
+        return NumberFormat::singleDecimal($relative);
+    }
+
+    private function average(int $partialNumber, int $totalNumber): float
+    {
+        $relative = ($partialNumber / $totalNumber);
+        return NumberFormat::singleDecimal($relative);
     }
 }

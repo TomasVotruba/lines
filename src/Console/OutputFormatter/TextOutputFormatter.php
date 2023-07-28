@@ -5,24 +5,17 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
 use Symfony\Component\Console\Helper\TableSeparator;
-use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use TomasVotruba\Lines\Console\TablePrinter;
 use TomasVotruba\Lines\Contract\OutputFormatterInterface;
 use TomasVotruba\Lines\Helpers\NumberFormat;
 use TomasVotruba\Lines\Measurements;
 
 final class TextOutputFormatter implements OutputFormatterInterface
 {
-    private TableStyle $padLeftTableStyle;
-
     public function __construct(
-        private readonly SymfonyStyle $symfonyStyle,
+        private readonly TablePrinter $tablePrinter,
     ) {
-        $padLeftTableStyle = new TableStyle();
-        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
-
-        $this->padLeftTableStyle = $padLeftTableStyle;
     }
 
     public function printResult(Measurements $measurements, OutputInterface $output): void
@@ -30,26 +23,27 @@ final class TextOutputFormatter implements OutputFormatterInterface
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
 
-        $rows = [];
-        $rows[] = ['Min', $measurements->getMinClassLength()];
-        $rows[] = ['Max ', $measurements->getMaxClassLength()];
-        $rows[] = ['Average ', $measurements->getAverageClassLength()];
-        $this->printItemValueTable($rows, 'Class length', 'Lines');
+        $this->tablePrinter->printItemValueTable([
+            ['Max ', $measurements->getMaxClassLength()],
+            ['Average ', $measurements->getAverageClassLength()],
+        ], 'Class length', 'Lines');
 
-        $rows = [];
-        $rows[] = ['Min', $measurements->getMinMethodLength()];
-        $rows[] = ['Max', $measurements->getMaxMethodLength()];
-        $rows[] = ['Average', $measurements->getAverageMethodLength()];
-        $this->printItemValueTable($rows, 'Method length', 'Lines');
+        $this->tablePrinter->printItemValueTable([
+            ['Max', $measurements->getMaxMethodLength()],
+            ['Average', $measurements->getAverageMethodLength()],
+        ], 'Method length', 'Lines');
+
+        $this->tablePrinter->printItemValueTable([
+            ['Classes', $measurements->getClassLines(), $measurements->getClassLinesRelative() . ' %'],
+            ['Functions', $measurements->getFunctionLines(), $measurements->getFunctionLinesRelative() . ' %'],
+            [
+                'Not in classes/functions',
+                $measurements->getNotInClassesOrFunctions(),
+                $measurements->getNotInClassesOrFunctionsRelative() . ' %',
+            ],
+        ], 'Classes vs functions vs rest', 'Lines', true);
 
         $format = <<<'END'
-Size
-    Classes
-        Lines                       %10d (%.2f%%)
-    Functions                               %10d (%.2f%%)
-        Average Length                      %10d
-    Not in classes or functions             %10d (%.2f%%)
-
 Structure
     Namespaces                              %10d
     Interfaces                              %10d
@@ -75,17 +69,6 @@ END;
 
         $result = sprintf(
             $format,
-            $measurements->getClassLines(),
-            $measurements->getClassLinesRelative(),
-
-            // functions
-            $measurements->getFunctionLines(),
-            $measurements->getFunctionLinesRelative(),
-            $measurements->getAverageFunctionLength(),
-
-            // non-class & non-function code
-            $measurements->getNotInClassesOrFunctions(),
-            $measurements->getNotInClassesOrFunctionsRelative(),
 
             // elements
             $measurements->getNamespaces(),
@@ -125,32 +108,28 @@ END;
             $classConstants > 0 ? ($nonPublicClassConstants / $classConstants) * 100 : 0
         );
 
-        //        $output->writeln($result);
+        $output->writeln($result);
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void
     {
-        $rows = [
-            ['Directories', $measurements->getDirectories()],
-            ['Files', $measurements->getFiles()]
-        ];
-
-        $this->printItemValueTable($rows, 'Metric', 'Count');
+        $tableRows = [['Directories', $measurements->getDirectories()], ['Files', $measurements->getFiles()]];
+        $this->tablePrinter->printItemValueTable($tableRows, 'Metric', 'Count');
     }
 
     private function printLinesOfCode(Measurements $measurements): void
     {
         $tableRows = [
             [
-                'Comments',
-                NumberFormat::pretty($measurements->getCommentLines()),
-                $measurements->getCommentLinesRelative() . ' %',
-            ],
-
-            [
                 'Code',
                 NumberFormat::pretty($measurements->getNonCommentLines()),
                 $measurements->getNonCommentLinesRelative() . ' %',
+            ],
+
+            [
+                'Comments',
+                NumberFormat::pretty($measurements->getCommentLines()),
+                $measurements->getCommentLinesRelative() . ' %',
             ],
 
             [new TableSeparator(), new TableSeparator(), new TableSeparator()],
@@ -162,31 +141,6 @@ END;
             ],
         ];
 
-        $this->symfonyStyle->createTable()
-            ->setColumnWidth(0, 30)
-            ->setColumnWidth(1, 8)
-            ->setColumnWidth(2, 7)
-            ->setHeaders(['Lines of code', 'Count', 'Relative'])
-            ->setRows($tableRows)
-            ->setColumnStyle(1, $this->padLeftTableStyle)
-            ->setColumnStyle(2, $this->padLeftTableStyle)
-            ->render();
-
-        $this->symfonyStyle->newLine(2);
-    }
-
-    /**
-     * @param mixed[] $rows
-     */
-    private function printItemValueTable(array $rows, string $titleHeader, string $countHeader): void
-    {
-        $this->symfonyStyle->createTable()
-            ->setHeaders([$titleHeader, $countHeader])
-            ->setColumnWidth(0, 30)
-            ->setRows($rows)
-            ->setColumnStyle(1, $this->padLeftTableStyle)
-            ->render();
-
-        $this->symfonyStyle->newLine();
+        $this->tablePrinter->printItemValueTable($tableRows, 'Lines of code', 'Count', true);
     }
 }

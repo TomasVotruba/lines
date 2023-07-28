@@ -258,11 +258,6 @@ final class Measurements
         return $this->average($this->getClassLines(), count($this->classLineCountPerClass));
     }
 
-    public function getMinClassLength(): int
-    {
-        return min($this->classLineCountPerClass);
-    }
-
     public function getMaxClassLength(): int
     {
         return max($this->classLineCountPerClass);
@@ -279,11 +274,6 @@ final class Measurements
         return $this->average($totalMethodLineCount, count($this->methodLineCountPerMethod));
     }
 
-    public function getMinMethodLength(): int
-    {
-        return min($this->methodLineCountPerMethod);
-    }
-
     public function getMaxMethodLength(): int
     {
         return max($this->methodLineCountPerMethod);
@@ -292,16 +282,6 @@ final class Measurements
     public function getFunctionLines(): int
     {
         return $this->functionLineCount;
-    }
-
-    public function getAverageFunctionLength(): float
-    {
-        if ($this->getFunctionCount() === 0) {
-            return 0.0;
-        }
-
-        $average = $this->functionLineCount / $this->getFunctionCount();
-        return NumberFormat::singleDecimal($average);
     }
 
     public function getNotInClassesOrFunctions(): int
@@ -410,7 +390,7 @@ final class Measurements
 
     public function getCommentLinesRelative(): float
     {
-        if ($this->lineCount) {
+        if ($this->lineCount !== 0) {
             $relative = ($this->commentLineCount / $this->lineCount) * 100;
             return NumberFormat::singleDecimal($relative);
         }
@@ -420,7 +400,7 @@ final class Measurements
 
     public function getNonCommentLinesRelative(): float
     {
-        if ($this->lineCount) {
+        if ($this->lineCount !== 0) {
             return $this->relative($this->getNonCommentLines(), $this->lineCount);
         }
 

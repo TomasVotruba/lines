@@ -69,7 +69,6 @@ final class TablePrinter
         foreach ($rows as $key => $row) {
             // big numbers
             if ($key === 1) {
-
                 // keep separator
                 if ($row[1] instanceof TableSeparator) {
                     continue;

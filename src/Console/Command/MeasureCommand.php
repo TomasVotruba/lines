@@ -9,31 +9,25 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
-use TomasVotruba\Lines\Console\TablePrinter;
 use TomasVotruba\Lines\Finder\PhpFilesFinder;
 
 final class MeasureCommand extends Command
 {
-    private readonly PhpFilesFinder $phpFilesFinder;
-
-    private readonly Analyser $analyser;
-
-    public function __construct()
-    {
+    public function __construct(
+        private readonly PhpFilesFinder $phpFilesFinder,
+        private readonly Analyser $analyser,
+        private readonly JsonOutputFormatter $jsonOutputFormatter,
+        private readonly TextOutputFormatter $textOutputFormatter,
+    ) {
         parent::__construct();
-
-        $this->phpFilesFinder = new PhpFilesFinder();
-        $this->analyser = new Analyser();
     }
 
     protected function configure(): void
     {
         $this->setName('measure');
-
         $this->setDescription('Measure lines of code in given path(s)');
 
         $this->addArgument('paths', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Path to analyze');
@@ -54,10 +48,11 @@ final class MeasureCommand extends Command
         $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');
     }
 
+    /**
+     * @return self::FAILURE|self::SUCCESS
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $symfonyStyle = new SymfonyStyle($input, $output);
-
         $paths = (array) $input->getArgument('paths');
         $suffixes = (array) $input->getOption('suffix');
         $excludes = (array) $input->getOption('exclude');
@@ -73,12 +68,9 @@ final class MeasureCommand extends Command
 
         // print results
         if ($isJson) {
-            $jsonOutputFormatter = new JsonOutputFormatter();
-            $jsonOutputFormatter->printResult($measurement, $output);
+            $this->jsonOutputFormatter->printMeasurement($measurement, $output);
         } else {
-            $tablePrinter = new TablePrinter($symfonyStyle);
-            $textOutputFormatter = new TextOutputFormatter($tablePrinter);
-            $textOutputFormatter->printResult($measurement, $output);
+            $this->textOutputFormatter->printMeasurement($measurement, $output);
         }
 
         return Command::SUCCESS;

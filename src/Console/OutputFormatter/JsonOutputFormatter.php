@@ -11,7 +11,7 @@ use Webmozart\Assert\Assert;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
-    public function printResult(Measurements $measurements, OutputInterface $output): void
+    public function printMeasurement(Measurements $measurements, OutputInterface $output): void
     {
         $arrayData = [
             'filesystem' => [

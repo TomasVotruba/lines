@@ -11,12 +11,8 @@ use Webmozart\Assert\Assert;
  */
 final class Analyser
 {
-    private readonly Measurements $measurements;
-
     public function __construct()
     {
-        $this->measurements = new Measurements();
-
         // define fallback constants for PHP 8.0 tokens in case of e.g. PHP 7.2 run
         if (! defined('T_MATCH')) {
             define('T_MATCH', 5000);
@@ -36,17 +32,19 @@ final class Analyser
      */
     public function measureFiles(array $filePaths): Measurements
     {
+        $measurements = new Measurements();
+
         Assert::allString($filePaths);
         Assert::allFileExists($filePaths);
 
         foreach ($filePaths as $filePath) {
-            $this->measureFile($filePath);
+            $this->measureFile($measurements, $filePath);
         }
 
-        return $this->measurements;
+        return $measurements;
     }
 
-    private function measureFile(string $filePath): void
+    private function measureFile(Measurements $measurements, string $filePath): void
     {
         Assert::fileExists($filePath);
 
@@ -54,7 +52,7 @@ final class Analyser
         Assert::string($fileContents);
 
         $newlinesCount = substr_count($fileContents, "\n");
-        $this->measurements->incrementLines($newlinesCount);
+        $measurements->incrementLines($newlinesCount);
 
         $tokens = token_get_all($fileContents);
         $numTokens = count($tokens);
@@ -62,14 +60,14 @@ final class Analyser
         // performance?
         unset($fileContents);
 
-        $this->measurements->addFile($filePath);
+        $measurements->addFile($filePath);
 
         $blocks = [];
         $currentBlock = false;
         $namespace = false;
         $className = null;
         $functionName = null;
-        $this->measurements->resetCurrentClass();
+        $measurements->resetCurrentClass();
         $isLogicalLine = true;
         $isInMethod = false;
 
@@ -80,16 +78,16 @@ final class Analyser
                 if ($token === ';') {
                     if ($isLogicalLine) {
                         if ($className !== null) {
-                            $this->measurements->incrementCurrentClassLines();
+                            $measurements->incrementCurrentClassLines();
 
                             if ($functionName !== null) {
-                                $this->measurements->currentMethodIncrementLines();
+                                $measurements->currentMethodIncrementLines();
                             }
                         } elseif ($functionName !== null) {
-                            $this->measurements->incrementFunctionLines();
+                            $measurements->incrementFunctionLines();
                         }
 
-                        $this->measurements->incrementLogicalLines();
+                        $measurements->incrementLogicalLines();
                     }
 
                     $isLogicalLine = true;
@@ -113,12 +111,12 @@ final class Analyser
                             $functionName = null;
 
                             if ($isInMethod) {
-                                $this->measurements->currentMethodStop();
+                                $measurements->currentMethodStop();
                                 $isInMethod = false;
                             }
                         } elseif ($block === $className) {
                             $className = null;
-                            $this->measurements->resetCurrentClass();
+                            $measurements->resetCurrentClass();
                         }
                     }
                 }
@@ -133,7 +131,7 @@ final class Analyser
                     $namespace = $this->getNamespaceName($tokens, $i);
 
                     if (is_string($namespace)) {
-                        $this->measurements->addNamespace($namespace);
+                        $measurements->addNamespace($namespace);
                     }
 
                     $isLogicalLine = false;
@@ -142,7 +140,7 @@ final class Analyser
 
                     // php 8.0+
                 case T_ENUM:
-                    $this->measurements->incrementEnums();
+                    $measurements->incrementEnums();
                     break;
 
                 case T_CLASS:
@@ -152,16 +150,16 @@ final class Analyser
                         break;
                     }
 
-                    $this->measurements->resetCurrentClass();
+                    $measurements->resetCurrentClass();
                     $className = $this->getClassName($namespace ?: '', $tokens, $i);
                     $currentBlock = T_CLASS;
 
                     if ($token === T_TRAIT) {
-                        $this->measurements->incrementTraits();
+                        $measurements->incrementTraits();
                     } elseif ($token === T_INTERFACE) {
-                        $this->measurements->incrementInterfaces();
+                        $measurements->incrementInterfaces();
                     } else {
-                        $this->measurements->incrementClasses();
+                        $measurements->incrementClasses();
                     }
 
                     break;
@@ -189,12 +187,12 @@ final class Analyser
                     } else {
                         $currentBlock = 'anonymous function';
                         $functionName = 'anonymous function';
-                        $this->measurements->incrementFunctions();
+                        $measurements->incrementFunctions();
                     }
 
                     if ($currentBlock === T_FUNCTION) {
                         if ($className === null && $functionName !== 'anonymous function') {
-                            $this->measurements->incrementFunctions();
+                            $measurements->incrementFunctions();
                         } else {
                             $static = false;
                             $visibility = T_PUBLIC;
@@ -229,22 +227,22 @@ final class Analyser
                             }
 
                             $isInMethod = true;
-                            $this->measurements->currentMethodStart();
+                            $measurements->currentMethodStart();
 
-                            $this->measurements->currentClassIncrementMethods();
+                            $measurements->currentClassIncrementMethods();
 
                             if (! $static) {
-                                $this->measurements->incrementNonStaticMethods();
+                                $measurements->incrementNonStaticMethods();
                             } else {
-                                $this->measurements->incrementStaticMethods();
+                                $measurements->incrementStaticMethods();
                             }
 
                             if ($visibility === T_PUBLIC) {
-                                $this->measurements->incrementPublicMethods();
+                                $measurements->incrementPublicMethods();
                             } elseif ($visibility === T_PROTECTED) {
-                                $this->measurements->incrementProtectedMethods();
+                                $measurements->incrementProtectedMethods();
                             } elseif ($visibility === T_PRIVATE) {
-                                $this->measurements->incrementPrivateMethods();
+                                $measurements->incrementPrivateMethods();
                             }
                         }
                     }
@@ -281,7 +279,7 @@ final class Analyser
                     // We want to count all intermediate lines before the token ends
                     // But sometimes a new token starts after a newline, we don't want to count that.
                     // That happened with /* */ and /**  */, but not with // since it'll end at the end
-                    $this->measurements->incrementCommentLines(substr_count(rtrim($value, "\n"), "\n") + 1);
+                    $measurements->incrementCommentLines(substr_count(rtrim($value, "\n"), "\n") + 1);
 
                     break;
                 case T_CONST:
@@ -290,16 +288,16 @@ final class Analyser
                     if ($possibleScopeToken &&
                         in_array($tokens[$possibleScopeToken][0], [T_PRIVATE, T_PROTECTED], true)
                     ) {
-                        $this->measurements->incrementNonPublicClassConstants();
+                        $measurements->incrementNonPublicClassConstants();
                     } else {
-                        $this->measurements->incrementPublicClassConstants();
+                        $measurements->incrementPublicClassConstants();
                     }
 
                     break;
 
                 case T_STRING:
                     if ($value === 'define') {
-                        $this->measurements->incrementGlobalConstants();
+                        $measurements->incrementGlobalConstants();
                     }
 
                     break;
@@ -325,12 +323,8 @@ final class Analyser
         if (isset($tokens[$i + 2][1])) {
             $namespace = $tokens[$i + 2][1];
 
-            for ($j = $i + 3; ; $j += 2) {
-                if (isset($tokens[$j]) && $tokens[$j][0] === T_NS_SEPARATOR) {
-                    $namespace .= '\\' . $tokens[$j + 1][1];
-                } else {
-                    break;
-                }
+            for ($j = $i + 3; isset($tokens[$j]) && $tokens[$j][0] === T_NS_SEPARATOR; $j += 2) {
+                $namespace .= '\\' . $tokens[$j + 1][1];
             }
 
             return $namespace;

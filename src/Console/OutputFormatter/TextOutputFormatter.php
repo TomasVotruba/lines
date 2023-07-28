@@ -8,7 +8,6 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Output\OutputInterface;
 use TomasVotruba\Lines\Console\TablePrinter;
 use TomasVotruba\Lines\Contract\OutputFormatterInterface;
-use TomasVotruba\Lines\Helpers\NumberFormat;
 use TomasVotruba\Lines\Measurements;
 
 final class TextOutputFormatter implements OutputFormatterInterface
@@ -18,25 +17,25 @@ final class TextOutputFormatter implements OutputFormatterInterface
     ) {
     }
 
-    public function printResult(Measurements $measurements, OutputInterface $output): void
+    public function printMeasurement(Measurements $measurements, OutputInterface $output): void
     {
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
 
         $this->tablePrinter->printItemValueTable([
             ['Class max', $measurements->getMaxClassLength()],
-            ['Class average ', $measurements->getAverageClassLength()],
+            ['Class average', $measurements->getAverageClassLength()],
             ['Method max', $measurements->getMaxMethodLength()],
             ['Method average', $measurements->getAverageMethodLength()],
         ], 'Length Stats', 'Lines');
 
         $this->tablePrinter->printItemValueTable([
-            ['Classes', $measurements->getClassLines(), $measurements->getClassLinesRelative() . ' %'],
-            ['Functions', $measurements->getFunctionLines(), $measurements->getFunctionLinesRelative() . ' %'],
+            ['Classes', $measurements->getClassLines(), $measurements->getClassLinesRelative()],
+            ['Functions', $measurements->getFunctionLines(), $measurements->getFunctionLinesRelative()],
             [
                 'Not in classes/functions',
                 $measurements->getNotInClassesOrFunctions(),
-                $measurements->getNotInClassesOrFunctionsRelative() . ' %',
+                $measurements->getNotInClassesOrFunctionsRelative(),
             ],
         ], 'Classes vs functions vs rest', 'Lines', true);
 
@@ -53,58 +52,39 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
         if ($measurements->getMethodCount() !== 0) {
             $this->tablePrinter->printItemValueTable([
-                [
-                    'Non-static',
-                    $measurements->getNonStaticMethods(),
-                    $measurements->getNonStaticMethodsRelative() . ' %',
-                ],
-
-                ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative() . ' %'],
+                ['Non-static', $measurements->getNonStaticMethods(), $measurements->getNonStaticMethodsRelative()],
+                ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative()],
 
                 [new TableSeparator(), new TableSeparator(), new TableSeparator()],
 
-                ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative() . ' %'],
-                [
-                    'Protected',
-                    $measurements->getProtectedMethods(),
-                    $measurements->getProtectedMethodsRelative() . ' %',
-                ],
-                ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative() . ' %'],
+                ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative()],
+                ['Protected', $measurements->getProtectedMethods(), $measurements->getProtectedMethodsRelative()],
+                ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative()],
 
             ], 'Methods', 'Count', true);
         }
 
         if ($measurements->getConstantCount() !== 0) {
-            $this->tablePrinter->printItemValueTable(
+            $constantsRows = [
                 [
-                    [
-                        'Global',
-                        $measurements->getGlobalConstantCount(),
-                        $measurements->getGlobalConstantCountRelative() . ' %',
-                    ],
-                    [
-                        'Class',
-                        $measurements->getClassConstants(),
-                        $measurements->getClassConstantCountRelative() . ' %',
-                    ],
-
-                    [new TableSeparator(), new TableSeparator(), new TableSeparator()],
-
-                    [
-                        'Public',
-                        $measurements->getPublicClassConstants(),
-                        $measurements->getPublicClassConstantsRelative() . ' %',
-                    ],
-                    [
-                        'Non-public',
-                        $measurements->getNonPublicClassConstants(),
-                        $measurements->getNonPublicClassConstantsRelative() . ' %',
-                    ],
+                    'Global',
+                    $measurements->getGlobalConstantCount(),
+                    $measurements->getGlobalConstantCountRelative(),
                 ],
-                'Constants',
-                'Count',
-                true
-            );
+                ['Class', $measurements->getClassConstants(), $measurements->getClassConstantCountRelative()],
+            ];
+
+            if ($measurements->getClassConstants() !== 0) {
+                $constantsRows[] = [new TableSeparator(), new TableSeparator(), new TableSeparator()];
+
+                $constantsRows[] = [
+                    'Non-public',
+                    $measurements->getNonPublicClassConstants(),
+                    $measurements->getNonPublicClassConstantsRelative(),
+                ];
+            }
+
+            $this->tablePrinter->printItemValueTable($constantsRows, 'Constants', 'Count', true);
         }
     }
 
@@ -117,25 +97,9 @@ final class TextOutputFormatter implements OutputFormatterInterface
     private function printLinesOfCode(Measurements $measurements): void
     {
         $tableRows = [
-            [
-                'Code',
-                NumberFormat::pretty($measurements->getNonCommentLines()),
-                $measurements->getNonCommentLinesRelative() . ' %',
-            ],
-
-            [
-                'Comments',
-                NumberFormat::pretty($measurements->getCommentLines()),
-                $measurements->getCommentLinesRelative() . ' %',
-            ],
-
-            [new TableSeparator(), new TableSeparator(), new TableSeparator()],
-
-            [
-                '<options=bold>Total</>',
-                '<options=bold>' . NumberFormat::pretty($measurements->getLines()) . '</>',
-                '<options=bold>100.0 %</>',
-            ],
+            ['Code', $measurements->getNonCommentLines(), $measurements->getNonCommentLinesRelative()],
+            ['Comments', $measurements->getCommentLines(), $measurements->getCommentLinesRelative()],
+            ['Total', $measurements->getLines(), 100.0],
         ];
 
         $this->tablePrinter->printItemValueTable($tableRows, 'Lines of code', 'Count', true);

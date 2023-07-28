@@ -17,13 +17,17 @@ jobs:
                         run: composer validate --ansi
 
                     -
-                        name: 'Bare Run'
+                        name: 'Run "measure" command'
                         run: |
-                            bin/lines measure vendor --ansi
-                            composer install --no-dev --ansi
+                            bin/lines measure src --ansi
 
                             # try json output
-                            bin/lines measure vendor --json --ansi
+                            bin/lines measure src --json --ansi
+
+                    -
+                        name: 'Run "vendor" command'
+                        run: |
+                            bin/lines vendor --ansi
 
                     -
                         name: 'PHPStan'

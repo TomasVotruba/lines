@@ -15,4 +15,9 @@ final class NumberFormat
     {
         return (float) number_format($number, 1);
     }
+
+    public static function percent(float|int $number): string
+    {
+        return self::singleDecimal($number) . ' %';
+    }
 }

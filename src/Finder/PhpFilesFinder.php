@@ -14,7 +14,7 @@ final class PhpFilesFinder
      * @param string[] $exclude
      * @return string[]
      */
-    public function findInDirectories(array $directories, array $suffixes, array $exclude): array
+    public function findInDirectories(array $directories, array $suffixes, array $exclude = []): array
     {
         $filePaths = [];
         $facade = new Facade();

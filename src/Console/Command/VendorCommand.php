@@ -54,10 +54,10 @@ final class VendorCommand extends Command
         $composerInstallNoDevProcess = new Process(['composer', 'install', '--no-dev']);
         $composerInstallNoDevProcess->run();
         if (! $composerInstallNoDevProcess->isSuccessful()) {
-            $this->symfonyStyle->error(
+            $this->symfonyStyle->error(sprintf(
                 'Composer install --no-dev failed: %s',
                 PHP_EOL . $composerInstallNoDevProcess->getErrorOutput()
-            );
+            ));
 
             return self::FAILURE;
         }

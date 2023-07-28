@@ -75,36 +75,36 @@ final class TextOutputFormatter implements OutputFormatterInterface
         }
 
         if ($measurements->getConstantCount() !== 0) {
-            $this->tablePrinter->printItemValueTable(
+            $constantsRows = [
                 [
-                    [
-                        'Global',
-                        $measurements->getGlobalConstantCount(),
-                        $measurements->getGlobalConstantCountRelative() . ' %',
-                    ],
-                    [
-                        'Class',
-                        $measurements->getClassConstants(),
-                        $measurements->getClassConstantCountRelative() . ' %',
-                    ],
-
-                    [new TableSeparator(), new TableSeparator(), new TableSeparator()],
-
-                    [
-                        'Public',
-                        $measurements->getPublicClassConstants(),
-                        $measurements->getPublicClassConstantsRelative() . ' %',
-                    ],
-                    [
-                        'Non-public',
-                        $measurements->getNonPublicClassConstants(),
-                        $measurements->getNonPublicClassConstantsRelative() . ' %',
-                    ],
+                    'Global',
+                    $measurements->getGlobalConstantCount(),
+                    $measurements->getGlobalConstantCountRelative() . ' %',
                 ],
-                'Constants',
-                'Count',
-                true
-            );
+                [
+                    'Class',
+                    $measurements->getClassConstants(),
+                    $measurements->getClassConstantCountRelative() . ' %',
+                ],
+            ];
+
+            if ($measurements->getClassConstants() !== 0) {
+                $constantsRows[] = [new TableSeparator(), new TableSeparator(), new TableSeparator()];
+
+                $constantsRows = [
+                    'Public',
+                    $measurements->getPublicClassConstants(),
+                    $measurements->getPublicClassConstantsRelative() . ' %',
+                ];
+
+                $constantsRows = [
+                    'Non-public',
+                    $measurements->getNonPublicClassConstants(),
+                    $measurements->getNonPublicClassConstantsRelative() . ' %',
+                ];
+            }
+
+            $this->tablePrinter->printItemValueTable($constantsRows, 'Constants', 'Count', true);
         }
     }
 

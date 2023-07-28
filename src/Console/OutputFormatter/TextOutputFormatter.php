@@ -24,7 +24,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
         $this->tablePrinter->printItemValueTable([
             ['Class max', $measurements->getMaxClassLength()],
-            ['Class average ', $measurements->getAverageClassLength()],
+            ['Class average', $measurements->getAverageClassLength()],
             ['Method max', $measurements->getMaxMethodLength()],
             ['Method average', $measurements->getAverageMethodLength()],
         ], 'Length Stats', 'Lines');
@@ -53,7 +53,6 @@ final class TextOutputFormatter implements OutputFormatterInterface
         if ($measurements->getMethodCount() !== 0) {
             $this->tablePrinter->printItemValueTable([
                 ['Non-static', $measurements->getNonStaticMethods(), $measurements->getNonStaticMethodsRelative()],
-
                 ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative()],
 
                 [new TableSeparator(), new TableSeparator(), new TableSeparator()],
@@ -78,7 +77,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
             if ($measurements->getClassConstants() !== 0) {
                 $constantsRows[] = [new TableSeparator(), new TableSeparator(), new TableSeparator()];
 
-                $constantsRows = [
+                $constantsRows[] = [
                     'Non-public',
                     $measurements->getNonPublicClassConstants(),
                     $measurements->getNonPublicClassConstantsRelative(),

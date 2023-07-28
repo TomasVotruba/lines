@@ -8,6 +8,7 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Helpers\NumberFormat;
+use Webmozart\Assert\Assert;
 
 final class TablePrinter
 {
@@ -31,6 +32,8 @@ final class TablePrinter
         string $countHeader,
         bool $includeRelative = false
     ): void {
+        Assert::allIsArray($rows);
+
         $headers = [$titleHeader, $countHeader];
         if ($includeRelative) {
             $headers[] = 'Relative';
@@ -66,6 +69,9 @@ final class TablePrinter
         foreach ($rows as $key => $row) {
             // big numbers
             if ($key === 1) {
+
+                dump($row);
+
                 // keep separator
                 if ($row[1] instanceof TableSeparator) {
                     continue;

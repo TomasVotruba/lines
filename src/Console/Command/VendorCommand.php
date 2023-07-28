@@ -12,6 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Finder\PhpFilesFinder;
+use TomasVotruba\Lines\Helpers\Calculator;
 use TomasVotruba\Lines\Helpers\NumberFormat;
 use Webmozart\Assert\Assert;
 
@@ -56,9 +57,15 @@ final class VendorCommand extends Command
         $padLeftTableStyle = new TableStyle();
         $padLeftTableStyle->setPadType(STR_PAD_LEFT);
 
-        $linesDifferenceRelative = 100 * (1 - ($fullVendorMeasurement->getLines() - $noDevVendorMeasurement->getLines()) / $fullVendorMeasurement->getLines());
+        $linesDifferenceRelative = Calculator::relativeChange(
+            $fullVendorMeasurement->getLines(),
+            $noDevVendorMeasurement->getLines()
+        );
 
-        $nonCommentLinesDifferenceRelative = 100 * (1 - ($fullVendorMeasurement->getNonCommentLines() - $noDevVendorMeasurement->getNonCommentLines()) / $fullVendorMeasurement->getNonCommentLines());
+        $nonCommentLinesDifferenceRelative = Calculator::relativeChange(
+            $fullVendorMeasurement->getNonCommentLines(),
+            $noDevVendorMeasurement->getNonCommentLines()
+        );
 
         $this->symfonyStyle->createTable()
             ->setHeaders(['Metric', 'All dependencies', 'Without dev', 'Change'])
@@ -68,13 +75,13 @@ final class VendorCommand extends Command
                     'All lines',
                     NumberFormat::pretty($fullVendorMeasurement->getLines()),
                     NumberFormat::pretty($noDevVendorMeasurement->getLines()),
-                    NumberFormat::percent(-1 * (100 - $linesDifferenceRelative)),
+                    NumberFormat::percent($linesDifferenceRelative),
                 ],
                 [
                     'Lines of code',
                     NumberFormat::pretty($fullVendorMeasurement->getNonCommentLines()),
                     NumberFormat::pretty($noDevVendorMeasurement->getNonCommentLines()),
-                    NumberFormat::percent(-1 * (100 - $nonCommentLinesDifferenceRelative)),
+                    NumberFormat::percent($nonCommentLinesDifferenceRelative),
                 ],
             ])
             ->setColumnStyle(1, $padLeftTableStyle)

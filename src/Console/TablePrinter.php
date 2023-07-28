@@ -70,8 +70,6 @@ final class TablePrinter
             // big numbers
             if ($key === 1) {
 
-                dump($row);
-
                 // keep separator
                 if ($row[1] instanceof TableSeparator) {
                     continue;

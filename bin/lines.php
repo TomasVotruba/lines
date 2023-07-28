@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
+use Illuminate\Container\Container;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use TomasVotruba\Lines\Console\Command\MeasureCommand;
+use TomasVotruba\Lines\Console\Command\VendorCommand;
 
 if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
     // A. build downgraded package
@@ -13,11 +17,14 @@ if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';
 }
 
+$container = new Container();
 $application = new Application();
-$application->add(new MeasureCommand());
 
-$input = new ArgvInput();
-$output = new ConsoleOutput();
+$measureCommand = $container->make(MeasureCommand::class);
+$application->add($measureCommand);
 
-$exitCode = $application->run($input, $output);
+$vendorCommand = $container->make(VendorCommand::class);
+$application->add($vendorCommand);
+
+$exitCode = $application->run(new ArgvInput(), new ConsoleOutput());
 exit($exitCode);

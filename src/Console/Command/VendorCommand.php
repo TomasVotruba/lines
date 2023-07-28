@@ -13,17 +13,21 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
+use TomasVotruba\Lines\Console\TablePrinter;
 use TomasVotruba\Lines\Finder\PhpFilesFinder;
 
-final class MeasureCommand extends Command
+final class VendorCommand extends Command
 {
-    public function __construct(
-        private readonly PhpFilesFinder $phpFilesFinder,
-        private readonly Analyser $analyser,
-        private readonly JsonOutputFormatter $jsonOutputFormatter,
-        private readonly TextOutputFormatter $textOutputFormatter,
-    ) {
+    private readonly PhpFilesFinder $phpFilesFinder;
+
+    private readonly Analyser $analyser;
+
+    public function __construct()
+    {
         parent::__construct();
+
+        $this->phpFilesFinder = new PhpFilesFinder();
+        $this->analyser = new Analyser();
     }
 
     protected function configure(): void
@@ -69,9 +73,12 @@ final class MeasureCommand extends Command
 
         // print results
         if ($isJson) {
-            $this->jsonOutputFormatter->printResult($measurement, $output);
+            $jsonOutputFormatter = new JsonOutputFormatter();
+            $jsonOutputFormatter->printResult($measurement, $output);
         } else {
-            $this->textOutputFormatter->printResult($measurement, $output);
+            $tablePrinter = new TablePrinter($symfonyStyle);
+            $textOutputFormatter = new TextOutputFormatter($tablePrinter);
+            $textOutputFormatter->printResult($measurement, $output);
         }
 
         return Command::SUCCESS;

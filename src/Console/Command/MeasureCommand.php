@@ -68,9 +68,9 @@ final class MeasureCommand extends Command
 
         // print results
         if ($isJson) {
-            $this->jsonOutputFormatter->printResult($measurement, $output);
+            $this->jsonOutputFormatter->printMeasurement($measurement, $output);
         } else {
-            $this->textOutputFormatter->printResult($measurement, $output);
+            $this->textOutputFormatter->printMeasurement($measurement, $output);
         }
 
         return Command::SUCCESS;

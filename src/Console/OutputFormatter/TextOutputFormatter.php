@@ -17,7 +17,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
     ) {
     }
 
-    public function printResult(Measurements $measurements, OutputInterface $output): void
+    public function printMeasurement(Measurements $measurements, OutputInterface $output): void
     {
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);

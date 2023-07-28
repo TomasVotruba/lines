@@ -11,6 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 use TomasVotruba\Lines\Analyser;
+use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
+use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
 use TomasVotruba\Lines\Exception\ShouldNotHappenException;
 use TomasVotruba\Lines\Finder\PhpFilesFinder;
 
@@ -20,6 +22,8 @@ final class VendorCommand extends Command
         private readonly PhpFilesFinder $phpFilesFinder,
         private readonly Analyser $analyser,
         private readonly SymfonyStyle $symfonyStyle,
+        private readonly JsonOutputFormatter $jsonOutputFormatter,
+        private readonly TextOutputFormatter $textOutputFormatter,
     ) {
         parent::__construct();
     }
@@ -43,8 +47,7 @@ final class VendorCommand extends Command
             );
         }
 
-        $this->symfonyStyle->note('Measuring current /vendor size...');
-
+        $this->symfonyStyle->note('Measuring current "/vendor" size...');
         $vendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory], ['php']);
         $fullVendorMeasurement = $this->analyser->measureFiles($vendorFilePaths);
 
@@ -52,18 +55,9 @@ final class VendorCommand extends Command
 
         // remove --dev dependencies
         $composerInstallNoDevProcess = new Process(['composer', 'install', '--no-dev']);
-        $composerInstallNoDevProcess->run();
-        if (! $composerInstallNoDevProcess->isSuccessful()) {
-            $this->symfonyStyle->error(sprintf(
-                'Composer install --no-dev failed: %s',
-                PHP_EOL . $composerInstallNoDevProcess->getErrorOutput()
-            ));
+        $composerInstallNoDevProcess->mustRun();
 
-            return self::FAILURE;
-        }
-
-        $this->symfonyStyle->note('Measuring current /vendor size without dev dependencies...');
-
+        $this->symfonyStyle->note('Measuring "/vendor" size without dev dependencies...');
         $noDevVendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory], ['php']);
         $noDevVendorMeasurement = $this->analyser->measureFiles($noDevVendorFilePaths);
 
@@ -71,15 +65,21 @@ final class VendorCommand extends Command
 
         // restore original vendor
         $composerInstallProcess = new Process(['composer', 'install']);
-        $composerInstallProcess->run();
+        $composerInstallProcess->mustRun();
 
-        // print resultsof both vendor and vendor-dev
+        // @todo add better comparisong table including relative size changes :) only lines!
         if ($isJson) {
-            // @todo
-            $this->symfonyStyle->success('Finished JSON');
+            $this->symfonyStyle->title('Vendor Size');
+            $this->jsonOutputFormatter->printMeasurement($fullVendorMeasurement, $output);
+
+            $this->symfonyStyle->title('Vendor Size without dev packages');
+            $this->jsonOutputFormatter->printMeasurement($noDevVendorMeasurement, $output);
         } else {
-            // @todo
-            $this->symfonyStyle->success('Finished TEXT');
+            $this->symfonyStyle->title('Vendor Size');
+            $this->textOutputFormatter->printMeasurement($fullVendorMeasurement, $output);
+
+            $this->symfonyStyle->title('Vendor Size without dev packages');
+            $this->textOutputFormatter->printMeasurement($noDevVendorMeasurement, $output);
         }
 
         return Command::SUCCESS;

@@ -24,14 +24,11 @@ final class TextOutputFormatter implements OutputFormatterInterface
         $this->printLinesOfCode($measurements);
 
         $this->tablePrinter->printItemValueTable([
-            ['Max ', $measurements->getMaxClassLength()],
-            ['Average ', $measurements->getAverageClassLength()],
-        ], 'Class length', 'Lines');
-
-        $this->tablePrinter->printItemValueTable([
-            ['Max', $measurements->getMaxMethodLength()],
-            ['Average', $measurements->getAverageMethodLength()],
-        ], 'Method length', 'Lines');
+            ['Class max', $measurements->getMaxClassLength()],
+            ['Class average ', $measurements->getAverageClassLength()],
+            ['Method max', $measurements->getMaxMethodLength()],
+            ['Method average', $measurements->getAverageMethodLength()],
+        ], 'Length Stats', 'Lines');
 
         $this->tablePrinter->printItemValueTable([
             ['Classes', $measurements->getClassLines(), $measurements->getClassLinesRelative() . ' %'],
@@ -56,8 +53,12 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
         if ($measurements->getMethodCount() !== 0) {
             $this->tablePrinter->printItemValueTable([
-                ['Non-static', $measurements->getNonStaticMethods(),
-                    $measurements->getNonStaticMethodsRelative() . ' %', ],
+                [
+                    'Non-static',
+                    $measurements->getNonStaticMethods(),
+                    $measurements->getNonStaticMethodsRelative() . ' %',
+                ],
+
                 ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative() . ' %'],
 
                 [new TableSeparator(), new TableSeparator(), new TableSeparator()],

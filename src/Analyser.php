@@ -127,6 +127,11 @@ final class Analyser
 
                     break;
 
+                    // php 8.0+
+                case T_ENUM:
+                    $this->measurements->incrementEnums();
+                    break;
+
                 case T_CLASS:
                 case T_INTERFACE:
                 case T_TRAIT:
@@ -143,7 +148,6 @@ final class Analyser
                     } elseif ($token === T_INTERFACE) {
                         $this->measurements->incrementInterfaces();
                     } else {
-                        // @todo add enum support
                         $this->measurements->incrementClasses();
                     }
 

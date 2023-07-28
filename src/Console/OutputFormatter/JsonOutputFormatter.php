@@ -25,17 +25,20 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 'comments' => $measurements->getCommentLines(),
                 'comments_relative' => $measurements->getCommentLinesRelative(),
             ],
+
             'lengths' => [
                 'class_max' => $measurements->getMaxClassLength(),
                 'class_average' => $measurements->getAverageClassLength(),
                 'method_max' => $measurements->getMaxMethodLength(),
                 'method_average' => $measurements->getAverageMethodLength(),
             ],
+
             'structure' => [
                 'namespaces' => $measurements->getNamespaces(),
                 'classes' => $measurements->getClassCount(),
                 'interfaces' => $measurements->getInterfaceCount(),
                 'traits' => $measurements->getTraitCount(),
+                'enums' => $measurements->getEnumCount(),
                 'constants' => $measurements->getConstantCount(),
                 'methods' => $measurements->getMethodCount(),
                 'functions' => $measurements->getFunctionCount(),

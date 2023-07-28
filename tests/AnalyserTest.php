@@ -116,4 +116,12 @@ final class AnalyserTest extends TestCase
         $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/class_using_trait.php']);
         $this->assertSame(1, $measurements->getClassLines());
     }
+
+    public function testEnums(): void
+    {
+        $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/enums.php']);
+
+        $this->assertSame(0, $measurements->getClassCount());
+        $this->assertSame(1, $measurements->getEnumCount());
+    }
 }

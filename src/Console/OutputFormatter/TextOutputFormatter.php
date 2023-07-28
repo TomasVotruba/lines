@@ -45,7 +45,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
             ['Classes', $measurements->getClassCount()],
             ['Interfaces', $measurements->getInterfaceCount()],
             ['Traits', $measurements->getTraitCount()],
-            // @todo enums
+            ['Enums', $measurements->getEnumCount()],
             ['Constants', $measurements->getConstantCount()],
             ['Methods', $measurements->getMethodCount()],
             ['Functions', $measurements->getFunctionCount()],

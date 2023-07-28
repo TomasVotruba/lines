@@ -353,16 +353,6 @@ final class Measurements
         return $this->namedFunctionCount + $this->anonymousFunctionCount;
     }
 
-    public function getNamedFunctionCount(): int
-    {
-        return $this->namedFunctionCount;
-    }
-
-    public function getAnonymousFunctionCount(): int
-    {
-        return $this->anonymousFunctionCount;
-    }
-
     public function getConstantCount(): int
     {
         return $this->globalConstantCount + $this->getClassConstants();
@@ -435,5 +425,23 @@ final class Measurements
     {
         $relative = ($partialNumber / $totalNumber);
         return NumberFormat::singleDecimal($relative);
+    }
+
+    public function getStaticMethodsRelative(): float
+    {
+        if ($this->getMethods() > 0) {
+            return $this->relative($this->staticMethodCount, $this->getMethods());
+        }
+
+        return 0.0;
+    }
+
+    public function getNonStaticMethodsRelative(): float
+    {
+        if ($this->getMethods() > 0) {
+            return $this->relative($this->nonStaticMethodCount, $this->getMethods());
+        }
+
+        return 0.0;
     }
 }

@@ -45,43 +45,40 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
         $format = <<<'END'
 Structure
-    Namespaces                              %10d
-    Interfaces                              %10d
-    Traits                                  %10d
-    Classes                                 %10d
-        Methods                             %10d
-            Scope
                 Non-Static                  %10d (%.2f%%)
                 Static                      %10d (%.2f%%)
             Visibility
                 Public                      %10d (%.2f%%)
                 Protected                   %10d (%.2f%%)
                 Private                     %10d (%.2f%%)
-            Functions                       %10d
-                Named                       %10d (%.2f%%)
-                Anonymous                   %10d (%.2f%%)
-            Constants                       %10d
+
+        Constants                       %10d
                 Global                      %10d (%.2f%%)
                 Class                       %10d (%.2f%%)
                 Public                      %10d (%.2f%%)
                 Non-Public                  %10d (%.2f%%)
 END;
 
+        $this->tablePrinter->printItemValueTable([
+            ['Namespaces', $measurements->getNamespaces()],
+            ['Functions', $measurements->getFunctionCount()],
+            ['Interfaces', $measurements->getInterfaces()],
+            ['Traits', $measurements->getTraits()],
+            // @todo enums
+            ['Classes', $measurements->getClasses()],
+            ['Methods', $measurements->getMethods()],
+        ], 'Structure', 'Count');
+
+        $methods = $measurements->getMethods();
+
         $result = sprintf(
             $format,
 
-            // elements
-            $measurements->getNamespaces(),
-            $measurements->getInterfaces(),
-            $measurements->getTraits(),
-            $measurements->getClasses(),
-
             // methods
-            $methods = $measurements->getMethods(),
-            $nonStaticMethods = $measurements->getNonStaticMethods(),
-            $methods > 0 ? ($nonStaticMethods / $methods) * 100 : 0,
-            $staticMethods = $measurements->getStaticMethods(),
-            $methods > 0 ? ($staticMethods / $methods) * 100 : 0,
+            $measurements->getNonStaticMethods(),
+            $measurements->getNonStaticMethodsRelative(),
+            $measurements->getStaticMethods(),
+            $measurements->getStaticMethodsRelative(),
             $publicMethods = $measurements->getPublicMethods(),
             $methods > 0 ? ($publicMethods / $methods) * 100 : 0,
             $protectedMethods = $measurements->getProtectedMethods(),
@@ -90,11 +87,11 @@ END;
             $methods > 0 ? ($privateMethods / $methods) * 100 : 0,
 
             // functions
-            $functions = $measurements->getFunctionCount(),
-            $namedFunctions = $measurements->getNamedFunctionCount(),
-            $functions > 0 ? ($namedFunctions / $functions) * 100 : 0,
-            $anonymousFunctions = $measurements->getAnonymousFunctionCount(),
-            $functions > 0 ? ($anonymousFunctions / $functions) * 100 : 0,
+            //            $functions = $measurements->getFunctionCount(),
+            //            $namedFunctions = $measurements->getNamedFunctionCount(),
+            //            $functions > 0 ? ($namedFunctions / $functions) * 100 : 0,
+            //            $anonymousFunctions = $measurements->getAnonymousFunctionCount(),
+            //            $functions > 0 ? ($anonymousFunctions / $functions) * 100 : 0,
 
             // constants
             $constants = $measurements->getConstantCount(),

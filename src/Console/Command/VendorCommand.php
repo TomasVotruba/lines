@@ -15,6 +15,7 @@ use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
 use TomasVotruba\Lines\Exception\ShouldNotHappenException;
 use TomasVotruba\Lines\Finder\PhpFilesFinder;
+use Webmozart\Assert\Assert;
 
 final class VendorCommand extends Command
 {
@@ -41,11 +42,7 @@ final class VendorCommand extends Command
         $isJson = (bool) $input->getOption('json');
 
         $currentVendorDirectory = getcwd() . '/vendor';
-        if (! file_exists($currentVendorDirectory)) {
-            throw new ShouldNotHappenException(
-                'Local /vendor directory could not be found. Be sure to have this tool installed in a composer project and have run "composre install"'
-            );
-        }
+        Assert::directory($currentVendorDirectory);
 
         $this->symfonyStyle->note('Measuring current "/vendor" size...');
         $vendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory], ['php']);

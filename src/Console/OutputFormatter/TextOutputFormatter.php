@@ -8,7 +8,6 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Output\OutputInterface;
 use TomasVotruba\Lines\Console\TablePrinter;
 use TomasVotruba\Lines\Contract\OutputFormatterInterface;
-use TomasVotruba\Lines\Helpers\NumberFormat;
 use TomasVotruba\Lines\Measurements;
 
 final class TextOutputFormatter implements OutputFormatterInterface
@@ -117,25 +116,9 @@ final class TextOutputFormatter implements OutputFormatterInterface
     private function printLinesOfCode(Measurements $measurements): void
     {
         $tableRows = [
-            [
-                'Code',
-                NumberFormat::pretty($measurements->getNonCommentLines()),
-                $measurements->getNonCommentLinesRelative() . ' %',
-            ],
-
-            [
-                'Comments',
-                NumberFormat::pretty($measurements->getCommentLines()),
-                $measurements->getCommentLinesRelative() . ' %',
-            ],
-
-            [new TableSeparator(), new TableSeparator(), new TableSeparator()],
-
-            [
-                '<options=bold>Total</>',
-                '<options=bold>' . NumberFormat::pretty($measurements->getLines()) . '</>',
-                '<options=bold>100.0 %</>',
-            ],
+            ['Code', $measurements->getNonCommentLines(), $measurements->getNonCommentLinesRelative()],
+            ['Comments', $measurements->getCommentLines(), $measurements->getCommentLinesRelative()],
+            ['Total', $measurements->getLines(), 100.0],
         ];
 
         $this->tablePrinter->printItemValueTable($tableRows, 'Lines of code', 'Count', true);

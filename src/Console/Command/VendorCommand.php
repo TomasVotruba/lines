@@ -58,21 +58,29 @@ final class VendorCommand extends Command
 
         $linesDifferenceRelative = 100 * (1 - ($fullVendorMeasurement->getLines() - $noDevVendorMeasurement->getLines()) / $fullVendorMeasurement->getLines());
 
+        $nonCommentLinesDifferenceRelative = 100 * (1 - ($fullVendorMeasurement->getNonCommentLines() - $noDevVendorMeasurement->getNonCommentLines()) / $fullVendorMeasurement->getNonCommentLines());
+
         $this->symfonyStyle->createTable()
-            ->setHeaders(['Metric', 'All dependencies', 'Without "require-dev"', 'Relative'])
+            ->setHeaders(['Metric', 'All dependencies', 'Without dev', 'Change'])
             ->setColumnWidth(0, 20)
             ->setRows([
                 [
-                    'Lines of code',
+                    'All lines',
                     NumberFormat::pretty($fullVendorMeasurement->getLines()),
                     NumberFormat::pretty($noDevVendorMeasurement->getLines()),
-                    NumberFormat::percent($linesDifferenceRelative),
-
+                    NumberFormat::percent(-1 * (100 - $linesDifferenceRelative)),
+                ],
+                [
+                    'Lines of code',
+                    NumberFormat::pretty($fullVendorMeasurement->getNonCommentLines()),
+                    NumberFormat::pretty($noDevVendorMeasurement->getNonCommentLines()),
+                    NumberFormat::percent(-1 * (100 - $nonCommentLinesDifferenceRelative)),
                 ],
             ])
             ->setColumnStyle(1, $padLeftTableStyle)
             ->setColumnStyle(2, $padLeftTableStyle)
             ->setColumnStyle(3, $padLeftTableStyle)
+            ->setColumnStyle(4, $padLeftTableStyle)
             ->render();
 
         $this->symfonyStyle->newLine(2);

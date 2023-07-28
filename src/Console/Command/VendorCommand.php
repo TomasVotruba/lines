@@ -47,7 +47,7 @@ final class VendorCommand extends Command
         Assert::directory($currentVendorDirectory);
 
         $this->symfonyStyle->note('Measuring current "/vendor" size...');
-        $vendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory], ['php']);
+        $vendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory]);
         $fullVendorMeasurement = $this->analyser->measureFiles($vendorFilePaths);
 
         $this->symfonyStyle->note('Temporarily uninstalling dev packages...');
@@ -57,7 +57,7 @@ final class VendorCommand extends Command
         $composerInstallNoDevProcess->mustRun();
 
         $this->symfonyStyle->note('Measuring "/vendor" size without dev dependencies...');
-        $noDevVendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory], ['php']);
+        $noDevVendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory]);
         $noDevVendorMeasurement = $this->analyser->measureFiles($noDevVendorFilePaths);
 
         $this->symfonyStyle->note('Adding back dev packages...');

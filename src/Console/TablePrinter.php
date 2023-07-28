@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console;
 
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Helpers\NumberFormat;
@@ -57,20 +58,30 @@ final class TablePrinter
     }
 
     /**
-     * @param array<array{0: string, 1: int, 2?: float}> $rows
-     * @return array<array{0: string, 1: int|string, 2?: float|string}>
+     * @param array<array{0: string|TableSeparator, 1: int|TableSeparator, 2?: float|TableSeparator}> $rows
+     * @return array<array{0: string|TableSeparator, 1: int|string|TableSeparator, 2?: float|string|TableSeparator}>
      */
     private function formatRowsNumbers(array $rows): array
     {
         foreach ($rows as $key => $row) {
             // big numbers
             if ($key === 1) {
+                // keep separator
+                if ($row[1] instanceof TableSeparator) {
+                    continue;
+                }
+
                 $rows[$key][1] = NumberFormat::pretty($row[1]);
                 continue;
             }
 
             // float relatives
             if (isset($row[2]) && $key === 2) {
+                // keep separator
+                if ($row[2] instanceof TableSeparator) {
+                    continue;
+                }
+
                 $rows[$key][2] = NumberFormat::percent($row[2]);
             }
         }

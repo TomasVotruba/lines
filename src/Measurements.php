@@ -453,6 +453,42 @@ final class Measurements
         return 0.0;
     }
 
+    public function getGlobalConstantCountRelative(): float
+    {
+        if ($this->getConstantCount() !== 0) {
+            return $this->relative($this->globalConstantCount, $this->getConstantCount());
+        }
+
+        return 0.0;
+    }
+
+    public function getClassConstantCountRelative(): float
+    {
+        if ($this->getConstantCount() !== 0) {
+            return $this->relative($this->getClassConstants(), $this->getConstantCount());
+        }
+
+        return 0.0;
+    }
+
+    public function getPublicClassConstantsRelative(): float
+    {
+        if ($this->getClassConstants() !== 0) {
+            return $this->relative($this->publicClassConstantCount, $this->getClassConstants());
+        }
+
+        return 0.0;
+    }
+
+    public function getNonPublicClassConstantsRelative(): float
+    {
+        if ($this->getClassConstants() !== 0) {
+            return $this->relative($this->nonPublicClassConstantCount, $this->getClassConstants());
+        }
+
+        return 0.0;
+    }
+
     private function relative(int $partialNumber, int $totalNumber): float
     {
         $relative = ($partialNumber / $totalNumber) * 100;

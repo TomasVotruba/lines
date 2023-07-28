@@ -43,13 +43,13 @@ final class TextOutputFormatter implements OutputFormatterInterface
             ],
         ], 'Classes vs functions vs rest', 'Lines', true);
 
-        $format = <<<'END'
-        Constants                       %10d
-                Global                      %10d (%.2f%%)
-                Class                       %10d (%.2f%%)
-                Public                      %10d (%.2f%%)
-                Non-Public                  %10d (%.2f%%)
-END;
+        //        $format = <<<'END'
+        //        Constants                       %10d
+        //                Global                      %10d (%.2f%%)
+        //                Class                       %10d (%.2f%%)
+        //                Public                      %10d (%.2f%%)
+        //                Non-Public                  %10d (%.2f%%)
+        //END;
 
         $this->tablePrinter->printItemValueTable([
             ['Namespaces', $measurements->getNamespaces()],
@@ -57,41 +57,62 @@ END;
             ['Interfaces', $measurements->getInterfaces()],
             ['Traits', $measurements->getTraits()],
             // @todo enums
+            ['Constants', $measurements->getConstantCount()],
             ['Methods', $measurements->getMethods()],
             ['Functions', $measurements->getFunctionCount()],
         ], 'Structure', 'Count');
 
-        $this->tablePrinter->printItemValueTable([
-            ['Non-static', $measurements->getNonStaticMethods(),
-                $measurements->getNonStaticMethodsRelative() . ' %', ],
-            ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative() . ' %'],
+        if ($measurements->getMethods() !== 0) {
+            $this->tablePrinter->printItemValueTable([
+                ['Non-static', $measurements->getNonStaticMethods(),
+                    $measurements->getNonStaticMethodsRelative() . ' %', ],
+                ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative() . ' %'],
 
-            [new TableSeparator(), new TableSeparator(), new TableSeparator()],
+                [new TableSeparator(), new TableSeparator(), new TableSeparator()],
 
-            ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative() . ' %'],
-            ['Protected', $measurements->getProtectedMethods(), $measurements->getProtectedMethodsRelative() . ' %'],
-            ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative() . ' %'],
+                ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative() . ' %'],
+                [
+                    'Protected',
+                    $measurements->getProtectedMethods(),
+                    $measurements->getProtectedMethodsRelative() . ' %',
+                ],
+                ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative() . ' %'],
 
-        ], 'Methods', 'Count', true);
+            ], 'Methods', 'Count', true);
+        }
 
-        $result = sprintf(
-            $format,
+        if ($measurements->getConstantCount() !== 0) {
+            $this->tablePrinter->printItemValueTable(
+                [
+                    [
+                        'Global',
+                        $measurements->getGlobalConstantCount(),
+                        $measurements->getGlobalConstantCountRelative() . ' %',
+                    ],
+                    [
+                        'Class',
+                        $measurements->getClassConstants(),
+                        $measurements->getClassConstantCountRelative() . ' %',
+                    ],
 
-            // methods
+                    [new TableSeparator(), new TableSeparator(), new TableSeparator()],
 
-            // constants
-            $constants = $measurements->getConstantCount(),
-            $globalConstants = $measurements->getGlobalConstantCount(),
-            $constants > 0 ? ($globalConstants / $constants) * 100 : 0,
-            $classConstants = $measurements->getClassConstants(),
-            $constants > 0 ? ($classConstants / $constants) * 100 : 0,
-            $publicClassConstants = $measurements->getPublicClassConstants(),
-            $classConstants > 0 ? ($publicClassConstants / $classConstants) * 100 : 0,
-            $nonPublicClassConstants = $measurements->getNonPublicClassConstants(),
-            $classConstants > 0 ? ($nonPublicClassConstants / $classConstants) * 100 : 0
-        );
-
-        $output->writeln($result);
+                    [
+                        'Public',
+                        $measurements->getPublicClassConstants(),
+                        $measurements->getPublicClassConstantsRelative() . ' %',
+                    ],
+                    [
+                        'Non-public',
+                        $measurements->getNonPublicClassConstants(),
+                        $measurements->getNonPublicClassConstantsRelative() . ' %',
+                    ],
+                ],
+                'Constants',
+                'Count',
+                true
+            );
+        }
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void

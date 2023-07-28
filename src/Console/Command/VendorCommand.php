@@ -13,7 +13,6 @@ use Symfony\Component\Process\Process;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
-use TomasVotruba\Lines\Exception\ShouldNotHappenException;
 use TomasVotruba\Lines\Finder\PhpFilesFinder;
 use Webmozart\Assert\Assert;
 

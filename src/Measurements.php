@@ -237,8 +237,7 @@ final class Measurements
     public function getClassLinesRelative(): float
     {
         if ($this->logicalLineCount > 0) {
-            $relative = ($this->getClassLines() / $this->logicalLineCount) * 100;
-            return NumberFormat::singleDecimal($relative);
+            return $this->relative($this->getClassLines(), $this->logicalLineCount);
         }
 
         return 0.0;
@@ -373,8 +372,7 @@ final class Measurements
     public function getCommentLinesRelative(): float
     {
         if ($this->lineCount !== 0) {
-            $relative = ($this->commentLineCount / $this->lineCount) * 100;
-            return NumberFormat::singleDecimal($relative);
+            return $this->relative($this->commentLineCount, $this->lineCount);
         }
 
         return 0.0;

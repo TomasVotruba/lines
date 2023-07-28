@@ -69,16 +69,16 @@ final class MeasureCommand extends Command
             return Command::FAILURE;
         }
 
-        $measurmentResult = $this->analyser->measureFiles($filePaths);
+        $measurement = $this->analyser->measureFiles($filePaths);
 
         // print results
         if ($isJson) {
             $jsonOutputFormatter = new JsonOutputFormatter();
-            $jsonOutputFormatter->printResult($measurmentResult, $output);
+            $jsonOutputFormatter->printResult($measurement, $output);
         } else {
             $tablePrinter = new TablePrinter($symfonyStyle);
             $textOutputFormatter = new TextOutputFormatter($tablePrinter);
-            $textOutputFormatter->printResult($measurmentResult, $output);
+            $textOutputFormatter->printResult($measurement, $output);
         }
 
         return Command::SUCCESS;

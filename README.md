@@ -30,10 +30,3 @@ For json output, just add `--json`:
 ```bash
 vendor/bin/lines measure src --json
 ```
-
-<br>
-
-## How to Read these Results?
-
-* https://matthiasnoback.nl/2019/09/using-phploc-for-quick-code-quality-estimation-part-1/
-* https://matthiasnoback.nl/2019/09/using-phploc-for-quick-code-quality-estimation-part-2/

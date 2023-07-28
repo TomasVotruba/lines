@@ -10,5 +10,6 @@ parameters:
     level: 8
 
     ignoreErrors:
-        # crazy array shapes
-        - '#Parameter (.*?) of method TomasVotruba\\Lines\\Console\\TablePrinter::formatRowsNumbers\(\) expects array(.*?) array<array> given#'
+        -
+            message: '#Cannot access offset (1|2) on array(.*?)\|Symfony\\Component\\Console\\Helper\\TableSeparator#'
+            path: src/Console/TablePrinter.php

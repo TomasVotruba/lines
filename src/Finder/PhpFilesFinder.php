@@ -4,25 +4,30 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Finder;
 
-use SebastianBergmann\FileIterator\Facade;
+use Symfony\Component\Finder\Finder;
+use Webmozart\Assert\Assert;
 
 final class PhpFilesFinder
 {
     /**
      * @param string[] $directories
-     * @param string[] $suffixes
      * @param string[] $exclude
      * @return string[]
      */
-    public function findInDirectories(array $directories, array $suffixes, array $exclude = []): array
+    public function findInDirectories(array $directories, array $exclude = []): array
     {
-        $filePaths = [];
-        $facade = new Facade();
+        $phpFilesFinder = Finder::create()
+            ->files()
+            ->in($directories)
+            ->name('*.php')
+            ->exclude($exclude);
 
-        foreach ($directories as $directory) {
-            $currentFilePaths = $facade->getFilesAsArray($directory, $suffixes, '', $exclude);
-            $filePaths = [...$filePaths, ...$currentFilePaths];
+        $filePaths = [];
+        foreach ($phpFilesFinder->getIterator() as $fileInfo) {
+            $filePaths[] = $fileInfo->getRealPath();
         }
+
+        Assert::allString($filePaths);
 
         return $filePaths;
     }

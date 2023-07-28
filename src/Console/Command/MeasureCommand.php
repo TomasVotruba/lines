@@ -32,13 +32,6 @@ final class MeasureCommand extends Command
 
         $this->addArgument('paths', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Path to analyze');
         $this->addOption(
-            'suffix',
-            null,
-            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-            'Suffix of files to analyze',
-            ['php']
-        );
-        $this->addOption(
             'exclude',
             null,
             InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
@@ -54,11 +47,10 @@ final class MeasureCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $paths = (array) $input->getArgument('paths');
-        $suffixes = (array) $input->getOption('suffix');
         $excludes = (array) $input->getOption('exclude');
         $isJson = (bool) $input->getOption('json');
 
-        $filePaths = $this->phpFilesFinder->findInDirectories($paths, $suffixes, $excludes);
+        $filePaths = $this->phpFilesFinder->findInDirectories($paths, $excludes);
         if ($filePaths === []) {
             $output->writeln('<error>No files found to scan</error>');
             return Command::FAILURE;

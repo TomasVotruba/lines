@@ -19,6 +19,9 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
     public function printMeasurement(Measurements $measurements, OutputInterface $output): void
     {
+        // newline
+        $output->writeln('');
+
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
 
@@ -55,7 +58,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
                 ['Non-static', $measurements->getNonStaticMethods(), $measurements->getNonStaticMethodsRelative()],
                 ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative()],
 
-                [new TableSeparator(), new TableSeparator(), new TableSeparator()],
+                new TableSeparator(),
 
                 ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative()],
                 ['Protected', $measurements->getProtectedMethods(), $measurements->getProtectedMethodsRelative()],
@@ -75,7 +78,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
             ];
 
             if ($measurements->getClassConstants() !== 0) {
-                $constantsRows[] = [new TableSeparator(), new TableSeparator(), new TableSeparator()];
+                $constantsRows[] = new TableSeparator();
 
                 $constantsRows[] = [
                     'Non-public',

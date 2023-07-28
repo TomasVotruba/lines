@@ -53,16 +53,16 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
         $this->tablePrinter->printItemValueTable([
             ['Namespaces', $measurements->getNamespaces()],
-            ['Classes', $measurements->getClasses()],
-            ['Interfaces', $measurements->getInterfaces()],
-            ['Traits', $measurements->getTraits()],
+            ['Classes', $measurements->getClassCount()],
+            ['Interfaces', $measurements->getInterfaceCount()],
+            ['Traits', $measurements->getTraitCount()],
             // @todo enums
             ['Constants', $measurements->getConstantCount()],
-            ['Methods', $measurements->getMethods()],
+            ['Methods', $measurements->getMethodCount()],
             ['Functions', $measurements->getFunctionCount()],
         ], 'Structure', 'Count');
 
-        if ($measurements->getMethods() !== 0) {
+        if ($measurements->getMethodCount() !== 0) {
             $this->tablePrinter->printItemValueTable([
                 ['Non-static', $measurements->getNonStaticMethods(),
                     $measurements->getNonStaticMethodsRelative() . ' %', ],

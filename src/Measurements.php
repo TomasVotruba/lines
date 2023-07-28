@@ -288,22 +288,22 @@ final class Measurements
         return count($uniqueNamespaceNames);
     }
 
-    public function getInterfaces(): int
+    public function getInterfaceCount(): int
     {
         return $this->interfaceCount;
     }
 
-    public function getTraits(): int
+    public function getTraitCount(): int
     {
         return $this->traitCount;
     }
 
-    public function getClasses(): int
+    public function getClassCount(): int
     {
         return $this->classCount;
     }
 
-    public function getMethods(): int
+    public function getMethodCount(): int
     {
         return $this->nonStaticMethodCount + $this->staticMethodCount;
     }
@@ -321,14 +321,6 @@ final class Measurements
     public function getPublicMethods(): int
     {
         return $this->publicMethodCount;
-    }
-
-    /**
-     * @api
-     */
-    public function getNonPublicMethods(): int
-    {
-        return $this->protectedMethodCount + $this->privateMethodCount;
     }
 
     public function getProtectedMethods(): int
@@ -410,8 +402,8 @@ final class Measurements
 
     public function getStaticMethodsRelative(): float
     {
-        if ($this->getMethods() > 0) {
-            return $this->relative($this->staticMethodCount, $this->getMethods());
+        if ($this->getMethodCount() > 0) {
+            return $this->relative($this->staticMethodCount, $this->getMethodCount());
         }
 
         return 0.0;
@@ -419,8 +411,8 @@ final class Measurements
 
     public function getNonStaticMethodsRelative(): float
     {
-        if ($this->getMethods() > 0) {
-            return $this->relative($this->nonStaticMethodCount, $this->getMethods());
+        if ($this->getMethodCount() > 0) {
+            return $this->relative($this->nonStaticMethodCount, $this->getMethodCount());
         }
 
         return 0.0;
@@ -428,8 +420,8 @@ final class Measurements
 
     public function getPublicMethodsRelative(): float
     {
-        if ($this->getMethods() !== 0) {
-            return $this->relative($this->publicMethodCount, $this->getMethods());
+        if ($this->getMethodCount() !== 0) {
+            return $this->relative($this->publicMethodCount, $this->getMethodCount());
         }
 
         return 0.0;
@@ -437,8 +429,8 @@ final class Measurements
 
     public function getProtectedMethodsRelative(): float
     {
-        if ($this->getMethods() !== 0) {
-            return $this->relative($this->protectedMethodCount, $this->getMethods());
+        if ($this->getMethodCount() !== 0) {
+            return $this->relative($this->protectedMethodCount, $this->getMethodCount());
         }
 
         return 0.0;
@@ -446,8 +438,8 @@ final class Measurements
 
     public function getPrivateMethodsRelative(): float
     {
-        if ($this->getMethods() !== 0) {
-            return $this->relative($this->privateMethodCount, $this->getMethods());
+        if ($this->getMethodCount() !== 0) {
+            return $this->relative($this->privateMethodCount, $this->getMethodCount());
         }
 
         return 0.0;

@@ -28,13 +28,12 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $measurements->getFunctionLines());
         $this->assertSame(1, $measurements->getNotInClassesOrFunctions());
         $this->assertSame(7, $measurements->getCommentLines());
-        $this->assertSame(1, $measurements->getInterfaces());
-        $this->assertSame(0, $measurements->getTraits());
-        $this->assertSame(2, $measurements->getClasses());
+        $this->assertSame(1, $measurements->getInterfaceCount());
+        $this->assertSame(0, $measurements->getTraitCount());
+        $this->assertSame(2, $measurements->getClassCount());
         $this->assertSame(2, $measurements->getFunctionCount());
-        $this->assertSame(4, $measurements->getMethods());
+        $this->assertSame(4, $measurements->getMethodCount());
         $this->assertSame(2, $measurements->getPublicMethods());
-        $this->assertSame(2, $measurements->getNonPublicMethods());
         $this->assertSame(1, $measurements->getProtectedMethods());
         $this->assertSame(1, $measurements->getPrivateMethods());
         $this->assertSame(3, $measurements->getNonStaticMethods());
@@ -47,10 +46,13 @@ final class AnalyserTest extends TestCase
         $this->assertSame(0, $measurements->getDirectories());
         $this->assertSame(1, $measurements->getNamespaces());
         $this->assertSame(75, $measurements->getNonCommentLines());
-        $this->assertSame(4.0, $measurements->getAverageClassLength());
+
         $this->assertSame(28, $measurements->getMaxClassLength());
-        $this->assertSame(7.3, $measurements->getAverageMethodLength());
         $this->assertSame(9, $measurements->getMaxMethodLength());
+
+        // average
+        $this->assertSame(4.0, $measurements->getAverageClassLength());
+        $this->assertSame(7.3, $measurements->getAverageMethodLength());
 
         // relative
         $this->assertSame(8.5, $measurements->getCommentLinesRelative());
@@ -58,6 +60,9 @@ final class AnalyserTest extends TestCase
         $this->assertSame(93.3, $measurements->getClassLinesRelative());
         $this->assertSame(91.5, $measurements->getNonCommentLinesRelative());
         $this->assertSame(3.3, $measurements->getNotInClassesOrFunctionsRelative());
+
+        $this->assertSame(25.0, $measurements->getStaticMethodsRelative());
+        $this->assertSame(75.0, $measurements->getNonStaticMethodsRelative());
     }
 
     #[DataProvider('issue126Provider')]
@@ -81,18 +86,14 @@ final class AnalyserTest extends TestCase
     public function testSkipAnonymousClass(): void
     {
         $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/issue_138.php']);
-        $this->assertSame(1, $measurements->getClasses());
-    }
-
-    public function testDeclareIsNotLogicalLine(): void
-    {
-        $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/with_declare.php']);
-        $this->assertSame(0, $measurements->getNotInClassesOrFunctions());
+        $this->assertSame(1, $measurements->getClassCount());
     }
 
     public function testNamespaceIsNotLogicalLine(): void
     {
-        $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/with_namespace.php']);
+        $measurements = $this->analyser->measureFiles(
+            [__DIR__ . '/Fixture/with_namespace.php', __DIR__ . '/Fixture/with_declare.php']
+        );
         $this->assertSame(0, $measurements->getNotInClassesOrFunctions());
     }
 
@@ -116,7 +117,7 @@ final class AnalyserTest extends TestCase
     public function testClasses(): void
     {
         $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/classes.php']);
-        $this->assertSame(9, $measurements->getClasses());
+        $this->assertSame(9, $measurements->getClassCount());
     }
 
     public function testMethodVisibility(): void
@@ -126,7 +127,7 @@ final class AnalyserTest extends TestCase
         $this->assertSame(2, $measurements->getPublicMethods());
         $this->assertSame(1, $measurements->getProtectedMethods());
         $this->assertSame(3, $measurements->getPrivateMethods());
-        $this->assertSame(6, $measurements->getMethods());
+        $this->assertSame(6, $measurements->getMethodCount());
     }
 
     public function testSkipTraitFromLogicalLines(): void

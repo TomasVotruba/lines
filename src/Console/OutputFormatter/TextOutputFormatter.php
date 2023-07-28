@@ -79,12 +79,6 @@ final class TextOutputFormatter implements OutputFormatterInterface
                 $constantsRows[] = [new TableSeparator(), new TableSeparator(), new TableSeparator()];
 
                 $constantsRows = [
-                    'Public',
-                    $measurements->getPublicClassConstants(),
-                    $measurements->getPublicClassConstantsRelative(),
-                ];
-
-                $constantsRows = [
                     'Non-public',
                     $measurements->getNonPublicClassConstants(),
                     $measurements->getNonPublicClassConstantsRelative(),

@@ -1,6 +1,6 @@
 # Lines
 
-This is a CLI tool for quick size measure of PHP project.
+CLI tool for quick size measure of PHP project, runs anywhere
 
 ## What are killer features?
 

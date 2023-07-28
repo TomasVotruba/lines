@@ -43,72 +43,68 @@ final class TextOutputFormatter implements OutputFormatterInterface
             ],
         ], 'Classes vs functions vs rest', 'Lines', true);
 
-        $format = <<<'END'
-Structure
-    Namespaces                              %10d
-    Interfaces                              %10d
-    Traits                                  %10d
-    Classes                                 %10d
-        Methods                             %10d
-            Scope
-                Non-Static                  %10d (%.2f%%)
-                Static                      %10d (%.2f%%)
-            Visibility
-                Public                      %10d (%.2f%%)
-                Protected                   %10d (%.2f%%)
-                Private                     %10d (%.2f%%)
-            Functions                       %10d
-                Named                       %10d (%.2f%%)
-                Anonymous                   %10d (%.2f%%)
-            Constants                       %10d
-                Global                      %10d (%.2f%%)
-                Class                       %10d (%.2f%%)
-                Public                      %10d (%.2f%%)
-                Non-Public                  %10d (%.2f%%)
-END;
+        $this->tablePrinter->printItemValueTable([
+            ['Namespaces', $measurements->getNamespaces()],
+            ['Classes', $measurements->getClassCount()],
+            ['Interfaces', $measurements->getInterfaceCount()],
+            ['Traits', $measurements->getTraitCount()],
+            // @todo enums
+            ['Constants', $measurements->getConstantCount()],
+            ['Methods', $measurements->getMethodCount()],
+            ['Functions', $measurements->getFunctionCount()],
+        ], 'Structure', 'Count');
 
-        $result = sprintf(
-            $format,
+        if ($measurements->getMethodCount() !== 0) {
+            $this->tablePrinter->printItemValueTable([
+                ['Non-static', $measurements->getNonStaticMethods(),
+                    $measurements->getNonStaticMethodsRelative() . ' %', ],
+                ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative() . ' %'],
 
-            // elements
-            $measurements->getNamespaces(),
-            $measurements->getInterfaces(),
-            $measurements->getTraits(),
-            $measurements->getClasses(),
+                [new TableSeparator(), new TableSeparator(), new TableSeparator()],
 
-            // methods
-            $methods = $measurements->getMethods(),
-            $nonStaticMethods = $measurements->getNonStaticMethods(),
-            $methods > 0 ? ($nonStaticMethods / $methods) * 100 : 0,
-            $staticMethods = $measurements->getStaticMethods(),
-            $methods > 0 ? ($staticMethods / $methods) * 100 : 0,
-            $publicMethods = $measurements->getPublicMethods(),
-            $methods > 0 ? ($publicMethods / $methods) * 100 : 0,
-            $protectedMethods = $measurements->getProtectedMethods(),
-            $methods > 0 ? ($protectedMethods / $methods) * 100 : 0,
-            $privateMethods = $measurements->getPrivateMethods(),
-            $methods > 0 ? ($privateMethods / $methods) * 100 : 0,
+                ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative() . ' %'],
+                [
+                    'Protected',
+                    $measurements->getProtectedMethods(),
+                    $measurements->getProtectedMethodsRelative() . ' %',
+                ],
+                ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative() . ' %'],
 
-            // functions
-            $functions = $measurements->getFunctionCount(),
-            $namedFunctions = $measurements->getNamedFunctionCount(),
-            $functions > 0 ? ($namedFunctions / $functions) * 100 : 0,
-            $anonymousFunctions = $measurements->getAnonymousFunctionCount(),
-            $functions > 0 ? ($anonymousFunctions / $functions) * 100 : 0,
+            ], 'Methods', 'Count', true);
+        }
 
-            // constants
-            $constants = $measurements->getConstantCount(),
-            $globalConstants = $measurements->getGlobalConstantCount(),
-            $constants > 0 ? ($globalConstants / $constants) * 100 : 0,
-            $classConstants = $measurements->getClassConstants(),
-            $constants > 0 ? ($classConstants / $constants) * 100 : 0,
-            $publicClassConstants = $measurements->getPublicClassConstants(),
-            $classConstants > 0 ? ($publicClassConstants / $classConstants) * 100 : 0,
-            $nonPublicClassConstants = $measurements->getNonPublicClassConstants(),
-            $classConstants > 0 ? ($nonPublicClassConstants / $classConstants) * 100 : 0
-        );
+        if ($measurements->getConstantCount() !== 0) {
+            $this->tablePrinter->printItemValueTable(
+                [
+                    [
+                        'Global',
+                        $measurements->getGlobalConstantCount(),
+                        $measurements->getGlobalConstantCountRelative() . ' %',
+                    ],
+                    [
+                        'Class',
+                        $measurements->getClassConstants(),
+                        $measurements->getClassConstantCountRelative() . ' %',
+                    ],
 
-        $output->writeln($result);
+                    [new TableSeparator(), new TableSeparator(), new TableSeparator()],
+
+                    [
+                        'Public',
+                        $measurements->getPublicClassConstants(),
+                        $measurements->getPublicClassConstantsRelative() . ' %',
+                    ],
+                    [
+                        'Non-public',
+                        $measurements->getNonPublicClassConstants(),
+                        $measurements->getNonPublicClassConstantsRelative() . ' %',
+                    ],
+                ],
+                'Constants',
+                'Count',
+                true
+            );
+        }
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void

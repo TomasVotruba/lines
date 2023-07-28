@@ -172,12 +172,12 @@ final class Analyser
                     } else {
                         $currentBlock = 'anonymous function';
                         $functionName = 'anonymous function';
-                        $this->measurements->incrementAnonymousFunctions();
+                        $this->measurements->incrementFunctions();
                     }
 
                     if ($currentBlock === T_FUNCTION) {
                         if ($className === null && $functionName !== 'anonymous function') {
-                            $this->measurements->incrementNamedFunctions();
+                            $this->measurements->incrementFunctions();
                         } else {
                             $static = false;
                             $visibility = T_PUBLIC;

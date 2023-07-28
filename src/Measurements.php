@@ -49,9 +49,7 @@ final class Measurements
 
     private int $privateMethodCount = 0;
 
-    private int $namedFunctionCount = 0;
-
-    private int $anonymousFunctionCount = 0;
+    private int $functionCount = 0;
 
     private int $globalConstantCount = 0;
 
@@ -170,14 +168,9 @@ final class Measurements
         ++$this->privateMethodCount;
     }
 
-    public function incrementNamedFunctions(): void
+    public function incrementFunctions(): void
     {
-        ++$this->namedFunctionCount;
-    }
-
-    public function incrementAnonymousFunctions(): void
-    {
-        ++$this->anonymousFunctionCount;
+        ++$this->functionCount;
     }
 
     public function incrementGlobalConstants(): void
@@ -295,22 +288,22 @@ final class Measurements
         return count($uniqueNamespaceNames);
     }
 
-    public function getInterfaces(): int
+    public function getInterfaceCount(): int
     {
         return $this->interfaceCount;
     }
 
-    public function getTraits(): int
+    public function getTraitCount(): int
     {
         return $this->traitCount;
     }
 
-    public function getClasses(): int
+    public function getClassCount(): int
     {
         return $this->classCount;
     }
 
-    public function getMethods(): int
+    public function getMethodCount(): int
     {
         return $this->nonStaticMethodCount + $this->staticMethodCount;
     }
@@ -330,14 +323,6 @@ final class Measurements
         return $this->publicMethodCount;
     }
 
-    /**
-     * @api
-     */
-    public function getNonPublicMethods(): int
-    {
-        return $this->protectedMethodCount + $this->privateMethodCount;
-    }
-
     public function getProtectedMethods(): int
     {
         return $this->protectedMethodCount;
@@ -350,17 +335,7 @@ final class Measurements
 
     public function getFunctionCount(): int
     {
-        return $this->namedFunctionCount + $this->anonymousFunctionCount;
-    }
-
-    public function getNamedFunctionCount(): int
-    {
-        return $this->namedFunctionCount;
-    }
-
-    public function getAnonymousFunctionCount(): int
-    {
-        return $this->anonymousFunctionCount;
+        return $this->functionCount;
     }
 
     public function getConstantCount(): int
@@ -420,6 +395,87 @@ final class Measurements
     {
         if ($this->logicalLineCount > 0) {
             return $this->relative($this->getNotInClassesOrFunctions(), $this->logicalLineCount);
+        }
+
+        return 0.0;
+    }
+
+    public function getStaticMethodsRelative(): float
+    {
+        if ($this->getMethodCount() > 0) {
+            return $this->relative($this->staticMethodCount, $this->getMethodCount());
+        }
+
+        return 0.0;
+    }
+
+    public function getNonStaticMethodsRelative(): float
+    {
+        if ($this->getMethodCount() > 0) {
+            return $this->relative($this->nonStaticMethodCount, $this->getMethodCount());
+        }
+
+        return 0.0;
+    }
+
+    public function getPublicMethodsRelative(): float
+    {
+        if ($this->getMethodCount() !== 0) {
+            return $this->relative($this->publicMethodCount, $this->getMethodCount());
+        }
+
+        return 0.0;
+    }
+
+    public function getProtectedMethodsRelative(): float
+    {
+        if ($this->getMethodCount() !== 0) {
+            return $this->relative($this->protectedMethodCount, $this->getMethodCount());
+        }
+
+        return 0.0;
+    }
+
+    public function getPrivateMethodsRelative(): float
+    {
+        if ($this->getMethodCount() !== 0) {
+            return $this->relative($this->privateMethodCount, $this->getMethodCount());
+        }
+
+        return 0.0;
+    }
+
+    public function getGlobalConstantCountRelative(): float
+    {
+        if ($this->getConstantCount() !== 0) {
+            return $this->relative($this->globalConstantCount, $this->getConstantCount());
+        }
+
+        return 0.0;
+    }
+
+    public function getClassConstantCountRelative(): float
+    {
+        if ($this->getConstantCount() !== 0) {
+            return $this->relative($this->getClassConstants(), $this->getConstantCount());
+        }
+
+        return 0.0;
+    }
+
+    public function getPublicClassConstantsRelative(): float
+    {
+        if ($this->getClassConstants() !== 0) {
+            return $this->relative($this->publicClassConstantCount, $this->getClassConstants());
+        }
+
+        return 0.0;
+    }
+
+    public function getNonPublicClassConstantsRelative(): float
+    {
+        if ($this->getClassConstants() !== 0) {
+            return $this->relative($this->nonPublicClassConstantCount, $this->getClassConstants());
         }
 
         return 0.0;

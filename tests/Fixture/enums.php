@@ -1,5 +1,8 @@
 <?php
 
-enum SomeEnum
+enum SomeEnum: string
 {
+    case FIRST = 'first';
+
+    case SECOND = 'second';
 }

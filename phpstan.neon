@@ -8,3 +8,7 @@ parameters:
         - tests/Fixture/*
 
     level: 8
+
+    ignoreErrors:
+        # crazy array shapes
+        - '#Parameter (.*?) of method TomasVotruba\\Lines\\Console\\TablePrinter::formatRowsNumbers\(\) expects array(.*?) array<array> given#'

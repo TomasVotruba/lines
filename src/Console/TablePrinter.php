@@ -68,11 +68,11 @@ final class TablePrinter
                 continue;
             }
 
-            // big numbers
+            // make big numbers separated with space, e.g. "1 234"
             $rows[$key][1] = NumberFormat::pretty($row[1]);
 
-            // float relatives
-            if (isset($row[2]) && $key === 2) {
+            // optional float relatives
+            if (isset($row[2])) {
                 $rows[$key][2] = NumberFormat::percent($row[2]);
             }
         }

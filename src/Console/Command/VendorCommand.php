@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 use TomasVotruba\Lines\Analyser;
-use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
-use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
 use TomasVotruba\Lines\Finder\PhpFilesFinder;
+use TomasVotruba\Lines\Helpers\NumberFormat;
 use Webmozart\Assert\Assert;
 
 final class VendorCommand extends Command
@@ -22,8 +21,6 @@ final class VendorCommand extends Command
         private readonly PhpFilesFinder $phpFilesFinder,
         private readonly Analyser $analyser,
         private readonly SymfonyStyle $symfonyStyle,
-        private readonly JsonOutputFormatter $jsonOutputFormatter,
-        private readonly TextOutputFormatter $textOutputFormatter,
     ) {
         parent::__construct();
     }
@@ -32,8 +29,6 @@ final class VendorCommand extends Command
     {
         $this->setName('vendor');
         $this->setDescription('Measure current project /vendor size with and without dev dependencies');
-
-        $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');
     }
 
     /**
@@ -41,46 +36,59 @@ final class VendorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $isJson = (bool) $input->getOption('json');
-
         $currentVendorDirectory = getcwd() . '/vendor';
         Assert::directory($currentVendorDirectory);
 
-        $this->symfonyStyle->note('Measuring current "/vendor" size...');
+        $this->symfonyStyle->writeln('<fg=yellow>Measuring current "/vendor" size...</>');
         $vendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory]);
         $fullVendorMeasurement = $this->analyser->measureFiles($vendorFilePaths);
 
-        $this->symfonyStyle->note('Temporarily uninstalling dev packages...');
+        $this->uninstallDevPackages();
 
-        // remove --dev dependencies
-        $composerInstallNoDevProcess = new Process(['composer', 'install', '--no-dev']);
-        $composerInstallNoDevProcess->mustRun();
-
-        $this->symfonyStyle->note('Measuring "/vendor" size without dev dependencies...');
+        $this->symfonyStyle->writeln('<fg=yellow>Uninstalling dev dependencies and measuring "/vendor" again...</>');
         $noDevVendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory]);
         $noDevVendorMeasurement = $this->analyser->measureFiles($noDevVendorFilePaths);
 
-        $this->symfonyStyle->note('Adding back dev packages...');
+        $this->installOriginalDependencies();
 
-        // restore original vendor
-        $composerInstallProcess = new Process(['composer', 'install']);
-        $composerInstallProcess->mustRun();
+        $this->symfonyStyle->newLine();
 
-        // @todo add better comparisong table including relative size changes :) only lines!
-        if ($isJson) {
-            $this->symfonyStyle->title('Vendor Size');
-            $this->jsonOutputFormatter->printMeasurement($fullVendorMeasurement, $output);
+        $padLeftTableStyle = new TableStyle();
+        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
 
-            $this->symfonyStyle->title('Vendor Size without dev packages');
-            $this->jsonOutputFormatter->printMeasurement($noDevVendorMeasurement, $output);
-        } else {
-            $this->symfonyStyle->title('Vendor Size');
-            $this->textOutputFormatter->printMeasurement($fullVendorMeasurement, $output);
+        $linesDifferenceRelative = 100 * (1 - ($fullVendorMeasurement->getLines() - $noDevVendorMeasurement->getLines()) / $fullVendorMeasurement->getLines());
 
-            $this->symfonyStyle->title('Vendor Size without dev packages');
-            $this->textOutputFormatter->printMeasurement($noDevVendorMeasurement, $output);
-        }
+        $this->symfonyStyle->createTable()
+            ->setHeaders(['Metric', 'All dependencies', 'Without "require-dev"', 'Relative'])
+            ->setColumnWidth(0, 20)
+            ->setRows([
+                [
+                    'Lines of code',
+                    NumberFormat::pretty($fullVendorMeasurement->getLines()),
+                    NumberFormat::pretty($noDevVendorMeasurement->getLines()),
+                    NumberFormat::percent($linesDifferenceRelative),
+
+                ],
+            ])
+            ->setColumnStyle(1, $padLeftTableStyle)
+            ->setColumnStyle(2, $padLeftTableStyle)
+            ->setColumnStyle(3, $padLeftTableStyle)
+            ->render();
+
+        $this->symfonyStyle->newLine(2);
 
         return Command::SUCCESS;
+    }
+
+    private function uninstallDevPackages(): void
+    {
+        $process = new Process(['composer', 'install', '--no-dev']);
+        $process->mustRun();
+    }
+
+    private function installOriginalDependencies(): void
+    {
+        $process = new Process(['composer', 'install']);
+        $process->mustRun();
     }
 }

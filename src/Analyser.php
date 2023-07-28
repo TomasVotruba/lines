@@ -16,6 +16,19 @@ final class Analyser
     public function __construct()
     {
         $this->measurements = new Measurements();
+
+        // define fallback constants for PHP 8.0 tokens in case of e.g. PHP 7.2 run
+        if (! defined('T_MATCH')) {
+            define('T_MATCH', 5000);
+        }
+
+        if (! defined('T_READONLY')) {
+            define('T_READONLY', 5010);
+        }
+
+        if (! defined('T_ENUM')) {
+            define('T_ENUM', 5015);
+        }
     }
 
     /**
@@ -127,6 +140,11 @@ final class Analyser
 
                     break;
 
+                    // php 8.0+
+                case T_ENUM:
+                    $this->measurements->incrementEnums();
+                    break;
+
                 case T_CLASS:
                 case T_INTERFACE:
                 case T_TRAIT:
@@ -143,7 +161,6 @@ final class Analyser
                     } elseif ($token === T_INTERFACE) {
                         $this->measurements->incrementInterfaces();
                     } else {
-                        // @todo add enum support
                         $this->measurements->incrementClasses();
                     }
 

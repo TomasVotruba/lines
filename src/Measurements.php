@@ -31,6 +31,8 @@ final class Measurements
 
     private int $classCount = 0;
 
+    private int $enumCount = 0;
+
     private int $traitCount = 0;
 
     private int $interfaceCount = 0;
@@ -191,6 +193,11 @@ final class Measurements
     public function incrementClasses(): void
     {
         ++$this->classCount;
+    }
+
+    public function incrementEnums(): void
+    {
+        ++$this->enumCount;
     }
 
     public function getDirectories(): int
@@ -479,6 +486,11 @@ final class Measurements
         }
 
         return 0.0;
+    }
+
+    public function getEnumCount(): int
+    {
+        return $this->enumCount;
     }
 
     private function relative(int $partialNumber, int $totalNumber): float

@@ -7,7 +7,7 @@ class ClassConstants
     final public const EXPLICITLY_PUBLIC_CONSTANT = 'explicitly public';
 
     /* a comment might be here */
-    private const COMMENT_IN_DEFINTION = 'comment in definition';
+    private const COMMENT_IN_DEFINITION = 'comment in definition';
 
     private const PRIVATE_CONSTANT = 'private';
 

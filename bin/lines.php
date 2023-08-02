@@ -14,8 +14,11 @@ use TomasVotruba\Lines\Console\Command\VendorCommand;
 if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
     // A. build downgraded package
     require_once __DIR__ . '/../vendor/scoper-autoload.php';
+} elseif (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
+    // B. dev repository
+    require_once __DIR__ . '/../../../../vendor/autoload.php';
 } else {
-    // B. local repository
+    // C. local repository
     require_once __DIR__ . '/../vendor/autoload.php';
 }
 

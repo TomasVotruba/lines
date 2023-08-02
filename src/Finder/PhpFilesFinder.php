@@ -22,6 +22,9 @@ final class PhpFilesFinder
             ->name('*.php')
             ->exclude($exclude);
 
+        // skip yourself
+        $phpFilesFinder->notPath('tomasvotruba/lines');
+
         $filePaths = [];
         foreach ($phpFilesFinder->getIterator() as $fileInfo) {
             $filePaths[] = $fileInfo->getRealPath();

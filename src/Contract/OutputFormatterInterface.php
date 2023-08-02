@@ -9,5 +9,5 @@ use TomasVotruba\Lines\Measurements;
 
 interface OutputFormatterInterface
 {
-    public function printMeasurement(Measurements $measurements, OutputInterface $output): void;
+    public function printMeasurement(Measurements $measurements, OutputInterface $output, bool $isShort): void;
 }

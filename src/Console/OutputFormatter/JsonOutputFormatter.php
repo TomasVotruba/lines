@@ -11,7 +11,7 @@ use Webmozart\Assert\Assert;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
-    public function printMeasurement(Measurements $measurements, OutputInterface $output): void
+    public function printMeasurement(Measurements $measurements, OutputInterface $output, bool $isShort): void
     {
         $arrayData = [
             'filesystem' => [
@@ -25,15 +25,17 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 'comments' => $measurements->getCommentLines(),
                 'comments_relative' => $measurements->getCommentLinesRelative(),
             ],
+        ];
 
-            'lengths' => [
+        if ($isShort === false) {
+            $arrayData['lengths'] = [
                 'class_max' => $measurements->getMaxClassLength(),
                 'class_average' => $measurements->getAverageClassLength(),
                 'method_max' => $measurements->getMaxMethodLength(),
                 'method_average' => $measurements->getAverageMethodLength(),
-            ],
+            ];
 
-            'structure' => [
+            $arrayData['structure'] = [
                 'namespaces' => $measurements->getNamespaces(),
                 'classes' => $measurements->getClassCount(),
                 'interfaces' => $measurements->getInterfaceCount(),
@@ -42,9 +44,9 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 'constants' => $measurements->getConstantCount(),
                 'methods' => $measurements->getMethodCount(),
                 'functions' => $measurements->getFunctionCount(),
-            ],
+            ];
 
-            'methods' => [
+            $arrayData['methods'] = [
                 'non_static' => $measurements->getNonStaticMethods(),
                 'non_static_relative' => $measurements->getNonStaticMethodsRelative(),
                 'static' => $measurements->getStaticMethods(),
@@ -55,9 +57,9 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 'protected_relative' => $measurements->getProtectedMethodsRelative(),
                 'private' => $measurements->getPrivateMethods(),
                 'private_relative' => $measurements->getPrivateMethodsRelative(),
-            ],
+            ];
 
-            'constants' => [
+            $arrayData['constants'] = [
                 'class' => $measurements->getClassConstants(),
                 'class_public' => $measurements->getPublicClassConstants(),
                 'class_public_relative' => $measurements->getPublicClassConstantsRelative(),
@@ -65,8 +67,8 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 'class_non_public_relative' => $measurements->getNonPublicClassConstantsRelative(),
                 'global' => $measurements->getGlobalConstantCount(),
                 'global_relative' => $measurements->getGlobalConstantCountRelative(),
-            ],
-        ];
+            ];
+        }
 
         $jsonString = json_encode($arrayData, JSON_PRETTY_PRINT);
         Assert::string($jsonString);

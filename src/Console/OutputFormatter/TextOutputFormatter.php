@@ -17,13 +17,17 @@ final class TextOutputFormatter implements OutputFormatterInterface
     ) {
     }
 
-    public function printMeasurement(Measurements $measurements, OutputInterface $output): void
+    public function printMeasurement(Measurements $measurements, OutputInterface $output, bool $isShort): void
     {
         // newline
         $output->writeln('');
 
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
+
+        if ($isShort) {
+            return;
+        }
 
         $this->tablePrinter->printItemValueTable([
             ['Class max', $measurements->getMaxClassLength()],
@@ -42,53 +46,9 @@ final class TextOutputFormatter implements OutputFormatterInterface
             ],
         ], 'Classes vs functions vs rest', 'Lines', true);
 
-        $this->tablePrinter->printItemValueTable([
-            ['Namespaces', $measurements->getNamespaces()],
-            ['Classes', $measurements->getClassCount()],
-            ['Interfaces', $measurements->getInterfaceCount()],
-            ['Traits', $measurements->getTraitCount()],
-            ['Enums', $measurements->getEnumCount()],
-            ['Constants', $measurements->getConstantCount()],
-            ['Methods', $measurements->getMethodCount()],
-            ['Functions', $measurements->getFunctionCount()],
-        ], 'Structure', 'Count');
-
-        if ($measurements->getMethodCount() !== 0) {
-            $this->tablePrinter->printItemValueTable([
-                ['Non-static', $measurements->getNonStaticMethods(), $measurements->getNonStaticMethodsRelative()],
-                ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative()],
-
-                new TableSeparator(),
-
-                ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative()],
-                ['Protected', $measurements->getProtectedMethods(), $measurements->getProtectedMethodsRelative()],
-                ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative()],
-
-            ], 'Methods', 'Count', true);
-        }
-
-        if ($measurements->getConstantCount() !== 0) {
-            $constantsRows = [
-                [
-                    'Global',
-                    $measurements->getGlobalConstantCount(),
-                    $measurements->getGlobalConstantCountRelative(),
-                ],
-                ['Class', $measurements->getClassConstants(), $measurements->getClassConstantCountRelative()],
-            ];
-
-            if ($measurements->getClassConstants() !== 0) {
-                $constantsRows[] = new TableSeparator();
-
-                $constantsRows[] = [
-                    'Non-public',
-                    $measurements->getNonPublicClassConstants(),
-                    $measurements->getNonPublicClassConstantsRelative(),
-                ];
-            }
-
-            $this->tablePrinter->printItemValueTable($constantsRows, 'Constants', 'Count', true);
-        }
+        $this->printStructure($measurements);
+        $this->printMethods($measurements);
+        $this->printConstants($measurements);
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void
@@ -106,5 +66,62 @@ final class TextOutputFormatter implements OutputFormatterInterface
         ];
 
         $this->tablePrinter->printItemValueTable($tableRows, 'Lines of code', 'Count', true);
+    }
+
+    private function printMethods(Measurements $measurements): void
+    {
+        if ($measurements->getMethodCount() === 0) {
+            return;
+        }
+
+        $this->tablePrinter->printItemValueTable([
+            ['Non-static', $measurements->getNonStaticMethods(), $measurements->getNonStaticMethodsRelative()],
+            ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative()],
+
+            new TableSeparator(),
+
+            ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative()],
+            ['Protected', $measurements->getProtectedMethods(), $measurements->getProtectedMethodsRelative()],
+            ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative()],
+
+        ], 'Methods', 'Count', true);
+    }
+
+    private function printStructure(Measurements $measurements): void
+    {
+        $this->tablePrinter->printItemValueTable([
+            ['Namespaces', $measurements->getNamespaces()],
+            ['Classes', $measurements->getClassCount()],
+            ['Interfaces', $measurements->getInterfaceCount()],
+            ['Traits', $measurements->getTraitCount()],
+            ['Enums', $measurements->getEnumCount()],
+            ['Constants', $measurements->getConstantCount()],
+            ['Methods', $measurements->getMethodCount()],
+            ['Functions', $measurements->getFunctionCount()],
+        ], 'Structure', 'Count');
+    }
+
+    private function printConstants(Measurements $measurements): void
+    {
+        if ($measurements->getConstantCount() === 0) {
+            return;
+        }
+
+        $constantsRows = [
+            ['Global', $measurements->getGlobalConstantCount(), $measurements->getGlobalConstantCountRelative()],
+            ['Class', $measurements->getClassConstants(), $measurements->getClassConstantCountRelative()],
+        ];
+
+        if ($measurements->getClassConstants() !== 0) {
+            $constantsRows[] = new TableSeparator();
+
+            $constantsRows[] = [
+                'Non-public',
+                $measurements->getNonPublicClassConstants(),
+                $measurements->getNonPublicClassConstantsRelative(),
+            ];
+        }
+
+        $this->tablePrinter->printItemValueTable($constantsRows, 'Constants', 'Count', true);
     }
 }

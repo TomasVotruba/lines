@@ -53,6 +53,7 @@ final class MeasureCommand extends Command
         $paths = (array) $input->getArgument('paths');
         $excludes = (array) $input->getOption('exclude');
         $isJson = (bool) $input->getOption('json');
+        $isShort = (bool) $input->getOption('short');
 
         $filePaths = $this->phpFilesFinder->findInDirectories($paths, $excludes);
         if ($filePaths === []) {
@@ -64,9 +65,9 @@ final class MeasureCommand extends Command
 
         // print results
         if ($isJson) {
-            $this->jsonOutputFormatter->printMeasurement($measurement, $output);
+            $this->jsonOutputFormatter->printMeasurement($measurement, $output, $isShort);
         } else {
-            $this->textOutputFormatter->printMeasurement($measurement, $output);
+            $this->textOutputFormatter->printMeasurement($measurement, $output, $isShort);
         }
 
         return Command::SUCCESS;

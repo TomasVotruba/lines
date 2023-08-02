@@ -24,6 +24,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 'code_relative' => $measurements->getNonCommentLinesRelative(),
                 'comments' => $measurements->getCommentLines(),
                 'comments_relative' => $measurements->getCommentLinesRelative(),
+                'total' => $measurements->getLines(),
             ],
         ];
 

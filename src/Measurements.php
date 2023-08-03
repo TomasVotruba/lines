@@ -153,7 +153,7 @@ final class Measurements
         ++$this->classConstantCount;
     }
 
-    public function incrementClasses(): void
+    public function incrementClassCount(): void
     {
         ++$this->classCount;
     }

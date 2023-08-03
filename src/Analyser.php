@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines;
 
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
 use Webmozart\Assert\Assert;
 
 /**
@@ -11,8 +14,9 @@ use Webmozart\Assert\Assert;
  */
 final class Analyser
 {
-    public function __construct()
-    {
+    public function __construct(
+        private readonly \PhpParser\Parser $parser,
+    ) {
         // define fallback constants for PHP 8.0 tokens in case of e.g. PHP 7.2 run
         if (! defined('T_MATCH')) {
             define('T_MATCH', 5000);
@@ -62,7 +66,31 @@ final class Analyser
         $numTokens = count($tokens);
 
         // performance?
+        $stmts = $this->parser->parse($fileContents);
         unset($fileContents);
+
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new class($measurements) extends NodeVisitorAbstract {
+            public function __construct(
+                private readonly Measurements $measurements
+            ) {
+            }
+
+            public function enterNode(\PhpParser\Node $node)
+            {
+                if ($node instanceof Class_) {
+                    if ($node->isAnonymous()) {
+                        return;
+                    }
+
+                    $this->measurements->incrementClassCount();
+                }
+            }
+        });
+
+        $nodeTraverser->traverse($stmts);
+
+        // ...
 
         $measurements->addFile($filePath);
 
@@ -156,9 +184,8 @@ final class Analyser
                         $measurements->incrementTraits();
                     } elseif ($token === T_INTERFACE) {
                         $measurements->incrementInterfaces();
-                    } else {
-                        $measurements->incrementClasses();
                     }
+                    // $measurements->incrementClassCount();
 
                     break;
 

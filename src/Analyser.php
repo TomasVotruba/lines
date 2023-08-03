@@ -193,22 +193,22 @@ final class Analyser
 
                     if ($currentBlock === T_FUNCTION) {
                         if ($className === null && $functionName !== 'anonymous function') {
-                            $measurements->incrementFunctionCount();
+                            //                            $measurements->incrementFunctionCount();
                         } else {
-                            $static = false;
-                            $visibility = T_PUBLIC;
+                            //                            $static = false;
+                            //                            $visibility = T_PUBLIC;
 
-                            for ($j = $i; $j > 0; --$j) {
-                                if (is_string($tokens[$j])) {
-                                    if ($tokens[$j] === '{' ||
-                                        $tokens[$j] === '}' ||
-                                        $tokens[$j] === ';') {
-                                        break;
-                                    }
-
-                                    continue;
-                                }
-                            }
+                            //                            for ($j = $i; $j > 0; --$j) {
+                            //                                if (is_string($tokens[$j])) {
+                            //                                    if ($tokens[$j] === '{' ||
+                            //                                        $tokens[$j] === '}' ||
+                            //                                        $tokens[$j] === ';') {
+                            //                                        break;
+                            //                                    }
+                            //
+                            //                                    continue;
+                            //                                }
+                            //                            }
 
                             $isInMethod = true;
                             $measurements->currentMethodStart();

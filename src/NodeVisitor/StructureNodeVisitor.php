@@ -47,7 +47,7 @@ final class StructureNodeVisitor extends NodeVisitorAbstract
             return $node;
         }
 
-        if ($node instanceof Function_) {
+        if ($node instanceof Function_ || $node instanceof Node\Expr\Closure) {
             $this->measurements->incrementFunctionCount();
 
             return $node;

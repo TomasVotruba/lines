@@ -80,7 +80,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
     private function printStructure(Measurements $measurements): void
     {
         $this->tablePrinter->printItemValueTable([
-            ['Namespaces', $measurements->getNamespaces()],
+            ['Namespaces', $measurements->getNamespaceCount()],
             ['Classes', $measurements->getClassCount()],
             [' * Constants', $measurements->getClassConstantCount()],
             [' * Methods', $measurements->getMethodCount()],

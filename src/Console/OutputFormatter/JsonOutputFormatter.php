@@ -37,7 +37,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
             ];
 
             $arrayData['structure'] = [
-                'namespaces' => $measurements->getNamespaces(),
+                'namespaces' => $measurements->getNamespaceCount(),
                 'classes' => $measurements->getClassCount(),
                 'class_methods' => $measurements->getMethodCount(),
                 'class_constants' => $measurements->getClassConstantCount(),

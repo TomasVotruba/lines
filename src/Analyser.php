@@ -90,8 +90,6 @@ final class Analyser
                         } elseif ($functionName !== null) {
                             $measurements->incrementFunctionLines();
                         }
-
-                        $measurements->incrementLogicalLines();
                     }
 
                     $isLogicalLine = true;
@@ -287,15 +285,7 @@ final class Analyser
 
                     break;
                 case T_CONST:
-                    $possibleScopeToken = $this->getPreviousNonWhitespaceNonCommentTokenPos($tokens, $i);
-
-                    if ($possibleScopeToken &&
-                        in_array($tokens[$possibleScopeToken][0], [T_PRIVATE, T_PROTECTED], true)
-                    ) {
-                        $measurements->incrementNonPublicClassConstants();
-                    } else {
-                        $measurements->incrementPublicClassConstants();
-                    }
+                    $measurements->incrementClassConstants();
 
                     break;
 
@@ -394,25 +384,6 @@ final class Analyser
             }
 
             return $start - 1;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param array<int, mixed> $tokens
-     */
-    private function getPreviousNonWhitespaceNonCommentTokenPos(array $tokens, int $start): int|bool
-    {
-        $previousTokenIndex = $start - 1;
-
-        if (isset($tokens[$previousTokenIndex])) {
-            if (in_array($tokens[$previousTokenIndex][0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)
-            ) {
-                return $this->getPreviousNonWhitespaceNonCommentTokenPos($tokens, $previousTokenIndex);
-            }
-
-            return $previousTokenIndex;
         }
 
         return false;

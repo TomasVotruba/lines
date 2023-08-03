@@ -103,12 +103,12 @@ final class Measurements
         $this->namespaceNames[] = $namespace;
     }
 
-    public function incrementInterfaces(): void
+    public function incrementInterfaceCount(): void
     {
         ++$this->interfaceCount;
     }
 
-    public function incrementTraits(): void
+    public function incrementTraitCount(): void
     {
         ++$this->traitCount;
     }
@@ -158,7 +158,7 @@ final class Measurements
         ++$this->classCount;
     }
 
-    public function incrementEnums(): void
+    public function incrementEnumCount(): void
     {
         ++$this->enumCount;
     }

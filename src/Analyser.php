@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines;
 
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitorAbstract;
+use TomasVotruba\Lines\NodeVisitor\StructureNodeVisitor;
 use Webmozart\Assert\Assert;
 
 /**
@@ -67,26 +66,14 @@ final class Analyser
 
         // performance?
         $stmts = $this->parser->parse($fileContents);
+        if (! is_array($stmts)) {
+            return;
+        }
+
         unset($fileContents);
 
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new class($measurements) extends NodeVisitorAbstract {
-            public function __construct(
-                private readonly Measurements $measurements
-            ) {
-            }
-
-            public function enterNode(\PhpParser\Node $node)
-            {
-                if ($node instanceof Class_) {
-                    if ($node->isAnonymous()) {
-                        return;
-                    }
-
-                    $this->measurements->incrementClassCount();
-                }
-            }
-        });
+        $nodeTraverser->addVisitor(new StructureNodeVisitor($measurements));
 
         $nodeTraverser->traverse($stmts);
 
@@ -166,9 +153,9 @@ final class Analyser
                     break;
 
                     // php 8.0+
-                case T_ENUM:
-                    $measurements->incrementEnums();
-                    break;
+                    //                case T_ENUM:
+                    //                    $measurements->incrementEnumCount();
+                    //                    break;
 
                 case T_CLASS:
                 case T_INTERFACE:
@@ -180,11 +167,11 @@ final class Analyser
                     $className = $this->getClassName($namespace ?: '', $tokens, $i);
                     $currentBlock = T_CLASS;
 
-                    if ($token === T_TRAIT) {
-                        $measurements->incrementTraits();
-                    } elseif ($token === T_INTERFACE) {
-                        $measurements->incrementInterfaces();
-                    }
+                    //                    if ($token === T_TRAIT) {
+                    //                        $measurements->incrementTraitCount();
+                    //                    } elseif ($token === T_INTERFACE) {
+                    //                        $measurements->incrementInterfaceCount();
+                    //                    }
                     // $measurements->incrementClassCount();
 
                     break;
@@ -255,20 +242,6 @@ final class Analyser
                             $measurements->currentMethodStart();
 
                             $measurements->currentClassIncrementMethods();
-
-                            if (! $static) {
-                                $measurements->incrementNonStaticMethods();
-                            } else {
-                                $measurements->incrementStaticMethods();
-                            }
-
-                            if ($visibility === T_PUBLIC) {
-                                $measurements->incrementPublicMethods();
-                            } elseif ($visibility === T_PROTECTED) {
-                                $measurements->incrementProtectedMethods();
-                            } elseif ($visibility === T_PRIVATE) {
-                                $measurements->incrementPrivateMethods();
-                            }
                         }
                     }
 

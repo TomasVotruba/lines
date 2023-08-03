@@ -85,6 +85,7 @@ final class AnalyserTest extends TestCase
         $this->assertSame(2, $measurements->getPublicMethods());
         $this->assertSame(1, $measurements->getProtectedMethods());
         $this->assertSame(3, $measurements->getPrivateMethods());
+
         $this->assertSame(6, $measurements->getMethodCount());
     }
 

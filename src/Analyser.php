@@ -17,9 +17,11 @@ final class Analyser
         if (! defined('T_MATCH')) {
             define('T_MATCH', 5000);
         }
+
         if (! defined('T_READONLY')) {
             define('T_READONLY', 5010);
         }
+
         if (! defined('T_ENUM')) {
             define('T_ENUM', 5015);
         }

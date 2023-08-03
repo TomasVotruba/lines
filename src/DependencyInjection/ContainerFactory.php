@@ -24,24 +24,22 @@ final class ContainerFactory
         $container = new Container();
 
         // console
-        $container->singleton(SymfonyStyle::class, function (): SymfonyStyle {
-            return new SymfonyStyle(new ArrayInput([]), new ConsoleOutput());
-        });
+        $container->singleton(
+            SymfonyStyle::class,
+            static fn (): SymfonyStyle => new SymfonyStyle(new ArrayInput([]), new ConsoleOutput())
+        );
 
-        $container->singleton(Application::class, function (Container $container): Application {
+        $container->singleton(Application::class, static function (Container $container): Application {
             $application = new Application();
-
             $commands = [];
             $commands[] = $container->make(MeasureCommand::class);
             $commands[] = $container->make(VendorCommand::class);
-
             $application->addCommands($commands);
-
             return $application;
         });
 
         // parser
-        $container->singleton(Parser::class, function () {
+        $container->singleton(Parser::class, static function (): Parser {
             $phpParserFactory = new ParserFactory();
             return $phpParserFactory->create(ParserFactory::PREFER_PHP7);
         });

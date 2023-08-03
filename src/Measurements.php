@@ -55,11 +55,7 @@ final class Measurements
 
     private int $globalConstantCount = 0;
 
-    private int $publicClassConstantCount = 0;
-
-    private int $nonPublicClassConstantCount = 0;
-
-    private int $logicalLineCount = 0;
+    private int $classConstantCount = 0;
 
     private int $commentLineCount = 0;
 
@@ -85,11 +81,6 @@ final class Measurements
     public function incrementCommentLines(int $number): void
     {
         $this->commentLineCount += $number;
-    }
-
-    public function incrementLogicalLines(): void
-    {
-        ++$this->logicalLineCount;
     }
 
     public function resetCurrentClass(): void
@@ -180,14 +171,9 @@ final class Measurements
         ++$this->globalConstantCount;
     }
 
-    public function incrementPublicClassConstants(): void
+    public function incrementClassConstants(): void
     {
-        ++$this->publicClassConstantCount;
-    }
-
-    public function incrementNonPublicClassConstants(): void
-    {
-        ++$this->nonPublicClassConstantCount;
+        ++$this->classConstantCount;
     }
 
     public function incrementClasses(): void
@@ -327,7 +313,7 @@ final class Measurements
 
     public function getClassConstantCount(): int
     {
-        return $this->publicClassConstantCount + $this->nonPublicClassConstantCount;
+        return $this->classConstantCount;
     }
 
     public function getCommentLinesRelative(): float

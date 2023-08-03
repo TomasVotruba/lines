@@ -53,7 +53,8 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
     private function printFilesAndDirectories(Measurements $measurements): void
     {
-        $tableRows = [['Directories', $measurements->getDirectories()], ['Files', $measurements->getFiles()]];
+        $tableRows = [['Directories', $measurements->getDirectoryCount()], ['Files', $measurements->getFileCount()]];
+
         $this->tablePrinter->printItemValueTable($tableRows, 'Metric', 'Count');
     }
 

@@ -200,13 +200,13 @@ final class Measurements
         ++$this->enumCount;
     }
 
-    public function getDirectories(): int
+    public function getDirectoryCount(): int
     {
         $uniqueDirectoryNames = array_unique($this->directoryNames);
         return count($uniqueDirectoryNames) - 1;
     }
 
-    public function getFiles(): int
+    public function getFileCount(): int
     {
         return $this->fileCount;
     }

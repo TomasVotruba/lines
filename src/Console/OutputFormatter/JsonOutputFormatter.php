@@ -15,8 +15,8 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     {
         $arrayData = [
             'filesystem' => [
-                'directories' => $measurements->getDirectories(),
-                'files' => $measurements->getFiles(),
+                'directories' => $measurements->getDirectoryCount(),
+                'files' => $measurements->getFileCount(),
             ],
 
             'lines_of_code' => [

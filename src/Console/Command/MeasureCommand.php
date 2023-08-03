@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
@@ -21,6 +22,7 @@ final class MeasureCommand extends Command
         private readonly Analyser $analyser,
         private readonly JsonOutputFormatter $jsonOutputFormatter,
         private readonly TextOutputFormatter $textOutputFormatter,
+        private readonly SymfonyStyle $symfonyStyle,
     ) {
         parent::__construct();
     }
@@ -61,7 +63,28 @@ final class MeasureCommand extends Command
             return Command::FAILURE;
         }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
         $measurement = $this->analyser->measureFiles($filePaths);
+=======
+        $this->symfonyStyle->createProgressBar(count($filePaths));
+        $progressBarClosure = function (): void {
+=======
+        $this->symfonyStyle->createProgressBar(count($filePaths));
+        $progressBarClosure = function () {
+>>>>>>> 41b8985 (misc)
+            $this->symfonyStyle->progressAdvance();
+        };
+
+=======
+        $progressBarClosure = $this->createProgressBarClosure($isJson, $filePaths);
+>>>>>>> 690f2ba (add progres bar)
+        $measurement = $this->analyser->measureFiles($filePaths, $progressBarClosure);
+<<<<<<< HEAD
+>>>>>>> a97c159 (fixup! misc)
+=======
+>>>>>>> 41b8985 (misc)
 
         // print results
         if ($isJson) {
@@ -71,5 +94,22 @@ final class MeasureCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * @param string[] $filePaths
+     */
+    private function createProgressBarClosure(bool $isJson, array $filePaths): ?callable
+    {
+        if ($isJson === true) {
+            return null;
+        }
+
+        $progressBar = $this->symfonyStyle->createProgressBar(count($filePaths));
+        $progressBar->start();
+
+        return function () use ($progressBar): void {
+            $progressBar->advance();
+        };
     }
 }

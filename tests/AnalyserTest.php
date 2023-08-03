@@ -22,7 +22,7 @@ final class AnalyserTest extends TestCase
     {
         $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/source.php']);
 
-        $this->assertSame(1, $measurements->getFiles());
+        $this->assertSame(1, $measurements->getFileCount());
         $this->assertSame(82, $measurements->getLines());
         $this->assertSame(30, $measurements->getLogicalLines());
         $this->assertSame(28, $measurements->getClassLines());
@@ -44,7 +44,7 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $measurements->getPublicClassConstants());
         $this->assertSame(0, $measurements->getNonPublicClassConstants());
         $this->assertSame(1, $measurements->getGlobalConstantCount());
-        $this->assertSame(0, $measurements->getDirectories());
+        $this->assertSame(0, $measurements->getDirectoryCount());
         $this->assertSame(1, $measurements->getNamespaces());
         $this->assertSame(75, $measurements->getNonCommentLines());
 

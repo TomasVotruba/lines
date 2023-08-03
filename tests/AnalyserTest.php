@@ -22,7 +22,7 @@ final class AnalyserTest extends TestCase
     {
         $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/source.php']);
 
-        $this->assertSame(1, $measurements->getFiles());
+        $this->assertSame(1, $measurements->getFileCount());
         $this->assertSame(82, $measurements->getLines());
         $this->assertSame(30, $measurements->getLogicalLines());
         $this->assertSame(28, $measurements->getClassLines());
@@ -39,12 +39,9 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $measurements->getPrivateMethods());
         $this->assertSame(3, $measurements->getNonStaticMethods());
         $this->assertSame(1, $measurements->getStaticMethods());
-        $this->assertSame(2, $measurements->getConstantCount());
-        $this->assertSame(1, $measurements->getClassConstants());
-        $this->assertSame(1, $measurements->getPublicClassConstants());
-        $this->assertSame(0, $measurements->getNonPublicClassConstants());
+        $this->assertSame(1, $measurements->getClassConstantCount());
         $this->assertSame(1, $measurements->getGlobalConstantCount());
-        $this->assertSame(0, $measurements->getDirectories());
+        $this->assertSame(0, $measurements->getDirectoryCount());
         $this->assertSame(1, $measurements->getNamespaces());
         $this->assertSame(75, $measurements->getNonCommentLines());
 
@@ -57,10 +54,7 @@ final class AnalyserTest extends TestCase
 
         // relative
         $this->assertSame(8.5, $measurements->getCommentLinesRelative());
-        $this->assertSame(3.3, $measurements->getFunctionLinesRelative());
-        $this->assertSame(93.3, $measurements->getClassLinesRelative());
         $this->assertSame(91.5, $measurements->getNonCommentLinesRelative());
-        $this->assertSame(3.3, $measurements->getNotInClassesOrFunctionsRelative());
 
         $this->assertSame(25.0, $measurements->getStaticMethodsRelative());
         $this->assertSame(75.0, $measurements->getNonStaticMethodsRelative());
@@ -90,11 +84,8 @@ final class AnalyserTest extends TestCase
     {
         $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/class_constants.php']);
 
-        $this->assertSame(2, $measurements->getPublicClassConstants());
-        $this->assertSame(3, $measurements->getNonPublicClassConstants());
-
-        $this->assertSame(5, $measurements->getClassConstants());
-        $this->assertSame(5, $measurements->getConstantCount());
+        $this->assertSame(5, $measurements->getClassConstantCount());
+        $this->assertSame(1, $measurements->getGlobalConstantCount());
     }
 
     public function testClasses(): void

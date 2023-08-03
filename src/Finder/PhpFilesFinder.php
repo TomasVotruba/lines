@@ -10,24 +10,37 @@ use Webmozart\Assert\Assert;
 final class PhpFilesFinder
 {
     /**
-     * @param string[] $directories
+     * @param string[] $paths
      * @param string[] $exclude
      * @return string[]
      */
-    public function findInDirectories(array $directories, array $exclude = []): array
+    public function findInDirectories(array $paths, array $exclude = []): array
     {
-        $phpFilesFinder = Finder::create()
-            ->files()
-            ->in($directories)
-            ->name('*.php')
-            ->exclude($exclude);
-
-        // skip yourself
-        $phpFilesFinder->notPath('tomasvotruba/lines');
+        Assert::allFileExists($paths);
 
         $filePaths = [];
-        foreach ($phpFilesFinder->getIterator() as $fileInfo) {
-            $filePaths[] = $fileInfo->getRealPath();
+        $directories = [];
+
+        foreach ($paths as $path) {
+            if (is_file($path)) {
+                $filePaths[] = $path;
+            } else {
+                $directories[] = $path;
+            }
+        }
+
+        if ($directories !== []) {
+            $phpFilesFinder = Finder::create()
+                ->files()
+                ->in($directories)
+                ->name('*.php')
+                // skip this package in /vendor
+                ->notPath('tomasvotruba/lines')
+                ->exclude($exclude);
+
+            foreach ($phpFilesFinder->getIterator() as $fileInfo) {
+                $filePaths[] = $fileInfo->getRealPath();
+            }
         }
 
         Assert::allString($filePaths);

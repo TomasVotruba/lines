@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
@@ -21,6 +22,7 @@ final class MeasureCommand extends Command
         private readonly Analyser $analyser,
         private readonly JsonOutputFormatter $jsonOutputFormatter,
         private readonly TextOutputFormatter $textOutputFormatter,
+        private readonly SymfonyStyle $symfonyStyle,
     ) {
         parent::__construct();
     }
@@ -61,15 +63,34 @@ final class MeasureCommand extends Command
             return Command::FAILURE;
         }
 
-        $measurement = $this->analyser->measureFiles($filePaths);
+        $progressBarClosure = $this->createProgressBarClosure($isJson, $filePaths);
+        $measurement = $this->analyser->measureFiles($filePaths, $progressBarClosure);
 
         // print results
         if ($isJson) {
             $this->jsonOutputFormatter->printMeasurement($measurement, $output, $isShort);
         } else {
+            $this->symfonyStyle->newLine();
             $this->textOutputFormatter->printMeasurement($measurement, $output, $isShort);
         }
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * @param string[] $filePaths
+     */
+    private function createProgressBarClosure(bool $isJson, array $filePaths): ?callable
+    {
+        if ($isJson) {
+            return null;
+        }
+
+        $progressBar = $this->symfonyStyle->createProgressBar(count($filePaths));
+        $progressBar->start();
+
+        return static function () use ($progressBar): void {
+            $progressBar->advance();
+        };
     }
 }

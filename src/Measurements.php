@@ -200,13 +200,13 @@ final class Measurements
         ++$this->enumCount;
     }
 
-    public function getDirectories(): int
+    public function getDirectoryCount(): int
     {
         $uniqueDirectoryNames = array_unique($this->directoryNames);
         return count($uniqueDirectoryNames) - 1;
     }
 
-    public function getFiles(): int
+    public function getFileCount(): int
     {
         return $this->fileCount;
     }
@@ -234,15 +234,9 @@ final class Measurements
         return $this->logicalLineCount;
     }
 
-    public function getClassLinesRelative(): float
-    {
-        if ($this->logicalLineCount > 0) {
-            return $this->relative($this->getClassLines(), $this->logicalLineCount);
-        }
-
-        return 0.0;
-    }
-
+    /**
+     * @api used only in tests
+     */
     public function getClassLines(): int
     {
         return array_sum($this->classLineCountPerClass);
@@ -278,11 +272,17 @@ final class Measurements
         return max($this->methodLineCountPerMethod);
     }
 
+    /**
+     * @api used in only in tests
+     */
     public function getFunctionLines(): int
     {
         return $this->functionLineCount;
     }
 
+    /**
+     * @api used in only in tests
+     */
     public function getNotInClassesOrFunctions(): int
     {
         return $this->logicalLineCount - $this->getClassLines() - $this->functionLineCount;
@@ -344,27 +344,12 @@ final class Measurements
         return $this->functionCount;
     }
 
-    public function getConstantCount(): int
-    {
-        return $this->globalConstantCount + $this->getClassConstants();
-    }
-
     public function getGlobalConstantCount(): int
     {
         return $this->globalConstantCount;
     }
 
-    public function getPublicClassConstants(): int
-    {
-        return $this->publicClassConstantCount;
-    }
-
-    public function getNonPublicClassConstants(): int
-    {
-        return $this->nonPublicClassConstantCount;
-    }
-
-    public function getClassConstants(): int
+    public function getClassConstantCount(): int
     {
         return $this->publicClassConstantCount + $this->nonPublicClassConstantCount;
     }
@@ -382,24 +367,6 @@ final class Measurements
     {
         if ($this->lineCount !== 0) {
             return $this->relative($this->getNonCommentLines(), $this->lineCount);
-        }
-
-        return 0.0;
-    }
-
-    public function getFunctionLinesRelative(): float
-    {
-        if ($this->logicalLineCount > 0) {
-            return $this->relative($this->functionLineCount, $this->logicalLineCount);
-        }
-
-        return 0.0;
-    }
-
-    public function getNotInClassesOrFunctionsRelative(): float
-    {
-        if ($this->logicalLineCount > 0) {
-            return $this->relative($this->getNotInClassesOrFunctions(), $this->logicalLineCount);
         }
 
         return 0.0;
@@ -445,42 +412,6 @@ final class Measurements
     {
         if ($this->getMethodCount() !== 0) {
             return $this->relative($this->privateMethodCount, $this->getMethodCount());
-        }
-
-        return 0.0;
-    }
-
-    public function getGlobalConstantCountRelative(): float
-    {
-        if ($this->getConstantCount() !== 0) {
-            return $this->relative($this->globalConstantCount, $this->getConstantCount());
-        }
-
-        return 0.0;
-    }
-
-    public function getClassConstantCountRelative(): float
-    {
-        if ($this->getConstantCount() !== 0) {
-            return $this->relative($this->getClassConstants(), $this->getConstantCount());
-        }
-
-        return 0.0;
-    }
-
-    public function getPublicClassConstantsRelative(): float
-    {
-        if ($this->getClassConstants() !== 0) {
-            return $this->relative($this->publicClassConstantCount, $this->getClassConstants());
-        }
-
-        return 0.0;
-    }
-
-    public function getNonPublicClassConstantsRelative(): float
-    {
-        if ($this->getClassConstants() !== 0) {
-            return $this->relative($this->nonPublicClassConstantCount, $this->getClassConstants());
         }
 
         return 0.0;

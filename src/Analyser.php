@@ -30,7 +30,7 @@ final class Analyser
     /**
      * @param string[] $filePaths
      */
-    public function measureFiles(array $filePaths): Measurements
+    public function measureFiles(array $filePaths, ?callable $progressBarClosure = null): Measurements
     {
         $measurements = new Measurements();
 
@@ -39,6 +39,10 @@ final class Analyser
 
         foreach ($filePaths as $filePath) {
             $this->measureFile($measurements, $filePath);
+
+            if (is_callable($progressBarClosure)) {
+                $progressBarClosure();
+            }
         }
 
         return $measurements;

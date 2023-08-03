@@ -57,10 +57,7 @@ final class AnalyserTest extends TestCase
 
         // relative
         $this->assertSame(8.5, $measurements->getCommentLinesRelative());
-        $this->assertSame(3.3, $measurements->getFunctionLinesRelative());
-        $this->assertSame(93.3, $measurements->getClassLinesRelative());
         $this->assertSame(91.5, $measurements->getNonCommentLinesRelative());
-        $this->assertSame(3.3, $measurements->getNotInClassesOrFunctionsRelative());
 
         $this->assertSame(25.0, $measurements->getStaticMethodsRelative());
         $this->assertSame(75.0, $measurements->getNonStaticMethodsRelative());

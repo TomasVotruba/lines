@@ -36,16 +36,6 @@ final class TextOutputFormatter implements OutputFormatterInterface
             ['Method average', $measurements->getAverageMethodLength()],
         ], 'Length Stats', 'Lines');
 
-        $this->tablePrinter->printItemValueTable([
-            ['Classes', $measurements->getClassLinesRelative()],
-            ['Functions', $measurements->getFunctionLinesRelative()],
-            [
-                'Not in classes/functions',
-                $measurements->getNotInClassesOrFunctions(),
-                $measurements->getNotInClassesOrFunctionsRelative(),
-            ],
-        ], 'Classes vs functions vs rest', null, true);
-
         $this->printStructure($measurements);
         $this->printMethods($measurements);
         $this->printConstants($measurements);

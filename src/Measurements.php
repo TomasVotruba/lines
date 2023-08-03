@@ -234,15 +234,6 @@ final class Measurements
         return $this->logicalLineCount;
     }
 
-    public function getClassLinesRelative(): float
-    {
-        if ($this->logicalLineCount > 0) {
-            return $this->relative($this->getClassLines(), $this->logicalLineCount);
-        }
-
-        return 0.0;
-    }
-
     /**
      * @api used only in tests
      */
@@ -391,24 +382,6 @@ final class Measurements
     {
         if ($this->lineCount !== 0) {
             return $this->relative($this->getNonCommentLines(), $this->lineCount);
-        }
-
-        return 0.0;
-    }
-
-    public function getFunctionLinesRelative(): float
-    {
-        if ($this->logicalLineCount > 0) {
-            return $this->relative($this->functionLineCount, $this->logicalLineCount);
-        }
-
-        return 0.0;
-    }
-
-    public function getNotInClassesOrFunctionsRelative(): float
-    {
-        if ($this->logicalLineCount > 0) {
-            return $this->relative($this->getNotInClassesOrFunctions(), $this->logicalLineCount);
         }
 
         return 0.0;

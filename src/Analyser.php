@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines;
 
 use PhpParser\NodeTraverser;
+use PhpParser\Parser;
 use TomasVotruba\Lines\NodeVisitor\StructureNodeVisitor;
 use Webmozart\Assert\Assert;
 
@@ -14,7 +15,7 @@ use Webmozart\Assert\Assert;
 final class Analyser
 {
     public function __construct(
-        private readonly \PhpParser\Parser $parser,
+        private readonly Parser $parser,
     ) {
         // define fallback constants for PHP 8.0 tokens in case of e.g. PHP 7.2 run
         if (! defined('T_MATCH')) {
@@ -187,12 +188,12 @@ final class Analyser
                     } else {
                         $currentBlock = 'anonymous function';
                         $functionName = 'anonymous function';
-                        $measurements->incrementFunctions();
+                        //                        $measurements->incrementFunctionCount();
                     }
 
                     if ($currentBlock === T_FUNCTION) {
                         if ($className === null && $functionName !== 'anonymous function') {
-                            $measurements->incrementFunctions();
+                            $measurements->incrementFunctionCount();
                         } else {
                             $static = false;
                             $visibility = T_PUBLIC;
@@ -274,24 +275,6 @@ final class Analyser
                     break;
             }
         }
-    }
-
-    /**
-     * @param array<int, mixed> $tokens
-     */
-    private function getNamespaceName(array $tokens, int $i): ?string
-    {
-        if (isset($tokens[$i + 2][1])) {
-            $namespace = $tokens[$i + 2][1];
-
-            for ($j = $i + 3; isset($tokens[$j]) && $tokens[$j][0] === T_NS_SEPARATOR; $j += 2) {
-                $namespace .= '\\' . $tokens[$j + 1][1];
-            }
-
-            return $namespace;
-        }
-
-        return null;
     }
 
     /**

@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Enum_;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeVisitorAbstract;
 use TomasVotruba\Lines\Measurements;
@@ -21,7 +24,7 @@ final class StructureNodeVisitor extends NodeVisitorAbstract
     ) {
     }
 
-    public function enterNode(Node $node): ?\PhpParser\Node
+    public function enterNode(Node $node): ?Node
     {
         if ($node instanceof ClassLike) {
             $this->measureClassLikes($node);
@@ -33,13 +36,21 @@ final class StructureNodeVisitor extends NodeVisitorAbstract
             return $node;
         }
 
-        if ($node instanceof Node\Stmt\Namespace_) {
-            if (! $node->name instanceof \PhpParser\Node\Name) {
+        if ($node instanceof Namespace_) {
+            if (! $node->name instanceof Name) {
                 return null;
             }
 
             $namespaceName = $node->name->toString();
             $this->measurements->addNamespace($namespaceName);
+
+            return $node;
+        }
+
+        if ($node instanceof Function_) {
+            $this->measurements->incrementFunctionCount();
+
+            return $node;
         }
 
         return null;
@@ -70,17 +81,17 @@ final class StructureNodeVisitor extends NodeVisitorAbstract
         }
     }
 
-    private function measureClassMethod(ClassMethod $node): void
+    private function measureClassMethod(ClassMethod $classMethod): void
     {
-        if ($node->isPrivate()) {
+        if ($classMethod->isPrivate()) {
             $this->measurements->incrementPrivateMethods();
-        } elseif ($node->isProtected()) {
+        } elseif ($classMethod->isProtected()) {
             $this->measurements->incrementProtectedMethods();
-        } elseif ($node->isPublic()) {
+        } elseif ($classMethod->isPublic()) {
             $this->measurements->incrementPublicMethods();
         }
 
-        if ($node->isStatic()) {
+        if ($classMethod->isStatic()) {
             $this->measurements->incrementStaticMethods();
         } else {
             $this->measurements->incrementNonStaticMethods();

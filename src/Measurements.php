@@ -138,7 +138,7 @@ final class Measurements
         ++$this->privateMethodCount;
     }
 
-    public function incrementFunctions(): void
+    public function incrementFunctionCount(): void
     {
         ++$this->functionCount;
     }

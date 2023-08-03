@@ -11,8 +11,9 @@ use Webmozart\Assert\Assert;
  */
 final class Analyser
 {
-    public function __construct()
-    {
+    public function __construct(
+        private readonly \PhpParser\Parser $parser
+    ) {
         // define fallback constants for PHP 8.0 tokens in case of e.g. PHP 7.2 run
         if (! defined('T_MATCH')) {
             define('T_MATCH', 5000);

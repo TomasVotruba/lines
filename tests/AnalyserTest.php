@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Tests;
 
-use Illuminate\Container\Container;
 use PHPUnit\Framework\TestCase;
 use TomasVotruba\Lines\Analyser;
+use TomasVotruba\Lines\DependencyInjection\ContainerFactory;
 
 final class AnalyserTest extends TestCase
 {
@@ -14,7 +14,9 @@ final class AnalyserTest extends TestCase
 
     protected function setUp(): void
     {
-        $container = new Container();
+        $containerFactory = new ContainerFactory();
+        $container = $containerFactory->create();
+
         $this->analyser = $container->make(Analyser::class);
     }
 

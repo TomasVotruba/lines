@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Console\Command\MeasureCommand;
 use TomasVotruba\Lines\Console\Command\VendorCommand;
+use TomasVotruba\Lines\DependencyInjection\ContainerFactory;
 
 if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
     // A. build downgraded package
@@ -22,18 +23,10 @@ if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';
 }
 
-$container = new Container();
-$container->singleton(SymfonyStyle::class, function (): SymfonyStyle {
-    return new SymfonyStyle(new ArrayInput([]), new ConsoleOutput());
-});
+$containerFactory = new ContainerFactory();
+$container = $containerFactory->create();
 
-$application = new Application();
-
-$measureCommand = $container->make(MeasureCommand::class);
-$application->add($measureCommand);
-
-$vendorCommand = $container->make(VendorCommand::class);
-$application->add($vendorCommand);
+$application = $container->make(Application::class);
 
 $exitCode = $application->run(new ArgvInput(), new ConsoleOutput());
 exit($exitCode);

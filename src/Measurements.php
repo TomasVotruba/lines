@@ -227,14 +227,6 @@ final class Measurements
     }
 
     /**
-     * @api used in tests
-     */
-    public function getLogicalLines(): int
-    {
-        return $this->logicalLineCount;
-    }
-
-    /**
      * @api used only in tests
      */
     public function getClassLines(): int

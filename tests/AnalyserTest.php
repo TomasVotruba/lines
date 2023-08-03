@@ -27,7 +27,6 @@ final class AnalyserTest extends TestCase
         // lines
         $this->assertSame(82, $measurements->getLines());
         $this->assertSame(75, $measurements->getNonCommentLines());
-        $this->assertSame(30, $measurements->getLogicalLines());
         $this->assertSame(28, $measurements->getClassLines());
         $this->assertSame(7, $measurements->getCommentLines());
 

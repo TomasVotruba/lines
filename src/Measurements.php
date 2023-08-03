@@ -243,6 +243,9 @@ final class Measurements
         return 0.0;
     }
 
+    /**
+     * @api used only in tests
+     */
     public function getClassLines(): int
     {
         return array_sum($this->classLineCountPerClass);
@@ -278,11 +281,17 @@ final class Measurements
         return max($this->methodLineCountPerMethod);
     }
 
+    /**
+     * @api used in only in tests
+     */
     public function getFunctionLines(): int
     {
         return $this->functionLineCount;
     }
 
+    /**
+     * @api used in only in tests
+     */
     public function getNotInClassesOrFunctions(): int
     {
         return $this->logicalLineCount - $this->getClassLines() - $this->functionLineCount;

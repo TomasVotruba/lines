@@ -28,10 +28,14 @@ final class TablePrinter
     public function printItemValueTable(
         array $rows,
         string $titleHeader,
-        string $countHeader,
+        ?string $countHeader = null,
         bool $includeRelative = false
     ): void {
-        $headers = [$titleHeader, $countHeader];
+        $headers = [$titleHeader];
+        if ($countHeader !== null) {
+            $headers[] = $countHeader;
+        }
+
         if ($includeRelative) {
             $headers[] = 'Relative';
         }
@@ -44,7 +48,7 @@ final class TablePrinter
             ->setRows($formattedRows)
             ->setColumnStyle(1, $this->padLeftTableStyle);
 
-        if ($includeRelative) {
+        if ($includeRelative && $countHeader !== null) {
             $table->setColumnWidth(1, 8)
                 ->setColumnWidth(2, 7)
                 ->setColumnStyle(2, $this->padLeftTableStyle);

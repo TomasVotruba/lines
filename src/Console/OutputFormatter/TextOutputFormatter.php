@@ -37,14 +37,14 @@ final class TextOutputFormatter implements OutputFormatterInterface
         ], 'Length Stats', 'Lines');
 
         $this->tablePrinter->printItemValueTable([
-            ['Classes', $measurements->getClassLines(), $measurements->getClassLinesRelative()],
-            ['Functions', $measurements->getFunctionLines(), $measurements->getFunctionLinesRelative()],
+            ['Classes', $measurements->getClassLinesRelative()],
+            ['Functions', $measurements->getFunctionLinesRelative()],
             [
                 'Not in classes/functions',
                 $measurements->getNotInClassesOrFunctions(),
                 $measurements->getNotInClassesOrFunctionsRelative(),
             ],
-        ], 'Classes vs functions vs rest', 'Lines', true);
+        ], 'Classes vs functions vs rest', null, true);
 
         $this->printStructure($measurements);
         $this->printMethods($measurements);

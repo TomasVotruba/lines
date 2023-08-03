@@ -38,7 +38,6 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
         $this->printStructure($measurements);
         $this->printMethods($measurements);
-        $this->printConstants($measurements);
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void
@@ -83,36 +82,13 @@ final class TextOutputFormatter implements OutputFormatterInterface
         $this->tablePrinter->printItemValueTable([
             ['Namespaces', $measurements->getNamespaces()],
             ['Classes', $measurements->getClassCount()],
+            [' * Constants', $measurements->getClassConstantCount()],
+            [' * Methods', $measurements->getMethodCount()],
             ['Interfaces', $measurements->getInterfaceCount()],
             ['Traits', $measurements->getTraitCount()],
             ['Enums', $measurements->getEnumCount()],
-            ['Constants', $measurements->getConstantCount()],
-            ['Methods', $measurements->getMethodCount()],
             ['Functions', $measurements->getFunctionCount()],
+            ['Global constants', $measurements->getGlobalConstantCount()],
         ], 'Structure', 'Count');
-    }
-
-    private function printConstants(Measurements $measurements): void
-    {
-        if ($measurements->getConstantCount() === 0) {
-            return;
-        }
-
-        $constantsRows = [
-            ['Global', $measurements->getGlobalConstantCount(), $measurements->getGlobalConstantCountRelative()],
-            ['Class', $measurements->getClassConstants(), $measurements->getClassConstantCountRelative()],
-        ];
-
-        if ($measurements->getClassConstants() !== 0) {
-            $constantsRows[] = new TableSeparator();
-
-            $constantsRows[] = [
-                'Non-public',
-                $measurements->getNonPublicClassConstants(),
-                $measurements->getNonPublicClassConstantsRelative(),
-            ];
-        }
-
-        $this->tablePrinter->printItemValueTable($constantsRows, 'Constants', 'Count', true);
     }
 }

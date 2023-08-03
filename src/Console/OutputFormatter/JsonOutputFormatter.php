@@ -39,12 +39,13 @@ final class JsonOutputFormatter implements OutputFormatterInterface
             $arrayData['structure'] = [
                 'namespaces' => $measurements->getNamespaces(),
                 'classes' => $measurements->getClassCount(),
+                'class_methods' => $measurements->getMethodCount(),
+                'class_constants' => $measurements->getClassConstantCount(),
                 'interfaces' => $measurements->getInterfaceCount(),
                 'traits' => $measurements->getTraitCount(),
                 'enums' => $measurements->getEnumCount(),
-                'constants' => $measurements->getConstantCount(),
-                'methods' => $measurements->getMethodCount(),
                 'functions' => $measurements->getFunctionCount(),
+                'global_constants' => $measurements->getGlobalConstantCount(),
             ];
 
             $arrayData['methods'] = [
@@ -58,16 +59,6 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 'protected_relative' => $measurements->getProtectedMethodsRelative(),
                 'private' => $measurements->getPrivateMethods(),
                 'private_relative' => $measurements->getPrivateMethodsRelative(),
-            ];
-
-            $arrayData['constants'] = [
-                'class' => $measurements->getClassConstants(),
-                'class_public' => $measurements->getPublicClassConstants(),
-                'class_public_relative' => $measurements->getPublicClassConstantsRelative(),
-                'class_non_public' => $measurements->getNonPublicClassConstants(),
-                'class_non_public_relative' => $measurements->getNonPublicClassConstantsRelative(),
-                'global' => $measurements->getGlobalConstantCount(),
-                'global_relative' => $measurements->getGlobalConstantCountRelative(),
             ];
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+define('SOME_CONSTANT', 'some_value');
+
 class ClassConstants
 {
     final public const IMPLICITLY_PUBLIC_CONSTANT = 'implicitly public';

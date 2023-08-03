@@ -39,10 +39,7 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $measurements->getPrivateMethods());
         $this->assertSame(3, $measurements->getNonStaticMethods());
         $this->assertSame(1, $measurements->getStaticMethods());
-        $this->assertSame(2, $measurements->getConstantCount());
-        $this->assertSame(1, $measurements->getClassConstants());
-        $this->assertSame(1, $measurements->getPublicClassConstants());
-        $this->assertSame(0, $measurements->getNonPublicClassConstants());
+        $this->assertSame(1, $measurements->getClassConstantCount());
         $this->assertSame(1, $measurements->getGlobalConstantCount());
         $this->assertSame(0, $measurements->getDirectoryCount());
         $this->assertSame(1, $measurements->getNamespaces());
@@ -87,11 +84,8 @@ final class AnalyserTest extends TestCase
     {
         $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/class_constants.php']);
 
-        $this->assertSame(2, $measurements->getPublicClassConstants());
-        $this->assertSame(3, $measurements->getNonPublicClassConstants());
-
-        $this->assertSame(5, $measurements->getClassConstants());
-        $this->assertSame(5, $measurements->getConstantCount());
+        $this->assertSame(5, $measurements->getClassConstantCount());
+        $this->assertSame(1, $measurements->getGlobalConstantCount());
     }
 
     public function testClasses(): void

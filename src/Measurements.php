@@ -1,398 +1,363 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Lines202308\TomasVotruba\Lines;
 
-namespace TomasVotruba\Lines;
-
-use TomasVotruba\Lines\Helpers\NumberFormat;
-
+use Lines202308\TomasVotruba\Lines\Helpers\NumberFormat;
 final class Measurements
 {
     /**
      * @var int[]
      */
-    private array $classLineCountPerClass = [];
-
+    private $classLineCountPerClass = [];
     /**
      * @var int[]
      */
-    private array $methodLineCountPerMethod = [];
-
-    private int $currentClassLines = 0;
-
-    private int $currentMethodLines = 0;
-
-    private int $currentClassMethodCount = 0;
-
+    private $methodLineCountPerMethod = [];
+    /**
+     * @var int
+     */
+    private $currentClassLines = 0;
+    /**
+     * @var int
+     */
+    private $currentMethodLines = 0;
+    /**
+     * @var int
+     */
+    private $currentClassMethodCount = 0;
     /**
      * @var string[]
      */
-    private array $directoryNames = [];
-
-    private int $classCount = 0;
-
-    private int $enumCount = 0;
-
-    private int $traitCount = 0;
-
-    private int $interfaceCount = 0;
-
-    private int $lineCount = 0;
-
-    private int $fileCount = 0;
-
-    private int $nonStaticMethodCount = 0;
-
-    private int $staticMethodCount = 0;
-
-    private int $publicMethodCount = 0;
-
-    private int $protectedMethodCount = 0;
-
-    private int $privateMethodCount = 0;
-
-    private int $functionCount = 0;
-
-    private int $globalConstantCount = 0;
-
-    private int $classConstantCount = 0;
-
-    private int $commentLineCount = 0;
-
-    private int $functionLineCount = 0;
-
+    private $directoryNames = [];
+    /**
+     * @var int
+     */
+    private $classCount = 0;
+    /**
+     * @var int
+     */
+    private $enumCount = 0;
+    /**
+     * @var int
+     */
+    private $traitCount = 0;
+    /**
+     * @var int
+     */
+    private $interfaceCount = 0;
+    /**
+     * @var int
+     */
+    private $lineCount = 0;
+    /**
+     * @var int
+     */
+    private $fileCount = 0;
+    /**
+     * @var int
+     */
+    private $nonStaticMethodCount = 0;
+    /**
+     * @var int
+     */
+    private $staticMethodCount = 0;
+    /**
+     * @var int
+     */
+    private $publicMethodCount = 0;
+    /**
+     * @var int
+     */
+    private $protectedMethodCount = 0;
+    /**
+     * @var int
+     */
+    private $privateMethodCount = 0;
+    /**
+     * @var int
+     */
+    private $functionCount = 0;
+    /**
+     * @var int
+     */
+    private $globalConstantCount = 0;
+    /**
+     * @var int
+     */
+    private $classConstantCount = 0;
+    /**
+     * @var int
+     */
+    private $commentLineCount = 0;
+    /**
+     * @var int
+     */
+    private $functionLineCount = 0;
     /**
      * @var string[]
      */
-    private array $namespaceNames = [];
-
-    public function addFile(string $filename): void
+    private $namespaceNames = [];
+    public function addFile(string $filename) : void
     {
-        $this->directoryNames[] = dirname($filename);
-
+        $this->directoryNames[] = \dirname($filename);
         ++$this->fileCount;
     }
-
-    public function incrementLines(int $number): void
+    public function incrementLines(int $number) : void
     {
         $this->lineCount += $number;
     }
-
-    public function incrementCommentLines(int $number): void
+    public function incrementCommentLines(int $number) : void
     {
         $this->commentLineCount += $number;
     }
-
-    public function resetCurrentClass(): void
+    public function resetCurrentClass() : void
     {
         $this->classLineCountPerClass[] = $this->currentClassLines;
-
         $this->currentClassLines = 0;
         $this->currentClassMethodCount = 0;
     }
-
-    public function incrementCurrentClassLines(): void
+    public function incrementCurrentClassLines() : void
     {
         ++$this->currentClassLines;
     }
-
-    public function currentMethodStart(): void
+    public function currentMethodStart() : void
     {
         $this->currentMethodLines = 0;
     }
-
-    public function currentClassIncrementMethods(): void
+    public function currentClassIncrementMethods() : void
     {
         ++$this->currentClassMethodCount;
     }
-
-    public function currentMethodIncrementLines(): void
+    public function currentMethodIncrementLines() : void
     {
         ++$this->currentMethodLines;
     }
-
-    public function currentMethodStop(): void
+    public function currentMethodStop() : void
     {
         $this->methodLineCountPerMethod[] = $this->currentMethodLines;
     }
-
-    public function incrementFunctionLines(): void
+    public function incrementFunctionLines() : void
     {
         ++$this->functionLineCount;
     }
-
-    public function addNamespace(string $namespace): void
+    public function addNamespace(string $namespace) : void
     {
         $this->namespaceNames[] = $namespace;
     }
-
-    public function incrementInterfaces(): void
+    public function incrementInterfaces() : void
     {
         ++$this->interfaceCount;
     }
-
-    public function incrementTraits(): void
+    public function incrementTraits() : void
     {
         ++$this->traitCount;
     }
-
-    public function incrementNonStaticMethods(): void
+    public function incrementNonStaticMethods() : void
     {
         ++$this->nonStaticMethodCount;
     }
-
-    public function incrementStaticMethods(): void
+    public function incrementStaticMethods() : void
     {
         ++$this->staticMethodCount;
     }
-
-    public function incrementPublicMethods(): void
+    public function incrementPublicMethods() : void
     {
         ++$this->publicMethodCount;
     }
-
-    public function incrementProtectedMethods(): void
+    public function incrementProtectedMethods() : void
     {
         ++$this->protectedMethodCount;
     }
-
-    public function incrementPrivateMethods(): void
+    public function incrementPrivateMethods() : void
     {
         ++$this->privateMethodCount;
     }
-
-    public function incrementFunctions(): void
+    public function incrementFunctions() : void
     {
         ++$this->functionCount;
     }
-
-    public function incrementGlobalConstants(): void
+    public function incrementGlobalConstants() : void
     {
         ++$this->globalConstantCount;
     }
-
-    public function incrementClassConstants(): void
+    public function incrementClassConstants() : void
     {
         ++$this->classConstantCount;
     }
-
-    public function incrementClasses(): void
+    public function incrementClasses() : void
     {
         ++$this->classCount;
     }
-
-    public function incrementEnums(): void
+    public function incrementEnums() : void
     {
         ++$this->enumCount;
     }
-
-    public function getDirectoryCount(): int
+    public function getDirectoryCount() : int
     {
-        $uniqueDirectoryNames = array_unique($this->directoryNames);
-        return count($uniqueDirectoryNames) - 1;
+        $uniqueDirectoryNames = \array_unique($this->directoryNames);
+        return \count($uniqueDirectoryNames) - 1;
     }
-
-    public function getFileCount(): int
+    public function getFileCount() : int
     {
         return $this->fileCount;
     }
-
-    public function getLines(): int
+    public function getLines() : int
     {
         return $this->lineCount;
     }
-
-    public function getCommentLines(): int
+    public function getCommentLines() : int
     {
         return $this->commentLineCount;
     }
-
-    public function getNonCommentLines(): int
+    public function getNonCommentLines() : int
     {
         return $this->lineCount - $this->commentLineCount;
     }
-
     /**
      * @api used only in tests
      */
-    public function getClassLines(): int
+    public function getClassLines() : int
     {
-        return array_sum($this->classLineCountPerClass);
+        return \array_sum($this->classLineCountPerClass);
     }
-
-    public function getAverageClassLength(): float
+    public function getAverageClassLength() : float
     {
         if ($this->classLineCountPerClass === []) {
             return 0.0;
         }
-
-        return $this->average($this->getClassLines(), count($this->classLineCountPerClass));
+        return $this->average($this->getClassLines(), \count($this->classLineCountPerClass));
     }
-
-    public function getMaxClassLength(): int
+    public function getMaxClassLength() : int
     {
-        return max($this->classLineCountPerClass);
+        return \max($this->classLineCountPerClass);
     }
-
-    public function getAverageMethodLength(): float
+    public function getAverageMethodLength() : float
     {
         if ($this->methodLineCountPerMethod === []) {
             return 0.0;
         }
-
-        $totalMethodLineCount = array_sum($this->methodLineCountPerMethod);
-
-        return $this->average($totalMethodLineCount, count($this->methodLineCountPerMethod));
+        $totalMethodLineCount = \array_sum($this->methodLineCountPerMethod);
+        return $this->average($totalMethodLineCount, \count($this->methodLineCountPerMethod));
     }
-
-    public function getMaxMethodLength(): int
+    public function getMaxMethodLength() : int
     {
-        return max($this->methodLineCountPerMethod);
+        return \max($this->methodLineCountPerMethod);
     }
-
-    public function getNamespaceCount(): int
+    public function getNamespaceCount() : int
     {
-        $uniqueNamespaceNames = array_unique($this->namespaceNames);
-        return count($uniqueNamespaceNames);
+        $uniqueNamespaceNames = \array_unique($this->namespaceNames);
+        return \count($uniqueNamespaceNames);
     }
-
-    public function getInterfaceCount(): int
+    public function getInterfaceCount() : int
     {
         return $this->interfaceCount;
     }
-
-    public function getTraitCount(): int
+    public function getTraitCount() : int
     {
         return $this->traitCount;
     }
-
-    public function getClassCount(): int
+    public function getClassCount() : int
     {
         return $this->classCount;
     }
-
-    public function getMethodCount(): int
+    public function getMethodCount() : int
     {
         return $this->nonStaticMethodCount + $this->staticMethodCount;
     }
-
-    public function getNonStaticMethods(): int
+    public function getNonStaticMethods() : int
     {
         return $this->nonStaticMethodCount;
     }
-
-    public function getStaticMethods(): int
+    public function getStaticMethods() : int
     {
         return $this->staticMethodCount;
     }
-
-    public function getPublicMethods(): int
+    public function getPublicMethods() : int
     {
         return $this->publicMethodCount;
     }
-
-    public function getProtectedMethods(): int
+    public function getProtectedMethods() : int
     {
         return $this->protectedMethodCount;
     }
-
-    public function getPrivateMethods(): int
+    public function getPrivateMethods() : int
     {
         return $this->privateMethodCount;
     }
-
-    public function getFunctionCount(): int
+    public function getFunctionCount() : int
     {
         return $this->functionCount;
     }
-
-    public function getGlobalConstantCount(): int
+    public function getGlobalConstantCount() : int
     {
         return $this->globalConstantCount;
     }
-
-    public function getClassConstantCount(): int
+    public function getClassConstantCount() : int
     {
         return $this->classConstantCount;
     }
-
-    public function getCommentLinesRelative(): float
+    public function getCommentLinesRelative() : float
     {
         if ($this->lineCount !== 0) {
             return $this->relative($this->commentLineCount, $this->lineCount);
         }
-
         return 0.0;
     }
-
-    public function getNonCommentLinesRelative(): float
+    public function getNonCommentLinesRelative() : float
     {
         if ($this->lineCount !== 0) {
             return $this->relative($this->getNonCommentLines(), $this->lineCount);
         }
-
         return 0.0;
     }
-
-    public function getStaticMethodsRelative(): float
+    public function getStaticMethodsRelative() : float
     {
         if ($this->getMethodCount() > 0) {
             return $this->relative($this->staticMethodCount, $this->getMethodCount());
         }
-
         return 0.0;
     }
-
-    public function getNonStaticMethodsRelative(): float
+    public function getNonStaticMethodsRelative() : float
     {
         if ($this->getMethodCount() > 0) {
             return $this->relative($this->nonStaticMethodCount, $this->getMethodCount());
         }
-
         return 0.0;
     }
-
-    public function getPublicMethodsRelative(): float
+    public function getPublicMethodsRelative() : float
     {
         if ($this->getMethodCount() !== 0) {
             return $this->relative($this->publicMethodCount, $this->getMethodCount());
         }
-
         return 0.0;
     }
-
-    public function getProtectedMethodsRelative(): float
+    public function getProtectedMethodsRelative() : float
     {
         if ($this->getMethodCount() !== 0) {
             return $this->relative($this->protectedMethodCount, $this->getMethodCount());
         }
-
         return 0.0;
     }
-
-    public function getPrivateMethodsRelative(): float
+    public function getPrivateMethodsRelative() : float
     {
         if ($this->getMethodCount() !== 0) {
             return $this->relative($this->privateMethodCount, $this->getMethodCount());
         }
-
         return 0.0;
     }
-
-    public function getEnumCount(): int
+    public function getEnumCount() : int
     {
         return $this->enumCount;
     }
-
-    private function relative(int $partialNumber, int $totalNumber): float
+    private function relative(int $partialNumber, int $totalNumber) : float
     {
-        $relative = ($partialNumber / $totalNumber) * 100;
+        $relative = $partialNumber / $totalNumber * 100;
         return NumberFormat::singleDecimal($relative);
     }
-
-    private function average(int $partialNumber, int $totalNumber): float
+    private function average(int $partialNumber, int $totalNumber) : float
     {
-        $relative = ($partialNumber / $totalNumber);
+        $relative = $partialNumber / $totalNumber;
         return NumberFormat::singleDecimal($relative);
     }
 }

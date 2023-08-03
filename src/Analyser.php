@@ -142,20 +142,15 @@ final class Analyser
 
             switch ($token) {
                 case T_NAMESPACE:
-                    $namespace = $this->getNamespaceName($tokens, $i);
-
-                    if (is_string($namespace)) {
-                        $measurements->addNamespace($namespace);
-                    }
-
+                    //                    $namespace = $this->getNamespaceName($tokens, $i);
+                    //
+                    //                    if (is_string($namespace)) {
+                    ////                        $measurements->addNamespace($namespace);
+                    //                    }
+                    //
                     $isLogicalLine = false;
 
                     break;
-
-                    // php 8.0+
-                    //                case T_ENUM:
-                    //                    $measurements->incrementEnumCount();
-                    //                    break;
 
                 case T_CLASS:
                 case T_INTERFACE:
@@ -166,13 +161,6 @@ final class Analyser
 
                     $className = $this->getClassName($namespace ?: '', $tokens, $i);
                     $currentBlock = T_CLASS;
-
-                    //                    if ($token === T_TRAIT) {
-                    //                        $measurements->incrementTraitCount();
-                    //                    } elseif ($token === T_INTERFACE) {
-                    //                        $measurements->incrementInterfaceCount();
-                    //                    }
-                    // $measurements->incrementClassCount();
 
                     break;
 
@@ -218,23 +206,6 @@ final class Analyser
                                     }
 
                                     continue;
-                                }
-
-                                switch ($tokens[$j][0]) {
-                                    case T_PRIVATE:
-                                        $visibility = T_PRIVATE;
-
-                                        break;
-
-                                    case T_PROTECTED:
-                                        $visibility = T_PROTECTED;
-
-                                        break;
-
-                                    case T_STATIC:
-                                        $static = true;
-
-                                        break;
                                 }
                             }
 

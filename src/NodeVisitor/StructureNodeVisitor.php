@@ -33,6 +33,15 @@ final class StructureNodeVisitor extends NodeVisitorAbstract
             return $node;
         }
 
+        if ($node instanceof Node\Stmt\Namespace_) {
+            if (! $node->name instanceof \PhpParser\Node\Name) {
+                return null;
+            }
+
+            $namespaceName = $node->name->toString();
+            $this->measurements->addNamespace($namespaceName);
+        }
+
         return null;
     }
 

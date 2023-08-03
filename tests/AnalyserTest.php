@@ -22,6 +22,7 @@ final class AnalyserTest extends TestCase
     {
         $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/source.php']);
 
+        $this->assertSame(0, $measurements->getDirectoryCount());
         $this->assertSame(1, $measurements->getFileCount());
 
         // lines
@@ -44,24 +45,22 @@ final class AnalyserTest extends TestCase
         $this->assertSame(2, $measurements->getPublicMethods());
         $this->assertSame(1, $measurements->getProtectedMethods());
         $this->assertSame(1, $measurements->getPrivateMethods());
-        $this->assertSame(3, $measurements->getNonStaticMethods());
+
+        // static and non-static
+        $this->assertSame(25.0, $measurements->getStaticMethodsRelative());
         $this->assertSame(1, $measurements->getStaticMethods());
+        $this->assertSame(3, $measurements->getNonStaticMethods());
+        $this->assertSame(75.0, $measurements->getNonStaticMethodsRelative());
 
-        $this->assertSame(0, $measurements->getDirectoryCount());
-
+        // class and metho lenghts
         $this->assertSame(28, $measurements->getMaxClassLength());
         $this->assertSame(9, $measurements->getMaxMethodLength());
-
-        // average
         $this->assertSame(4.0, $measurements->getAverageClassLength());
         $this->assertSame(7.3, $measurements->getAverageMethodLength());
 
         // relative
         $this->assertSame(8.5, $measurements->getCommentLinesRelative());
         $this->assertSame(91.5, $measurements->getNonCommentLinesRelative());
-
-        $this->assertSame(25.0, $measurements->getStaticMethodsRelative());
-        $this->assertSame(75.0, $measurements->getNonStaticMethodsRelative());
     }
 
     public function testSkipAnonymousClass(): void

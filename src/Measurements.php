@@ -272,23 +272,7 @@ final class Measurements
         return max($this->methodLineCountPerMethod);
     }
 
-    /**
-     * @api used in only in tests
-     */
-    public function getFunctionLines(): int
-    {
-        return $this->functionLineCount;
-    }
-
-    /**
-     * @api used in only in tests
-     */
-    public function getNotInClassesOrFunctions(): int
-    {
-        return $this->logicalLineCount - $this->getClassLines() - $this->functionLineCount;
-    }
-
-    public function getNamespaces(): int
+    public function getNamespaceCount(): int
     {
         $uniqueNamespaceNames = array_unique($this->namespaceNames);
         return count($uniqueNamespaceNames);

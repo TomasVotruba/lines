@@ -59,6 +59,9 @@ final class StructureNodeVisitor extends NodeVisitorAbstract
     private function measureClassLikes(ClassLike $classLike): void
     {
         if ($classLike instanceof Class_) {
+            $constantCount = count($classLike->getConstants());
+            $this->measurements->incrementClassConstants($constantCount);
+
             if ($classLike->isAnonymous()) {
                 return;
             }

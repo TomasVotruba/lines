@@ -188,28 +188,11 @@ final class Analyser
                     } else {
                         $currentBlock = 'anonymous function';
                         $functionName = 'anonymous function';
-                        //                        $measurements->incrementFunctionCount();
                     }
 
                     if ($currentBlock === T_FUNCTION) {
                         if ($className === null && $functionName !== 'anonymous function') {
-                            //                            $measurements->incrementFunctionCount();
                         } else {
-                            //                            $static = false;
-                            //                            $visibility = T_PUBLIC;
-
-                            //                            for ($j = $i; $j > 0; --$j) {
-                            //                                if (is_string($tokens[$j])) {
-                            //                                    if ($tokens[$j] === '{' ||
-                            //                                        $tokens[$j] === '}' ||
-                            //                                        $tokens[$j] === ';') {
-                            //                                        break;
-                            //                                    }
-                            //
-                            //                                    continue;
-                            //                                }
-                            //                            }
-
                             $isInMethod = true;
                             $measurements->currentMethodStart();
 
@@ -252,10 +235,10 @@ final class Analyser
                     $measurements->incrementCommentLines(substr_count(rtrim($value, "\n"), "\n") + 1);
 
                     break;
-                case T_CONST:
-                    $measurements->incrementClassConstants();
-
-                    break;
+                    //                case T_CONST:
+                    //                    $measurements->incrementClassConstants();
+                    //
+                    //                    break;
 
                 case T_STRING:
                     if ($value === 'define') {

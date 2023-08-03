@@ -148,9 +148,9 @@ final class Measurements
         ++$this->globalConstantCount;
     }
 
-    public function incrementClassConstants(): void
+    public function incrementClassConstants(int $count = 1): void
     {
-        ++$this->classConstantCount;
+        $this->classConstantCount += $count;
     }
 
     public function incrementClassCount(): void

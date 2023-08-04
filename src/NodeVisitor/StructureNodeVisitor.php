@@ -38,7 +38,7 @@ final class StructureNodeVisitor extends NodeVisitorAbstract
             return $node;
         }
 
-        if ($node instanceof FuncCall && $node->name instanceof Name && $node->name->toString() === 'define') {
+        if ($this->isDefineFuncCall($node)) {
             $this->measurements->incrementGlobalConstantCount();
             return $node;
         }
@@ -106,5 +106,18 @@ final class StructureNodeVisitor extends NodeVisitorAbstract
         } else {
             $this->measurements->incrementNonStaticMethods();
         }
+    }
+
+    private function isDefineFuncCall(Node $node): bool
+    {
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        if (! $node->name instanceof Name) {
+            return false;
+        }
+
+        return $node->name->toLowerString() === 'define';
     }
 }

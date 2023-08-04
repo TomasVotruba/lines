@@ -143,12 +143,12 @@ final class Measurements
         ++$this->functionCount;
     }
 
-    public function incrementGlobalConstants(): void
+    public function incrementGlobalConstantCount(): void
     {
         ++$this->globalConstantCount;
     }
 
-    public function incrementClassConstants(int $count = 1): void
+    public function incrementClassConstants(int $count): void
     {
         $this->classConstantCount += $count;
     }

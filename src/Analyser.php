@@ -143,14 +143,7 @@ final class Analyser
 
             switch ($token) {
                 case T_NAMESPACE:
-                    //                    $namespace = $this->getNamespaceName($tokens, $i);
-                    //
-                    //                    if (is_string($namespace)) {
-                    ////                        $measurements->addNamespace($namespace);
-                    //                    }
-                    //
                     $isLogicalLine = false;
-
                     break;
 
                 case T_CLASS:
@@ -160,7 +153,12 @@ final class Analyser
                         break;
                     }
 
+<<<<<<< HEAD
                     $className = $this->getClassName($namespace ?: '', $tokens, $i);
+=======
+                    $measurements->resetCurrentClass();
+                    $className = $this->getClassName('', $tokens, $i);
+>>>>>>> d6aa930 (global constants)
                     $currentBlock = T_CLASS;
 
                     break;
@@ -190,14 +188,10 @@ final class Analyser
                         $functionName = 'anonymous function';
                     }
 
-                    if ($currentBlock === T_FUNCTION) {
-                        if ($className === null && $functionName !== 'anonymous function') {
-                        } else {
-                            $isInMethod = true;
-                            $measurements->currentMethodStart();
-
-                            $measurements->currentClassIncrementMethods();
-                        }
+                    if ($currentBlock === T_FUNCTION && ! ($className === null && $functionName !== 'anonymous function')) {
+                        $isInMethod = true;
+                        $measurements->currentMethodStart();
+                        $measurements->currentClassIncrementMethods();
                     }
 
                     break;
@@ -234,21 +228,6 @@ final class Analyser
                     // That happened with /* */ and /**  */, but not with // since it'll end at the end
                     $measurements->incrementCommentLines(substr_count(rtrim($value, "\n"), "\n") + 1);
 
-                    break;
-                    //                case T_CONST:
-                    //                    $measurements->incrementClassConstants();
-                    //
-                    //                    break;
-
-                case T_STRING:
-                    if ($value === 'define') {
-                        $measurements->incrementGlobalConstants();
-                    }
-
-                    break;
-
-                case T_DOUBLE_COLON:
-                case T_OBJECT_OPERATOR:
                     break;
 
                 case T_USE:

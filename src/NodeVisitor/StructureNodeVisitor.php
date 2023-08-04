@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -36,6 +38,11 @@ final class StructureNodeVisitor extends NodeVisitorAbstract
             return $node;
         }
 
+        if ($node instanceof FuncCall && $node->name instanceof Name && $node->name->toString() === 'define') {
+            $this->measurements->incrementGlobalConstantCount();
+            return $node;
+        }
+
         if ($node instanceof Namespace_) {
             if (! $node->name instanceof Name) {
                 return null;
@@ -47,7 +54,7 @@ final class StructureNodeVisitor extends NodeVisitorAbstract
             return $node;
         }
 
-        if ($node instanceof Function_ || $node instanceof Node\Expr\Closure) {
+        if ($node instanceof Function_ || $node instanceof Closure) {
             $this->measurements->incrementFunctionCount();
 
             return $node;

@@ -17,9 +17,10 @@ jobs:
                     php-version: 7.2
                     coverage: none
 
+            # add some packages that could create confligs
             -   run: composer require symfony/console:^4.4 --ansi
+            -   run: composer require nette/utils --ansi
 
-            # make co-exist with other dependencies
+            # install this package
             -   run: composer require tomasvotruba/lines --ansi
-
             -   run: vendor/bin/lines --ansi

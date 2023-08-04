@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Console\Command\MeasureCommand;
 use TomasVotruba\Lines\Console\Command\VendorCommand;
+use TomasVotruba\Lines\Helpers\PrivatesAccessor;
 
 final class ContainerFactory
 {
@@ -31,14 +32,15 @@ final class ContainerFactory
             static fn (): SymfonyStyle => new SymfonyStyle(new ArrayInput([]), new ConsoleOutput())
         );
 
-        $container->singleton(Application::class, static function (Container $container): Application {
+        $container->singleton(Application::class, function (Container $container): Application {
             $application = new Application();
             $commands = [];
             $commands[] = $container->make(MeasureCommand::class);
             $commands[] = $container->make(VendorCommand::class);
             $application->addCommands($commands);
 
-            dd($application);
+            // remove basic command to make output clear
+            $this->defaultDefaultCommands($application);
 
             return $application;
         });
@@ -50,6 +52,17 @@ final class ContainerFactory
         });
 
         return $container;
+    }
+
+    public function defaultDefaultCommands(Application $application): void
+    {
+        PrivatesAccessor::propertyClosure($application, 'commands', function (array $commands) {
+            // remove default commands, as not needed here
+            unset($commands['completion']);
+            unset($commands['help']);
+
+            return $commands;
+        });
     }
 
     private function emulateTokensOfOlderPHP(): void

@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-function dd(...$data)
+use Tracy\Dumper;
+
+function dd(mixed $data): void
 {
-    \Tracy\Dumper::dump($data, [
+    Dumper::dump($data, [
         'depth' => 2,
     ]);
     die;

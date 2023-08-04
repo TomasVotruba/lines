@@ -8,16 +8,6 @@ use TomasVotruba\Lines\Helpers\NumberFormat;
 
 final class Measurements
 {
-    /**
-     * @var int[]
-     */
-    private array $classLineCountPerClass = [];
-
-    /**
-     * @var int[]
-     */
-    private array $methodLineCountPerMethod = [];
-
     private int $currentClassLines = 0;
 
     private int $currentMethodLines = 0;
@@ -83,14 +73,6 @@ final class Measurements
         $this->commentLineCount += $number;
     }
 
-    public function resetCurrentClass(): void
-    {
-        $this->classLineCountPerClass[] = $this->currentClassLines;
-
-        $this->currentClassLines = 0;
-        $this->currentClassMethodCount = 0;
-    }
-
     public function incrementCurrentClassLines(): void
     {
         ++$this->currentClassLines;
@@ -109,11 +91,6 @@ final class Measurements
     public function currentMethodIncrementLines(): void
     {
         ++$this->currentMethodLines;
-    }
-
-    public function currentMethodStop(): void
-    {
-        $this->methodLineCountPerMethod[] = $this->currentMethodLines;
     }
 
     public function incrementFunctionLines(): void
@@ -210,44 +187,6 @@ final class Measurements
     public function getNonCommentLines(): int
     {
         return $this->lineCount - $this->commentLineCount;
-    }
-
-    /**
-     * @api used only in tests
-     */
-    public function getClassLines(): int
-    {
-        return array_sum($this->classLineCountPerClass);
-    }
-
-    public function getAverageClassLength(): float
-    {
-        if ($this->classLineCountPerClass === []) {
-            return 0.0;
-        }
-
-        return $this->average($this->getClassLines(), count($this->classLineCountPerClass));
-    }
-
-    public function getMaxClassLength(): int
-    {
-        return max($this->classLineCountPerClass);
-    }
-
-    public function getAverageMethodLength(): float
-    {
-        if ($this->methodLineCountPerMethod === []) {
-            return 0.0;
-        }
-
-        $totalMethodLineCount = array_sum($this->methodLineCountPerMethod);
-
-        return $this->average($totalMethodLineCount, count($this->methodLineCountPerMethod));
-    }
-
-    public function getMaxMethodLength(): int
-    {
-        return max($this->methodLineCountPerMethod);
     }
 
     public function getNamespaceCount(): int
@@ -387,12 +326,6 @@ final class Measurements
     private function relative(int $partialNumber, int $totalNumber): float
     {
         $relative = ($partialNumber / $totalNumber) * 100;
-        return NumberFormat::singleDecimal($relative);
-    }
-
-    private function average(int $partialNumber, int $totalNumber): float
-    {
-        $relative = ($partialNumber / $totalNumber);
         return NumberFormat::singleDecimal($relative);
     }
 }

@@ -37,6 +37,9 @@ final class ContainerFactory
             $commands[] = $container->make(MeasureCommand::class);
             $commands[] = $container->make(VendorCommand::class);
             $application->addCommands($commands);
+
+            dd($application);
+
             return $application;
         });
 

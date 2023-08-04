@@ -37,7 +37,10 @@
     "autoload-dev": {
         "psr-4": {
             "TomasVotruba\\Lines\\Tests\\": "tests"
-        }
+        },
+        "files": [
+            "tests/functions.php"
+        ]
     },
     "scripts": {
         "check-cs": "vendor/bin/ecs check --ansi",

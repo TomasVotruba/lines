@@ -23,6 +23,8 @@ final class ContainerFactory
     {
         $container = new Container();
 
+        $this->emulateTokensOfOlderPHP();
+
         // console
         $container->singleton(
             SymfonyStyle::class,
@@ -45,5 +47,21 @@ final class ContainerFactory
         });
 
         return $container;
+    }
+
+    private function emulateTokensOfOlderPHP(): void
+    {
+        // define fallback constants for PHP 8.0 tokens in case of e.g. PHP 7.2 run
+        if (! defined('T_MATCH')) {
+            define('T_MATCH', 5000);
+        }
+
+        if (! defined('T_READONLY')) {
+            define('T_READONLY', 5010);
+        }
+
+        if (! defined('T_ENUM')) {
+            define('T_ENUM', 5015);
+        }
     }
 }

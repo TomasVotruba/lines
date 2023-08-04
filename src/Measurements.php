@@ -8,12 +8,6 @@ use TomasVotruba\Lines\Helpers\NumberFormat;
 
 final class Measurements
 {
-    private int $currentClassLines = 0;
-
-    private int $currentMethodLines = 0;
-
-    private int $currentClassMethodCount = 0;
-
     /**
      * @var string[]
      */
@@ -49,8 +43,6 @@ final class Measurements
 
     private int $commentLineCount = 0;
 
-    private int $functionLineCount = 0;
-
     /**
      * @var string[]
      */
@@ -73,42 +65,17 @@ final class Measurements
         $this->commentLineCount += $number;
     }
 
-    public function incrementCurrentClassLines(): void
-    {
-        ++$this->currentClassLines;
-    }
-
-    public function currentMethodStart(): void
-    {
-        $this->currentMethodLines = 0;
-    }
-
-    public function currentClassIncrementMethods(): void
-    {
-        ++$this->currentClassMethodCount;
-    }
-
-    public function currentMethodIncrementLines(): void
-    {
-        ++$this->currentMethodLines;
-    }
-
-    public function incrementFunctionLines(): void
-    {
-        ++$this->functionLineCount;
-    }
-
     public function addNamespace(string $namespace): void
     {
         $this->namespaceNames[] = $namespace;
     }
 
-    public function incrementInterfaces(): void
+    public function incrementInterfaceCount(): void
     {
         ++$this->interfaceCount;
     }
 
-    public function incrementTraits(): void
+    public function incrementTraitCount(): void
     {
         ++$this->traitCount;
     }
@@ -138,27 +105,27 @@ final class Measurements
         ++$this->privateMethodCount;
     }
 
-    public function incrementFunctions(): void
+    public function incrementFunctionCount(): void
     {
         ++$this->functionCount;
     }
 
-    public function incrementGlobalConstants(): void
+    public function incrementGlobalConstantCount(): void
     {
         ++$this->globalConstantCount;
     }
 
-    public function incrementClassConstants(): void
+    public function incrementClassConstants(int $count): void
     {
-        ++$this->classConstantCount;
+        $this->classConstantCount += $count;
     }
 
-    public function incrementClasses(): void
+    public function incrementClassCount(): void
     {
         ++$this->classCount;
     }
 
-    public function incrementEnums(): void
+    public function incrementEnumCount(): void
     {
         ++$this->enumCount;
     }

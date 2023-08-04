@@ -10,7 +10,6 @@ class Methods1
     {
     }
 
-    /* a comment here */
     protected function protectedVisibility1()
     {
     }
@@ -26,7 +25,6 @@ class Methods2
     {
     }
 
-    /* a comment here */
     private function privateVisibility3()
     {
     }

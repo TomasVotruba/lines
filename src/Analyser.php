@@ -6,6 +6,7 @@ namespace TomasVotruba\Lines;
 
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
+use SebastianBergmann\LinesOfCode\Counter;
 use TomasVotruba\Lines\NodeVisitor\StructureNodeVisitor;
 use Webmozart\Assert\Assert;
 
@@ -59,14 +60,14 @@ final class Analyser
             return;
         }
 
-        unset($fileContents);
-
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new StructureNodeVisitor($measurements));
-
         $nodeTraverser->traverse($stmts);
 
-        // ...
+        $linesOfCodeCounter = new Counter();
+
+        $initLinesOfCode = $this->resolveInitLinesOfCode($fileContents);
+        $linesOfCode = $linesOfCodeCounter->countInAbstractSyntaxTree($initLinesOfCode, $stmts);
 
         $measurements->addFile($filePath);
 
@@ -141,12 +142,7 @@ final class Analyser
                         break;
                     }
 
-<<<<<<< HEAD
-                    $className = $this->getClassName($namespace ?: '', $tokens, $i);
-=======
-                    $measurements->resetCurrentClass();
                     $className = $this->getClassName('', $tokens, $i);
->>>>>>> d6aa930 (global constants)
                     $currentBlock = T_CLASS;
 
                     break;
@@ -299,5 +295,15 @@ final class Analyser
         return ! isset($tokens[$n]) ||
             ! is_array($tokens[$n]) ||
             ! in_array($tokens[$n][0], [T_DOUBLE_COLON, T_NEW], true);
+    }
+
+    private function resolveInitLinesOfCode(string $fileContents): int
+    {
+        $linesOfCode = substr_count($fileContents, "\n");
+        if ($linesOfCode === 0 && ! empty($fileContents)) {
+            return 1;
+        }
+
+        return $linesOfCode;
     }
 }

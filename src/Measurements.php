@@ -8,12 +8,6 @@ use TomasVotruba\Lines\Helpers\NumberFormat;
 
 final class Measurements
 {
-    private int $currentClassLines = 0;
-
-    private int $currentMethodLines = 0;
-
-    private int $currentClassMethodCount = 0;
-
     /**
      * @var string[]
      */
@@ -49,8 +43,6 @@ final class Measurements
 
     private int $commentLineCount = 0;
 
-    private int $functionLineCount = 0;
-
     /**
      * @var string[]
      */
@@ -71,31 +63,6 @@ final class Measurements
     public function incrementCommentLines(int $number): void
     {
         $this->commentLineCount += $number;
-    }
-
-    public function incrementCurrentClassLines(): void
-    {
-        ++$this->currentClassLines;
-    }
-
-    public function currentMethodStart(): void
-    {
-        $this->currentMethodLines = 0;
-    }
-
-    public function currentClassIncrementMethods(): void
-    {
-        ++$this->currentClassMethodCount;
-    }
-
-    public function currentMethodIncrementLines(): void
-    {
-        ++$this->currentMethodLines;
-    }
-
-    public function incrementFunctionLines(): void
-    {
-        ++$this->functionLineCount;
     }
 
     public function addNamespace(string $namespace): void

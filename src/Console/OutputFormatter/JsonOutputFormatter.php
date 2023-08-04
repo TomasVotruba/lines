@@ -29,13 +29,6 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         ];
 
         if ($isShort === false) {
-            $arrayData['lengths'] = [
-                'class_max' => $measurements->getMaxClassLength(),
-                'class_average' => $measurements->getAverageClassLength(),
-                'method_max' => $measurements->getMaxMethodLength(),
-                'method_average' => $measurements->getAverageMethodLength(),
-            ];
-
             $arrayData['structure'] = [
                 'namespaces' => $measurements->getNamespaceCount(),
                 'classes' => $measurements->getClassCount(),

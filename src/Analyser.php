@@ -71,7 +71,6 @@ final class Analyser
         $namespace = false;
         $className = null;
         $functionName = null;
-        $measurements->resetCurrentClass();
         $isLogicalLine = true;
         $isInMethod = false;
 
@@ -113,12 +112,10 @@ final class Analyser
                             $functionName = null;
 
                             if ($isInMethod) {
-                                $measurements->currentMethodStop();
                                 $isInMethod = false;
                             }
                         } elseif ($block === $className) {
                             $className = null;
-                            $measurements->resetCurrentClass();
                         }
                     }
                 }
@@ -152,7 +149,6 @@ final class Analyser
                         break;
                     }
 
-                    $measurements->resetCurrentClass();
                     $className = $this->getClassName($namespace ?: '', $tokens, $i);
                     $currentBlock = T_CLASS;
 

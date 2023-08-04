@@ -29,13 +29,6 @@ final class TextOutputFormatter implements OutputFormatterInterface
             return;
         }
 
-        $this->tablePrinter->printItemValueTable([
-            ['Class max', $measurements->getMaxClassLength()],
-            ['Class average', $measurements->getAverageClassLength()],
-            ['Method max', $measurements->getMaxMethodLength()],
-            ['Method average', $measurements->getAverageMethodLength()],
-        ], 'Length Stats', 'Lines');
-
         $this->printStructure($measurements);
         $this->printMethods($measurements);
     }

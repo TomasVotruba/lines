@@ -30,7 +30,6 @@ final class AnalyserTest extends TestCase
         // lines
         $this->assertSame(82, $measurements->getLines());
         $this->assertSame(75, $measurements->getNonCommentLines());
-        $this->assertSame(28, $measurements->getClassLines());
         $this->assertSame(7, $measurements->getCommentLines());
 
         // structure
@@ -53,12 +52,6 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $measurements->getStaticMethods());
         $this->assertSame(3, $measurements->getNonStaticMethods());
         $this->assertSame(75.0, $measurements->getNonStaticMethodsRelative());
-
-        // class and metho lenghts
-        $this->assertSame(28, $measurements->getMaxClassLength());
-        $this->assertSame(9, $measurements->getMaxMethodLength());
-        $this->assertSame(4.0, $measurements->getAverageClassLength());
-        $this->assertSame(7.3, $measurements->getAverageMethodLength());
 
         // relative
         $this->assertSame(8.5, $measurements->getCommentLinesRelative());
@@ -93,12 +86,6 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $measurements->getProtectedMethods());
         $this->assertSame(3, $measurements->getPrivateMethods());
         $this->assertSame(6, $measurements->getMethodCount());
-    }
-
-    public function testSkipTraitFromLogicalLines(): void
-    {
-        $measurements = $this->analyser->measureFiles([__DIR__ . '/Fixture/class_using_trait.php']);
-        $this->assertSame(1, $measurements->getClassLines());
     }
 
     public function testEnums(): void

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
-use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Output\OutputInterface;
 use TomasVotruba\Lines\Console\TablePrinter;
 use TomasVotruba\Lines\Contract\OutputFormatterInterface;
@@ -19,9 +18,6 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
     public function printMeasurement(Measurements $measurements, OutputInterface $output, bool $isShort): void
     {
-        // newline
-        $output->writeln('');
-
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
 
@@ -31,11 +27,16 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
         $this->printStructure($measurements);
         $this->printMethods($measurements);
+
+        $output->writeln('');
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void
     {
-        $tableRows = [['Directories', $measurements->getDirectoryCount()], ['Files', $measurements->getFileCount()]];
+        $tableRows = [
+            ['Directories', $measurements->getDirectoryCount()],
+            ['Files', $measurements->getFileCount()],
+        ];
 
         $this->tablePrinter->printItemValueTable($tableRows, 'Metric', 'Count');
     }
@@ -60,13 +61,10 @@ final class TextOutputFormatter implements OutputFormatterInterface
         $this->tablePrinter->printItemValueTable([
             ['Non-static', $measurements->getNonStaticMethods(), $measurements->getNonStaticMethodsRelative()],
             ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative()],
-
-            new TableSeparator(),
-
+            [],
             ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative()],
             ['Protected', $measurements->getProtectedMethods(), $measurements->getProtectedMethodsRelative()],
             ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative()],
-
         ], 'Methods', 'Count', true);
     }
 
@@ -75,8 +73,8 @@ final class TextOutputFormatter implements OutputFormatterInterface
         $this->tablePrinter->printItemValueTable([
             ['Namespaces', $measurements->getNamespaceCount()],
             ['Classes', $measurements->getClassCount()],
-            [' * Constants', $measurements->getClassConstantCount()],
-            [' * Methods', $measurements->getMethodCount()],
+            ['* Constants', $measurements->getClassConstantCount(), null, true],
+            ['* Methods', $measurements->getMethodCount(), null, true],
             ['Interfaces', $measurements->getInterfaceCount()],
             ['Traits', $measurements->getTraitCount()],
             ['Enums', $measurements->getEnumCount()],

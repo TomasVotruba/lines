@@ -22,6 +22,8 @@ final class TextOutputFormatter implements OutputFormatterInterface
         $this->printLinesOfCode($measurements);
 
         if ($isShort) {
+            $output->writeln('');
+
             return;
         }
 

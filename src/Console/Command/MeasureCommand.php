@@ -70,7 +70,6 @@ final class MeasureCommand extends Command
         if ($isJson) {
             $this->jsonOutputFormatter->printMeasurement($measurement, $output, $isShort);
         } else {
-            $this->symfonyStyle->newLine();
             $this->textOutputFormatter->printMeasurement($measurement, $output, $isShort);
         }
 

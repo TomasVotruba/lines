@@ -17,6 +17,8 @@ final class TextOutputFormatter implements OutputFormatterInterface
     {
         renderUsing($output);
 
+        $output->writeln('');
+
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
 

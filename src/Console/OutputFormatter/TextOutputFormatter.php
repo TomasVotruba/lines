@@ -5,25 +5,29 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
 use Symfony\Component\Console\Output\OutputInterface;
+use TomasVotruba\Lines\Console\View;
 use TomasVotruba\Lines\Contract\OutputFormatterInterface;
 use TomasVotruba\Lines\Helpers\NumberFormat;
 use TomasVotruba\Lines\Measurements;
-use function Termwind\render;
-use function Termwind\renderUsing;
 
 final class TextOutputFormatter implements OutputFormatterInterface
 {
+    public function __construct(
+        private readonly View $view
+    ) {
+    }
+
     public function printMeasurement(Measurements $measurements, OutputInterface $output, bool $isShort): void
     {
-        renderUsing($output);
-
-        $output->writeln('');
+        $this->view
+            ->setOutput($output)
+            ->newLine();
 
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
 
         if ($isShort) {
-            $output->writeln('');
+            $this->view->newLine();
 
             return;
         }
@@ -31,12 +35,12 @@ final class TextOutputFormatter implements OutputFormatterInterface
         $this->printStructure($measurements);
         $this->printMethods($measurements);
 
-        $output->writeln('');
+        $this->view->newLine();
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void
     {
-        $this->renderView('table', [
+        $this->view->render('table', [
             'title' => 'Metric',
             'label' => 'Count',
             'rows' => $this->formatRows([
@@ -48,7 +52,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
     private function printLinesOfCode(Measurements $measurements): void
     {
-        $this->renderView('table', [
+        $this->view->render('table', [
             'title' => 'Lines of code',
             'label' => 'Count',
             'includeRelative' => true,
@@ -66,7 +70,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
             return;
         }
 
-        $this->renderView('table', [
+        $this->view->render('table', [
             'title' => 'Methods',
             'label' => 'Count',
             'includeRelative' => true,
@@ -83,7 +87,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
     private function printStructure(Measurements $measurements): void
     {
-        $this->renderView('table', [
+        $this->view->render('table', [
             'title' => 'Structure',
             'label' => 'Count',
             'rows' => $this->formatRows([
@@ -120,21 +124,5 @@ final class TextOutputFormatter implements OutputFormatterInterface
                 'isChild' => $row[3] ?? false,
             ];
         }, $rows);
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    private function renderView(string $view, array $data): void
-    {
-        extract($data);
-
-        ob_start();
-
-        include __DIR__ . sprintf('/../views/%s.php', $view);
-
-        render((string) ob_get_contents());
-
-        ob_end_clean();
     }
 }

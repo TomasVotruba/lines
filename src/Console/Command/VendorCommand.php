@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console\Command;
 
+use TomasVotruba\Lines\Measurements;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 use TomasVotruba\Lines\Analyser;
+use TomasVotruba\Lines\Console\View;
 use TomasVotruba\Lines\Finder\PhpFilesFinder;
 use TomasVotruba\Lines\Helpers\Calculator;
 use TomasVotruba\Lines\Helpers\NumberFormat;
@@ -21,7 +21,7 @@ final class VendorCommand extends Command
     public function __construct(
         private readonly PhpFilesFinder $phpFilesFinder,
         private readonly Analyser $analyser,
-        private readonly SymfonyStyle $symfonyStyle,
+        private readonly View $view,
     ) {
         parent::__construct();
     }
@@ -37,25 +37,31 @@ final class VendorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->view->setOutput($output);
+
         $currentVendorDirectory = getcwd() . '/vendor';
         Assert::directory($currentVendorDirectory);
 
-        $this->symfonyStyle->writeln('<fg=yellow>Measuring current "/vendor" size...</>');
-        $vendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory]);
-        $fullVendorMeasurement = $this->analyser->measureFiles($vendorFilePaths);
+        $fullVendorMeasurement = $this->view->loading(
+            'Measuring current "/vendor" size...',
+            function () use ($currentVendorDirectory): Measurements {
+                $vendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory]);
+                return $this->analyser->measureFiles($vendorFilePaths);
+            }
+        );
 
-        $this->uninstallDevPackages();
+        $noDevVendorMeasurement = $this->view->loading(
+            'Uninstalling dev dependencies and measuring "/vendor" again...',
+            function () use ($currentVendorDirectory) {
+                $this->uninstallDevPackages();
+                $noDevVendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory]);
 
-        $this->symfonyStyle->writeln('<fg=yellow>Uninstalling dev dependencies and measuring "/vendor" again...</>');
-        $noDevVendorFilePaths = $this->phpFilesFinder->findInDirectories([$currentVendorDirectory]);
-        $noDevVendorMeasurement = $this->analyser->measureFiles($noDevVendorFilePaths);
+                $measurements = $this->analyser->measureFiles($noDevVendorFilePaths);
+                $this->installOriginalDependencies();
 
-        $this->installOriginalDependencies();
-
-        $this->symfonyStyle->newLine();
-
-        $padLeftTableStyle = new TableStyle();
-        $padLeftTableStyle->setPadType(STR_PAD_LEFT);
+                return $measurements;
+            }
+        );
 
         $linesDifferenceRelative = Calculator::relativeChange(
             $fullVendorMeasurement->getLines(),
@@ -67,30 +73,18 @@ final class VendorCommand extends Command
             $noDevVendorMeasurement->getNonCommentLines()
         );
 
-        $this->symfonyStyle->createTable()
-            ->setHeaders(['Metric', 'All dependencies', 'Without dev', 'Change'])
-            ->setColumnWidth(0, 20)
-            ->setRows([
-                [
-                    'All lines',
-                    NumberFormat::pretty($fullVendorMeasurement->getLines()),
-                    NumberFormat::pretty($noDevVendorMeasurement->getLines()),
-                    NumberFormat::percent($linesDifferenceRelative),
-                ],
-                [
-                    'Lines of code',
-                    NumberFormat::pretty($fullVendorMeasurement->getNonCommentLines()),
-                    NumberFormat::pretty($noDevVendorMeasurement->getNonCommentLines()),
-                    NumberFormat::percent($nonCommentLinesDifferenceRelative),
-                ],
-            ])
-            ->setColumnStyle(1, $padLeftTableStyle)
-            ->setColumnStyle(2, $padLeftTableStyle)
-            ->setColumnStyle(3, $padLeftTableStyle)
-            ->setColumnStyle(4, $padLeftTableStyle)
-            ->render();
-
-        $this->symfonyStyle->newLine(2);
+        $this->view->render('vendor', [
+            'all' => [
+                'full' => NumberFormat::pretty($fullVendorMeasurement->getLines()),
+                'noDev' => NumberFormat::pretty($noDevVendorMeasurement->getLines()),
+                'percent' => NumberFormat::percent($linesDifferenceRelative),
+            ],
+            'lines' => [
+                'full' => NumberFormat::pretty($fullVendorMeasurement->getNonCommentLines()),
+                'noDev' => NumberFormat::pretty($noDevVendorMeasurement->getNonCommentLines()),
+                'percent' => NumberFormat::percent($nonCommentLinesDifferenceRelative),
+            ],
+        ]);
 
         return Command::SUCCESS;
     }

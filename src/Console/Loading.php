@@ -12,7 +12,22 @@ final class Loading
     /**
      * @var array<int, string>
      */
-    private array $frames = ["⠄", "⠆", "⠇", "⠋", "⠙", "⠸", "⠰", "⠠", "⠰", "⠸", "⠙", "⠋", "⠇", "⠆"];
+    private array $frames = [
+        '⠄',
+        '⠆',
+        '⠇',
+        '⠋',
+        '⠙',
+        '⠸',
+        '⠰',
+        '⠠',
+        '⠰',
+        '⠸',
+        '⠙',
+        '⠋',
+        '⠇',
+        '⠆',
+    ];
 
     public function __construct(
         private readonly View $view

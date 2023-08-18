@@ -42,8 +42,6 @@ final class MeasureCommand extends Command
         );
 
         $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');
-
-        // @todo
         $this->addOption('short', null, InputOption::VALUE_NONE, 'Print short metrics only');
     }
 

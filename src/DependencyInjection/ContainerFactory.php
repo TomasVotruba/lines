@@ -56,11 +56,10 @@ final class ContainerFactory
 
     public function defaultDefaultCommands(Application $application): void
     {
-        PrivatesAccessor::propertyClosure($application, 'commands', function (array $commands) {
+        PrivatesAccessor::propertyClosure($application, 'commands', static function (array $commands): array {
             // remove default commands, as not needed here
             unset($commands['completion']);
             unset($commands['help']);
-
             return $commands;
         });
     }

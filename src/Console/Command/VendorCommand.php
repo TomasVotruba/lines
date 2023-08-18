@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console\Command;
 
-use TomasVotruba\Lines\Measurements;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,6 +13,7 @@ use TomasVotruba\Lines\Console\View;
 use TomasVotruba\Lines\Finder\PhpFilesFinder;
 use TomasVotruba\Lines\Helpers\Calculator;
 use TomasVotruba\Lines\Helpers\NumberFormat;
+use TomasVotruba\Lines\Measurements;
 use Webmozart\Assert\Assert;
 
 final class VendorCommand extends Command

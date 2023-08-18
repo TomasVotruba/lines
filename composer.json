@@ -14,7 +14,7 @@
         "symfony/finder": "^6.3",
         "illuminate/container": "^10.16",
         "webmozart/assert": "^1.11",
-        "nikic/php-parser": "^4.16",
+        "nikic/php-parser": "^4.17",
         "sebastian/lines-of-code": "^2.0",
         "nunomaduro/termwind": "^1.15"
     },

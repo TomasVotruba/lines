@@ -4,46 +4,29 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console;
 
-use Closure;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use function Termwind\render;
-use function Termwind\renderUsing;
 
-final class View
+final class ViewRenderer
 {
-    private ?OutputInterface $output = null;
-
-    public function setOutput(OutputInterface $output): self
-    {
-        renderUsing($this->output = $output);
-
-        return $this;
+    public function __construct(
+        private readonly SymfonyStyle $symfonyStyle,
+    ) {
     }
 
     public function newLine(): self
     {
-        $this->output?->writeln('');
+        $this->symfonyStyle->writeln('');
 
         return $this;
     }
 
-    public function write(string $string): self
-    {
-        $this->output?->write($string);
-
-        return $this;
-    }
-
-    /**
-     * @template TReturn of mixed
-     *
-     * @param Closure(): TReturn $callback
-     * @return TReturn
-     */
-    public function loading(string $message, Closure $callback): mixed
-    {
-        return (new Loading($this))->render($message, $callback);
-    }
+    //    public function write(string $string): self
+    //    {
+    //        $this->symfonyStyle->write($string);
+    //
+    //        return $this;
+    //    }
 
     /**
      * @param array<string, mixed> $data

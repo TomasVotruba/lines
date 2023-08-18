@@ -17,7 +17,8 @@ declare(strict_types=1);
             <?php if ($includeRelative ?? false) { ?>
                 <span class="text-gray mr-1">/</span>
                 <span class="text-gray font-bold">Relative</span>
-            <?php } ?>
+            <?php }
+            ?>
         </span>
     </div>
     <?php foreach ($rows as $row) { ?>
@@ -37,8 +38,11 @@ declare(strict_types=1);
                             <?php echo $row['percent']; ?>
                         </span>
                     </span>
-                <?php } ?>
+                <?php }
+                ?>
             </div>
-        <?php } ?>
-    <?php } ?>
+<?php }
+        ?>
+<?php }
+    ?>
 </div>

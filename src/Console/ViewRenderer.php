@@ -9,13 +9,20 @@ use function Termwind\render;
 
 final class ViewRenderer
 {
-    public function renderTableVIew(TableView $tableView): void
+    public function renderTableView(TableView $tableView): void
+    {
+        $viewContent = $this->getFileContents($tableView);
+
+        render($viewContent);
+    }
+
+    private function getFileContents(TableView $tableView): string
     {
         ob_start();
-        require_once $tableView->getTemplateFilePath();
+        require $tableView->getTemplateFilePath();
         $viewContent = (string) ob_get_contents();
         ob_end_clean();
 
-        render($viewContent);
+        return $viewContent;
     }
 }

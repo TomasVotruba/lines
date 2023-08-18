@@ -46,7 +46,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
         ]);
 
         $tableView = new TableView('Metric', 'Count', $rows);
-        $this->viewRenderer->renderTableVIew($tableView);
+        $this->viewRenderer->renderTableView($tableView);
     }
 
     private function printLinesOfCode(Measurements $measurements): void
@@ -58,7 +58,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
         ]);
 
         $tableView = new TableView('Lines of code', 'Count', $rows, true);
-        $this->viewRenderer->renderTableVIew($tableView);
+        $this->viewRenderer->renderTableView($tableView);
     }
 
     private function printMethods(Measurements $measurements): void
@@ -77,7 +77,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
         ]);
 
         $tableView = new TableView('Methods', 'Count', $rows, true);
-        $this->viewRenderer->renderTableVIew($tableView);
+        $this->viewRenderer->renderTableView($tableView);
     }
 
     private function printStructure(Measurements $measurements): void
@@ -95,7 +95,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
         ]);
 
         $tableView = new TableView('Structure', 'Count', $rows);
-        $this->viewRenderer->renderTableVIew($tableView);
+        $this->viewRenderer->renderTableView($tableView);
     }
 
     /**

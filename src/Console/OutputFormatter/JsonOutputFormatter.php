@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
-use Symfony\Component\Console\Output\OutputInterface;
 use TomasVotruba\Lines\Contract\OutputFormatterInterface;
 use TomasVotruba\Lines\Measurements;
 use Webmozart\Assert\Assert;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
-    public function printMeasurement(Measurements $measurements, OutputInterface $output, bool $isShort): void
+    public function printMeasurement(Measurements $measurements, bool $isShort): void
     {
         $arrayData = [
             'filesystem' => [
@@ -58,6 +57,6 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         $jsonString = json_encode($arrayData, JSON_PRETTY_PRINT);
         Assert::string($jsonString);
 
-        $output->writeln($jsonString);
+        echo $jsonString;
     }
 }

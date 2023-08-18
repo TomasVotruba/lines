@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use TomasVotruba\Lines\Console\View;
+use TomasVotruba\Lines\Console\ViewRenderer;
 use TomasVotruba\Lines\Contract\OutputFormatterInterface;
 use TomasVotruba\Lines\Helpers\NumberFormat;
 use TomasVotruba\Lines\Measurements;
@@ -13,21 +12,19 @@ use TomasVotruba\Lines\Measurements;
 final class TextOutputFormatter implements OutputFormatterInterface
 {
     public function __construct(
-        private readonly View $view
+        private readonly ViewRenderer $viewRenderer
     ) {
     }
 
-    public function printMeasurement(Measurements $measurements, OutputInterface $output, bool $isShort): void
+    public function printMeasurement(Measurements $measurements, bool $isShort): void
     {
-        $this->view
-            ->setOutput($output)
-            ->newLine();
+        $this->viewRenderer->newLine();
 
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
 
         if ($isShort) {
-            $this->view->newLine();
+            $this->viewRenderer->newLine();
 
             return;
         }
@@ -35,12 +32,12 @@ final class TextOutputFormatter implements OutputFormatterInterface
         $this->printStructure($measurements);
         $this->printMethods($measurements);
 
-        $this->view->newLine();
+        $this->viewRenderer->newLine();
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void
     {
-        $this->view->render('table', [
+        $this->viewRenderer->render('table', [
             'title' => 'Metric',
             'label' => 'Count',
             'rows' => $this->formatRows([
@@ -52,7 +49,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
     private function printLinesOfCode(Measurements $measurements): void
     {
-        $this->view->render('table', [
+        $this->viewRenderer->render('table', [
             'title' => 'Lines of code',
             'label' => 'Count',
             'includeRelative' => true,
@@ -70,7 +67,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
             return;
         }
 
-        $this->view->render('table', [
+        $this->viewRenderer->render('table', [
             'title' => 'Methods',
             'label' => 'Count',
             'includeRelative' => true,
@@ -87,7 +84,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
     private function printStructure(Measurements $measurements): void
     {
-        $this->view->render('table', [
+        $this->viewRenderer->render('table', [
             'title' => 'Structure',
             'label' => 'Count',
             'rows' => $this->formatRows([

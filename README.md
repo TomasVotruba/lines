@@ -42,7 +42,7 @@ vendor/bin/lines measure src --json
 For the text output, you'll get data like these:
 
 ```bash
-   Metric                                             count
+  Metric                                             count
   Directories ......................................... 32
   Files .............................................. 160
 

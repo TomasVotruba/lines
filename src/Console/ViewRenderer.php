@@ -14,28 +14,18 @@ final class ViewRenderer
     ) {
     }
 
-    public function newLine(): self
+    public function newLine(): void
     {
         $this->symfonyStyle->writeln('');
-
-        return $this;
     }
-
-    //    public function write(string $string): self
-    //    {
-    //        $this->symfonyStyle->write($string);
-    //
-    //        return $this;
-    //    }
 
     /**
      * @param array<string, mixed> $data
      */
-    public function render(string $view, array $data): self
+    public function render(string $view, array $data): void
     {
-        render($this->getViewContent($view, $data));
-
-        return $this;
+        $viewContent = $this->getViewContent($view, $data);
+        render($viewContent);
     }
 
     /**

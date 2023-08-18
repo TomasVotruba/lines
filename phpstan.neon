@@ -3,6 +3,7 @@ parameters:
         - bin
         - src
         - tests
+        - views
 
     excludePaths:
         - tests/Fixture/*

@@ -2,26 +2,24 @@
 
 declare(strict_types=1);
 
-/** @var string $title */
-/** @var string $label */
-/** @var ?bool $includeRelative */
-/** @var array<array{}|array{name: string, count: int|float|string, percent: float|string|null, isChild: bool}> $rows */
+/** @var \TomasVotruba\Lines\ValueObject\TableView $tableView */
+
 ?>
 <div class="mt-1 mx-2 max-w-60">
     <div class="flex justify-between">
         <span class="text-green font-bold">
-            <?php echo $title; ?>
+            <?php echo $tableView->getTitle(); ?>
         </span>
         <span class="lowercase">
-            <?php echo $label; ?>
-            <?php if ($includeRelative ?? false) { ?>
+            <?php echo $tableView->getLabel(); ?>
+            <?php if ($tableView->isShouldIncludeRelative()) { ?>
                 <span class="text-gray mr-1">/</span>
                 <span class="text-gray font-bold">Relative</span>
             <?php }
             ?>
         </span>
     </div>
-    <?php foreach ($rows as $row) { ?>
+    <?php foreach ($tableView->getRows() as $row) { ?>
         <?php if ($row === []) { ?>
             <div />
         <?php } else { ?>

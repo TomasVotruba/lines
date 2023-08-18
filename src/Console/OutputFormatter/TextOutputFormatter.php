@@ -4,27 +4,30 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
+use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Console\ViewRenderer;
 use TomasVotruba\Lines\Contract\OutputFormatterInterface;
 use TomasVotruba\Lines\Helpers\NumberFormat;
 use TomasVotruba\Lines\Measurements;
+use TomasVotruba\Lines\ValueObject\TableView;
 
 final class TextOutputFormatter implements OutputFormatterInterface
 {
     public function __construct(
-        private readonly ViewRenderer $viewRenderer
+        private readonly ViewRenderer $viewRenderer,
+        private readonly SymfonyStyle $symfonyStyle,
     ) {
     }
 
     public function printMeasurement(Measurements $measurements, bool $isShort): void
     {
-        $this->viewRenderer->newLine();
+        $this->symfonyStyle->newLine();
 
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
 
         if ($isShort) {
-            $this->viewRenderer->newLine();
+            $this->symfonyStyle->newLine();
 
             return;
         }
@@ -32,33 +35,30 @@ final class TextOutputFormatter implements OutputFormatterInterface
         $this->printStructure($measurements);
         $this->printMethods($measurements);
 
-        $this->viewRenderer->newLine();
+        $this->symfonyStyle->newLine();
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void
     {
-        $this->viewRenderer->render('table', [
-            'title' => 'Metric',
-            'label' => 'Count',
-            'rows' => $this->formatRows([
-                ['Directories', $measurements->getDirectoryCount()],
-                ['Files', $measurements->getFileCount()],
-            ]),
+        $rows = $this->formatRows([
+            ['Directories', $measurements->getDirectoryCount()],
+            ['Files', $measurements->getFileCount()],
         ]);
+
+        $tableView = new TableView('Metric', 'Count', $rows);
+        $this->viewRenderer->renderTableVIew($tableView);
     }
 
     private function printLinesOfCode(Measurements $measurements): void
     {
-        $this->viewRenderer->render('table', [
-            'title' => 'Lines of code',
-            'label' => 'Count',
-            'includeRelative' => true,
-            'rows' => $this->formatRows([
-                ['Code', $measurements->getNonCommentLines(), $measurements->getNonCommentLinesRelative()],
-                ['Comments', $measurements->getCommentLines(), $measurements->getCommentLinesRelative()],
-                ['Total', $measurements->getLines(), 100.0],
-            ]),
+        $rows = $this->formatRows([
+            ['Code', $measurements->getNonCommentLines(), $measurements->getNonCommentLinesRelative()],
+            ['Comments', $measurements->getCommentLines(), $measurements->getCommentLinesRelative()],
+            ['Total', $measurements->getLines(), 100.0],
         ]);
+
+        $tableView = new TableView('Lines of code', 'Count', $rows, true);
+        $this->viewRenderer->renderTableVIew($tableView);
     }
 
     private function printMethods(Measurements $measurements): void
@@ -67,38 +67,35 @@ final class TextOutputFormatter implements OutputFormatterInterface
             return;
         }
 
-        $this->viewRenderer->render('table', [
-            'title' => 'Methods',
-            'label' => 'Count',
-            'includeRelative' => true,
-            'rows' => $this->formatRows([
-                ['Non-static', $measurements->getNonStaticMethods(), $measurements->getNonStaticMethodsRelative()],
-                ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative()],
-                [],
-                ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative()],
-                ['Protected', $measurements->getProtectedMethods(), $measurements->getProtectedMethodsRelative()],
-                ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative()],
-            ]),
+        $rows = $this->formatRows([
+            ['Non-static', $measurements->getNonStaticMethods(), $measurements->getNonStaticMethodsRelative()],
+            ['Static', $measurements->getStaticMethods(), $measurements->getStaticMethodsRelative()],
+            [],
+            ['Public', $measurements->getPublicMethods(), $measurements->getPublicMethodsRelative()],
+            ['Protected', $measurements->getProtectedMethods(), $measurements->getProtectedMethodsRelative()],
+            ['Private', $measurements->getPrivateMethods(), $measurements->getPrivateMethodsRelative()],
         ]);
+
+        $tableView = new TableView('Methods', 'Count', $rows, true);
+        $this->viewRenderer->renderTableVIew($tableView);
     }
 
     private function printStructure(Measurements $measurements): void
     {
-        $this->viewRenderer->render('table', [
-            'title' => 'Structure',
-            'label' => 'Count',
-            'rows' => $this->formatRows([
-                ['Namespaces', $measurements->getNamespaceCount()],
-                ['Classes', $measurements->getClassCount()],
-                ['* Constants', $measurements->getClassConstantCount(), null, true],
-                ['* Methods', $measurements->getMethodCount(), null, true],
-                ['Interfaces', $measurements->getInterfaceCount()],
-                ['Traits', $measurements->getTraitCount()],
-                ['Enums', $measurements->getEnumCount()],
-                ['Functions', $measurements->getFunctionCount()],
-                ['Global constants', $measurements->getGlobalConstantCount()],
-            ]),
+        $rows = $this->formatRows([
+            ['Namespaces', $measurements->getNamespaceCount()],
+            ['Classes', $measurements->getClassCount()],
+            ['* Constants', $measurements->getClassConstantCount(), null, true],
+            ['* Methods', $measurements->getMethodCount(), null, true],
+            ['Interfaces', $measurements->getInterfaceCount()],
+            ['Traits', $measurements->getTraitCount()],
+            ['Enums', $measurements->getEnumCount()],
+            ['Functions', $measurements->getFunctionCount()],
+            ['Global constants', $measurements->getGlobalConstantCount()],
         ]);
+
+        $tableView = new TableView('Structure', 'Count', $rows);
+        $this->viewRenderer->renderTableVIew($tableView);
     }
 
     /**

@@ -38,7 +38,7 @@ final class ContainerFactory
             $application->add($vendorCommand);
 
             // remove basic command to make output clear
-            $this->defaultDefaultCommands($application);
+            $this->cleanupDefaultCommands($application);
 
             return $application;
         });
@@ -52,7 +52,7 @@ final class ContainerFactory
         return $container;
     }
 
-    public function defaultDefaultCommands(Application $application): void
+    public function cleanupDefaultCommands(Application $application): void
     {
         PrivatesAccessor::propertyClosure($application, 'commands', static function (array $commands): array {
             // remove default commands, as not needed here

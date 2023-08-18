@@ -7,7 +7,7 @@ declare(strict_types=1);
 /** @var ?bool $includeRelative */
 /** @var array<array{}|array{name: string, count: int|float|string, percent: float|string|null, isChild: bool}> $rows */
 ?>
-<div class="mt-1 mx-2 max-w-150">
+<div class="mt-1 mx-2 max-w-60">
     <div class="flex justify-between">
         <span class="text-green font-bold">
             <?php echo $title; ?>

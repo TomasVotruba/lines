@@ -36,11 +36,8 @@ final class ViewRenderer
         extract($data);
 
         ob_start();
-
-        include __DIR__ . sprintf('/views/%s.php', $view);
-
+        include __DIR__ . '/../../views/' . $view . '.php';
         $content = (string) ob_get_contents();
-
         ob_end_clean();
 
         return $content;

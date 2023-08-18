@@ -57,6 +57,6 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         $jsonString = json_encode($arrayData, JSON_PRETTY_PRINT);
         Assert::string($jsonString);
 
-        echo $jsonString;
+        echo $jsonString . PHP_EOL;
     }
 }

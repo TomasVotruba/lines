@@ -47,7 +47,7 @@ final class TextOutputFormatter implements OutputFormatterInterface
             ['Files', $measurements->getFileCount()],
         ]);
 
-        $tableView = new TableView('Metric', 'Count', $tableRows);
+        $tableView = new TableView('Filesystem', 'Count', $tableRows);
         $this->viewRenderer->renderTableView($tableView);
     }
 

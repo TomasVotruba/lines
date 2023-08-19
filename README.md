@@ -48,7 +48,7 @@ vendor/bin/lines measure src --short --json
 For the text output, you'll get data like these:
 
 ```bash
-  Metric                                             count
+  Filesystem                                         count
   Directories ......................................... 32
   Files .............................................. 160
 

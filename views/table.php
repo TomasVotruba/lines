@@ -19,28 +19,24 @@ declare(strict_types=1);
             ?>
         </span>
     </div>
-    <?php foreach ($tableView->getRows() as $row) { ?>
-        <?php if ($row === []) { ?>
-            <div />
-        <?php } else { ?>
+    <?php foreach ($tableView->getRows() as $tableRow) { ?>
             <div class="flex space-x-1">
-                <span class="<?php echo $row['isChild'] ? 'ml-1' : '' ?>">
-                    <?php echo $row['name']; ?>
+                <span class="<?php echo $tableRow->isChild() ? 'ml-1' : '' ?>">
+                    <?php echo $tableRow->getName(); ?>
                 </span>
                 <span class="flex-1 content-repeat-[.] text-gray" />
-                <span><?php echo $row['count']; ?></span>
-                <?php if ($row['percent']) { ?>
+                <span><?php echo $tableRow->getCount(); ?></span>
+                <?php if ($tableRow->getPercent()) { ?>
                     <span>
                         <span class="text-gray mr-1">/</span>
                         <span class="text-gray w-6 text-right">
-                            <?php echo $row['percent']; ?>
+                            <?php echo $tableRow->getPercent(); ?>
                         </span>
                     </span>
                 <?php }
                 ?>
             </div>
-<?php }
-        ?>
+
 <?php }
     ?>
 </div>

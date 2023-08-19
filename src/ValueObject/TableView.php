@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\ValueObject;
 
+use Webmozart\Assert\Assert;
+
 /**
  * @api used in templates
  */
 final class TableView
 {
     /**
-     * @param array<array{}|array{name: string, count: int|float|string, percent: float|string|null, isChild: bool}> $rows
+     * @param TableRow[] $tableRows
      */
     public function __construct(
         private readonly string $title,
         private readonly string $label,
-        private readonly array $rows,
+        private readonly array $tableRows,
         private readonly bool $shouldIncludeRelative = false,
     ) {
+        Assert::allIsInstanceOf($tableRows, TableRow::class);
     }
 
     public function getTitle(): string
@@ -36,11 +39,11 @@ final class TableView
     }
 
     /**
-     * @return array<array{}|array{name: string, count: int|float|string, percent: float|string|null, isChild: bool}>
+     * @return TableRow[]
      */
     public function getRows(): array
     {
-        return $this->rows;
+        return $this->tableRows;
     }
 
     public function getTemplateFilePath(): string

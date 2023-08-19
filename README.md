@@ -39,11 +39,7 @@ vendor/bin/lines measure src --json
 
 Also, you can combine them (very handy for blog posts and tweets):
 
-<<<<<<< HEAD
-```bash
-=======
 ```json
->>>>>>> 940984c (note)
 vendor/bin/lines measure src --short --json
 ```
 

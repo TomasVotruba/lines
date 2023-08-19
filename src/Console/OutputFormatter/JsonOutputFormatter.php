@@ -40,11 +40,14 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 'global_constants' => $measurements->getGlobalConstantCount(),
             ];
 
-            $arrayData['methods'] = [
+            $arrayData['methods_access'] = [
                 'non_static' => $measurements->getNonStaticMethods(),
                 'non_static_relative' => $measurements->getNonStaticMethodsRelative(),
                 'static' => $measurements->getStaticMethods(),
                 'static_relative' => $measurements->getStaticMethodsRelative(),
+            ];
+
+            $arrayData['methods_visibility'] = [
                 'public' => $measurements->getPublicMethods(),
                 'public_relative' => $measurements->getPublicMethodsRelative(),
                 'protected' => $measurements->getProtectedMethods(),

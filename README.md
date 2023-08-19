@@ -82,38 +82,40 @@ Or in a json format:
 ```json
 {
     "filesystem": {
-        "directories": 9,
-        "files": 14
+        "directories": 10,
+        "files": 15
     },
     "lines_of_code": {
-        "code": 1059,
-        "code_relative": 95.8,
-        "comments": 46,
-        "comments_relative": 4.2,
-        "total": 1105
+        "code": 1064,
+        "code_relative": 95.4,
+        "comments": 51,
+        "comments_relative": 4.6,
+        "total": 1115
     },
     "structure": {
-        "namespaces": 10,
-        "classes": 13,
-        "class_methods": 78,
+        "namespaces": 11,
+        "classes": 14,
+        "class_methods": 88,
         "class_constants": 0,
         "interfaces": 1,
         "traits": 0,
         "enums": 0,
-        "functions": 3,
+        "functions": 5,
         "global_constants": 3
     },
-    "methods": {
-        "non_static": 74,
-        "non_static_relative": 94.9,
-        "static": 4,
-        "static_relative": 5.1,
-        "public": 60,
-        "public_relative": 76.9,
-        "protected": 4,
-        "protected_relative": 5.1,
-        "private": 14,
-        "private_relative": 17.9
+    "methods_access": {
+        "non_static": 82,
+        "non_static_relative": 93.2,
+        "static": 6,
+        "static_relative": 6.8
+    },
+    "methods_visibility": {
+        "public": 70,
+        "public_relative": 79.5,
+        "protected": 2,
+        "protected_relative": 2.3,
+        "private": 16,
+        "private_relative": 18.2
     }
 }
 ```

@@ -37,6 +37,12 @@ For json output, just add `--json`:
 vendor/bin/lines measure src --json
 ```
 
+Also, you can combine them (very handy for blog posts and tweets):
+
+```bash
+vendor/bin/lines measure src --short --json
+```
+
 ## The Measured Items
 
 For the text output, you'll get data like these:

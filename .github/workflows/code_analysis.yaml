@@ -18,11 +18,11 @@ jobs:
 
                     -
                         name: 'Run "measure" command'
-                        run: |
-                            bin/lines measure src --ansi
+                        run: bin/lines measure src --ansi
 
-                            # try json output
-                            bin/lines measure src --json --ansi
+                    -
+                        name: 'Run "measure" with json command'
+                        run: bin/lines measure src --json --ansi
 
                     -
                         name: 'PHPStan'

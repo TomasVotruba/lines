@@ -4,42 +4,25 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console;
 
-use Symfony\Component\Console\Style\SymfonyStyle;
+use TomasVotruba\Lines\ValueObject\TableView;
 use function Termwind\render;
 
 final class ViewRenderer
 {
-    public function __construct(
-        private readonly SymfonyStyle $symfonyStyle,
-    ) {
-    }
-
-    public function newLine(): void
+    public function renderTableView(TableView $tableView): void
     {
-        $this->symfonyStyle->writeln('');
-    }
+        $viewContent = $this->getFileContents($tableView);
 
-    /**
-     * @param array<string, mixed> $data
-     */
-    public function render(string $view, array $data): void
-    {
-        $viewContent = $this->getViewContent($view, $data);
         render($viewContent);
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
-    private function getViewContent(string $view, array $data): string
+    private function getFileContents(TableView $tableView): string
     {
-        extract($data);
-
         ob_start();
-        include __DIR__ . '/../../views/' . $view . '.php';
-        $content = (string) ob_get_contents();
+        require $tableView->getTemplateFilePath();
+        $viewContent = (string) ob_get_contents();
         ob_end_clean();
 
-        return $content;
+        return $viewContent;
     }
 }

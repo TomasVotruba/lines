@@ -1,52 +1,65 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Lines202308\TomasVotruba\Lines\ValueObject;
 
-namespace TomasVotruba\Lines\ValueObject;
-
-use Webmozart\Assert\Assert;
-
+use Lines202308\Webmozart\Assert\Assert;
 /**
  * @api used in templates
  */
 final class TableView
 {
     /**
+     * @readonly
+     * @var string
+     */
+    private $title;
+    /**
+     * @readonly
+     * @var string
+     */
+    private $label;
+    /**
+     * @var TableRow[]
+     * @readonly
+     */
+    private $tableRows;
+    /**
+     * @readonly
+     * @var bool
+     */
+    private $shouldIncludeRelative = \false;
+    /**
      * @param TableRow[] $tableRows
      */
-    public function __construct(
-        private readonly string $title,
-        private readonly string $label,
-        private readonly array $tableRows,
-        private readonly bool $shouldIncludeRelative = false,
-    ) {
+    public function __construct(string $title, string $label, array $tableRows, bool $shouldIncludeRelative = \false)
+    {
+        $this->title = $title;
+        $this->label = $label;
+        $this->tableRows = $tableRows;
+        $this->shouldIncludeRelative = $shouldIncludeRelative;
         Assert::allIsInstanceOf($tableRows, TableRow::class);
     }
-
-    public function getTitle(): string
+    public function getTitle() : string
     {
         return $this->title;
     }
-
-    public function getLabel(): string
+    public function getLabel() : string
     {
         return $this->label;
     }
-
-    public function isShouldIncludeRelative(): bool
+    public function isShouldIncludeRelative() : bool
     {
         return $this->shouldIncludeRelative;
     }
-
     /**
      * @return TableRow[]
      */
-    public function getRows(): array
+    public function getRows() : array
     {
         return $this->tableRows;
     }
-
-    public function getTemplateFilePath(): string
+    public function getTemplateFilePath() : string
     {
         return __DIR__ . '/../../views/table.php';
     }

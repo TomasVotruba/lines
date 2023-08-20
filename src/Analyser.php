@@ -49,7 +49,13 @@ final class Analyser
         $fileContents = file_get_contents($filePath);
         Assert::string($fileContents);
 
-        $stmts = $this->parser->parse($fileContents);
+        try {
+            // avoid stop on invalid file contents
+            $stmts = $this->parser->parse($fileContents);
+        } catch (\Throwable) {
+            return;
+        }
+
         if (! is_array($stmts)) {
             return;
         }

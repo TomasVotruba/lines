@@ -75,6 +75,9 @@ final class Analyser
         $measurements->incrementCommentLines($linesOfCode->commentLinesOfCode());
     }
 
+    /**
+     * @return int<0, max>
+     */
     private function resolveInitLinesOfCode(string $fileContents): int
     {
         $linesOfCode = substr_count($fileContents, "\n");

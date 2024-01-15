@@ -48,14 +48,14 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $measurements->getPrivateMethods());
 
         // static and non-static
-        $this->assertSame(25.0, $measurements->getStaticMethodsRelative());
+        $this->assertEqualsWithDelta(25.0, $measurements->getStaticMethodsRelative(), PHP_FLOAT_EPSILON);
         $this->assertSame(1, $measurements->getStaticMethods());
         $this->assertSame(3, $measurements->getNonStaticMethods());
-        $this->assertSame(75.0, $measurements->getNonStaticMethodsRelative());
+        $this->assertEqualsWithDelta(75.0, $measurements->getNonStaticMethodsRelative(), PHP_FLOAT_EPSILON);
 
         // relative
-        $this->assertSame(8.5, $measurements->getCommentLinesRelative());
-        $this->assertSame(91.5, $measurements->getNonCommentLinesRelative());
+        $this->assertEqualsWithDelta(8.5, $measurements->getCommentLinesRelative(), PHP_FLOAT_EPSILON);
+        $this->assertEqualsWithDelta(91.5, $measurements->getNonCommentLinesRelative(), PHP_FLOAT_EPSILON);
     }
 
     public function testSkipAnonymousClass(): void

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines;
 
+use Throwable;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use SebastianBergmann\LinesOfCode\Counter;
@@ -52,7 +53,7 @@ final class Analyser
         try {
             // avoid stop on invalid file contents
             $stmts = $this->parser->parse($fileContents);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return;
         }
 

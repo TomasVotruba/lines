@@ -13,11 +13,11 @@ use TomasVotruba\Lines\ValueObject\TableRow;
 use TomasVotruba\Lines\ValueObject\TableView;
 use Webmozart\Assert\Assert;
 
-final class TextOutputFormatter implements OutputFormatterInterface
+final readonly class TextOutputFormatter implements OutputFormatterInterface
 {
     public function __construct(
-        private readonly ViewRenderer $viewRenderer,
-        private readonly SymfonyStyle $symfonyStyle,
+        private ViewRenderer $viewRenderer,
+        private SymfonyStyle $symfonyStyle,
     ) {
     }
 

@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines;
 
-use Throwable;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use SebastianBergmann\LinesOfCode\Counter;
+use Throwable;
 use TomasVotruba\Lines\NodeVisitor\StructureNodeVisitor;
 use Webmozart\Assert\Assert;
 
 /**
  * @see \TomasVotruba\Lines\Tests\AnalyserTest
  */
-final class Analyser
+final readonly class Analyser
 {
     public function __construct(
-        private readonly Parser $parser,
-        private readonly Counter $counter,
+        private Parser $parser,
+        private Counter $counter,
     ) {
     }
 

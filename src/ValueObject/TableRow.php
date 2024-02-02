@@ -7,13 +7,13 @@ namespace TomasVotruba\Lines\ValueObject;
 /**
  * @api used in templates
  */
-final class TableRow
+final readonly class TableRow
 {
     public function __construct(
-        private readonly string $name,
-        private readonly string $count,
-        private readonly ?string $percent,
-        private readonly bool $isChild,
+        private string $name,
+        private string $count,
+        private ?string $percent,
+        private bool $isChild,
     ) {
     }
 

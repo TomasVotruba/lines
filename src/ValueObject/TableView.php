@@ -9,16 +9,16 @@ use Webmozart\Assert\Assert;
 /**
  * @api used in templates
  */
-final class TableView
+final readonly class TableView
 {
     /**
      * @param TableRow[] $tableRows
      */
     public function __construct(
-        private readonly string $title,
-        private readonly string $label,
-        private readonly array $tableRows,
-        private readonly bool $shouldIncludeRelative = false,
+        private string $title,
+        private string $label,
+        private array $tableRows,
+        private bool $shouldIncludeRelative = false,
     ) {
         Assert::allIsInstanceOf($tableRows, TableRow::class);
     }

@@ -119,3 +119,14 @@ Or in a json format:
     }
 }
 ```
+
+
+## Vendor file scanning
+
+This tool use case is to measure your code, not the 3rd party libraries. That's why it ignores `/vendor` directory by default to avoid huge false positives.
+
+If you want to measure vendor files too, use `--allow-vendor` option:
+
+```bash
+ vendor/bin/lines measure vendor/rector/rector --allow-vendor
+```

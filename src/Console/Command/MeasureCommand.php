@@ -43,6 +43,7 @@ final class MeasureCommand extends Command
 
         $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');
         $this->addOption('short', null, InputOption::VALUE_NONE, 'Print short metrics only');
+        $this->addOption('allow-vendor', null, InputOption::VALUE_NONE, 'Allow /vendor directory to be scanned');
     }
 
     /**
@@ -54,8 +55,9 @@ final class MeasureCommand extends Command
         $excludes = (array) $input->getOption('exclude');
         $isJson = (bool) $input->getOption('json');
         $isShort = (bool) $input->getOption('short');
+        $allowVendor = (bool) $input->getOption('allow-vendor');
 
-        $filePaths = $this->phpFilesFinder->findInDirectories($paths, $excludes);
+        $filePaths = $this->phpFilesFinder->findInDirectories($paths, $excludes, $allowVendor);
         if ($filePaths === []) {
             $output->writeln('<error>No files found to scan</error>');
             return Command::FAILURE;

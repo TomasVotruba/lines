@@ -1,28 +1,23 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Lines202402\TomasVotruba\Lines\Console;
 
-namespace TomasVotruba\Lines\Console;
-
-use TomasVotruba\Lines\ValueObject\TableView;
-use function Termwind\render;
-
+use Lines202402\TomasVotruba\Lines\ValueObject\TableView;
+use function Lines202402\Termwind\render;
 final class ViewRenderer
 {
-    public function renderTableView(TableView $tableView): void
+    public function renderTableView(TableView $tableView) : void
     {
         $viewContent = $this->getFileContents($tableView);
-
         render($viewContent);
     }
-
-    private function getFileContents(TableView $tableView): string
+    private function getFileContents(TableView $tableView) : string
     {
-        ob_start();
+        \ob_start();
         require $tableView->getTemplateFilePath();
-        $viewContent = (string) ob_get_contents();
-        ob_end_clean();
-
+        $viewContent = (string) \ob_get_contents();
+        \ob_end_clean();
         return $viewContent;
     }
 }

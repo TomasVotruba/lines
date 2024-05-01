@@ -7,6 +7,7 @@ CLI tool for quick size measure of PHP project, runs anywhere
 * install anywhere - PHP 7.2? PHPUnit 6? Symfony 3? Not a problem, this package **has zero dependencies and works on PHP 7.2+**
 * get quick overview of your project size - no details, no complexity, just lines of code
 * get easy JSON output for further processing
+* get easy Key=Value output for further processing
 * we keep it simple, so you can enjoy reading - for more complex operation use static analysis like PHPStan
 
 <br>
@@ -35,6 +36,12 @@ For json output, just add `--json`:
 
 ```bash
 vendor/bin/lines measure src --json
+```
+
+For key value output, just add `--key-value`:
+
+```bash
+vendor/bin/lines measure src --key-value
 ```
 
 Also, you can combine them (very handy for blog posts and tweets):
@@ -119,7 +126,11 @@ Or in a json format:
     }
 }
 ```
+Or in key value format:
 
+```
+directories=27,files=86,code=3580,code_relative=92.9,comments=274,comments_relative=7.1,total=3854,namespaces=28,classes=81,class_methods=231,class_constants=17,interfaces=2,traits=1,enums=2,functions=0,global_constants=0,non_static=210,non_static_relative=90.9,static=21,static_relative=9.1,public=205,public_relative=88.7,protected=7,protected_relative=3,private=19,private_relative=8.2
+```
 
 ## Vendor file scanning
 

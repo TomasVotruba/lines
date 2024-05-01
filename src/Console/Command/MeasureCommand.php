@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
+use TomasVotruba\Lines\Console\OutputFormatter\KeyValueOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
 use TomasVotruba\Lines\Finder\PhpFilesFinder;
 
@@ -22,6 +23,7 @@ final class MeasureCommand extends Command
         private readonly Analyser $analyser,
         private readonly JsonOutputFormatter $jsonOutputFormatter,
         private readonly TextOutputFormatter $textOutputFormatter,
+        private readonly KeyValueOutputFormatter $keyValueOutputFormatter,
         private readonly SymfonyStyle $symfonyStyle,
     ) {
         parent::__construct();
@@ -42,6 +44,7 @@ final class MeasureCommand extends Command
         );
 
         $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');
+        $this->addOption('key-value', null, InputOption::VALUE_NONE, 'Output in key=value format');
         $this->addOption('short', null, InputOption::VALUE_NONE, 'Print short metrics only');
         $this->addOption('allow-vendor', null, InputOption::VALUE_NONE, 'Allow /vendor directory to be scanned');
     }
@@ -54,6 +57,7 @@ final class MeasureCommand extends Command
         $paths = (array) $input->getArgument('paths');
         $excludes = (array) $input->getOption('exclude');
         $isJson = (bool) $input->getOption('json');
+        $isKeyValue = (bool) $input->getOption('key-value');
         $isShort = (bool) $input->getOption('short');
         $allowVendor = (bool) $input->getOption('allow-vendor');
 
@@ -63,12 +67,14 @@ final class MeasureCommand extends Command
             return Command::FAILURE;
         }
 
-        $progressBarClosure = $this->createProgressBarClosure($isJson, $filePaths);
+        $progressBarClosure = $this->createProgressBarClosure($isJson || $isKeyValue, $filePaths);
         $measurement = $this->analyser->measureFiles($filePaths, $progressBarClosure);
 
         // print results
         if ($isJson) {
             $this->jsonOutputFormatter->printMeasurement($measurement, $isShort);
+        } elseif ($isKeyValue) {
+            $this->keyValueOutputFormatter->printMeasurement($measurement, $isShort);
         } else {
             $this->textOutputFormatter->printMeasurement($measurement, $isShort);
         }
@@ -79,9 +85,9 @@ final class MeasureCommand extends Command
     /**
      * @param string[] $filePaths
      */
-    private function createProgressBarClosure(bool $isJson, array $filePaths): ?callable
+    private function createProgressBarClosure(bool $skipProgress, array $filePaths): ?callable
     {
-        if ($isJson) {
+        if ($skipProgress) {
             return null;
         }
 

@@ -66,13 +66,13 @@ final class MeasureCommand extends Command
         }
 
         $progressBarClosure = $this->createProgressBarClosure($isJson, $filePaths);
-        $measurement = $this->analyser->measureFiles($filePaths, $progressBarClosure);
+        $measurements = $this->analyser->measureFiles($filePaths, $progressBarClosure);
 
         // print results
         if ($isJson) {
-            $this->jsonOutputFormatter->printMeasurement($measurement, $isShort, $showLongestFiles);
+            $this->jsonOutputFormatter->printMeasurement($measurements, $isShort, $showLongestFiles);
         } else {
-            $this->textOutputFormatter->printMeasurement($measurement, $isShort, $showLongestFiles);
+            $this->textOutputFormatter->printMeasurement($measurements, $isShort, $showLongestFiles);
         }
 
         return Command::SUCCESS;

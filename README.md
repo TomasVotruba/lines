@@ -43,6 +43,14 @@ Also, you can combine them (very handy for blog posts and tweets):
 vendor/bin/lines measure src --short --json
 ```
 
+<br>
+
+Are you looking for top 10 longest files?
+
+```bash
+vendor/bin/lines measure src --longest
+```
+
 ## The Measured Items
 
 For the text output, you'll get data like these:

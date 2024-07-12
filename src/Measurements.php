@@ -58,7 +58,7 @@ final class Measurements
         $this->directoryNames[] = dirname($filename);
 
         $relativeFilePath = str_replace(getcwd() . '/', '', $filename);
-        $this->filesToSize[$relativeFilePath] = substr_count(file_get_contents($filename), "\n") + 1;
+        $this->filesToSize[$relativeFilePath] = substr_count((string) file_get_contents($filename), "\n") + 1;
 
         ++$this->fileCount;
     }

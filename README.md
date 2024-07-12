@@ -51,6 +51,22 @@ Are you looking for top 10 longest files?
 vendor/bin/lines measure src --longest
 ```
 
+```bash
+  Longest files                                 line count
+  src/Measurements.php ............................... 320
+  src/Console/OutputFormatter/TextOutputFormatter.php  136
+  src/NodeVisitor/StructureNodeVisitor.php ........... 124
+  src/Console/Command/MeasureCommand.php .............. 98
+  src/Analyser.php .................................... 92
+  src/DependencyInjection/ContainerFactory.php ........ 81
+  src/Console/OutputFormatter/JsonOutputFormatter.php . 70
+  src/Finder/PhpFilesFinder.php ....................... 56
+  src/ValueObject/TableView.php ....................... 54
+  src/ValueObject/TableRow.php ........................ 40
+```
+
+<br>
+
 ## The Measured Items
 
 For the text output, you'll get data like these:

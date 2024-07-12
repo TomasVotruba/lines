@@ -51,6 +51,8 @@ Are you looking for top 10 longest files?
 vendor/bin/lines measure src --longest
 ```
 
+↓
+
 ```bash
   Longest files                                 line count
   src/Measurements.php ............................... 320

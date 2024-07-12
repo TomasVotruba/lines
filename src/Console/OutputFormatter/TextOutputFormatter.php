@@ -21,7 +21,7 @@ final readonly class TextOutputFormatter implements OutputFormatterInterface
     ) {
     }
 
-    public function printMeasurement(Measurements $measurements, bool $isShort): void
+    public function printMeasurement(Measurements $measurements, bool $isShort, bool $showLongestFiles): void
     {
         $this->symfonyStyle->newLine();
 
@@ -36,6 +36,17 @@ final readonly class TextOutputFormatter implements OutputFormatterInterface
 
         $this->printStructure($measurements);
         $this->printMethods($measurements);
+
+        if ($showLongestFiles) {
+            $rows = [];
+            foreach ($measurements->getLongestFiles() as $filePath => $linesCount) {
+                $rows[] = [$filePath, $linesCount];
+            }
+
+            $tableRows = $this->formatRows($rows);
+            $tableView = new TableView('Longest files', 'Line count', $tableRows);
+            $this->viewRenderer->renderTableView($tableView);
+        }
 
         $this->symfonyStyle->newLine();
     }

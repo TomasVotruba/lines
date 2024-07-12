@@ -48,9 +48,17 @@ final class Measurements
      */
     private array $namespaceNames = [];
 
+    /**
+     * @var array<string, int>
+     */
+    private array $filesToSize = [];
+
     public function addFile(string $filename): void
     {
         $this->directoryNames[] = dirname($filename);
+
+        $relativeFilePath = str_replace(getcwd() . '/', '', $filename);
+        $this->filesToSize[$relativeFilePath] = substr_count(file_get_contents($filename), "\n") + 1;
 
         ++$this->fileCount;
     }
@@ -134,6 +142,7 @@ final class Measurements
     {
         $uniqueDirectoryNames = array_unique($this->directoryNames);
         return count($uniqueDirectoryNames) - 1;
+
     }
 
     public function getFileCount(): int
@@ -288,6 +297,18 @@ final class Measurements
     public function getEnumCount(): int
     {
         return $this->enumCount;
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    public function getLongestFiles(): array
+    {
+        // longest files first
+        arsort($this->filesToSize);
+
+        // get top 10
+        return array_slice($this->filesToSize, 0, 10);
     }
 
     private function relative(int $partialNumber, int $totalNumber): float

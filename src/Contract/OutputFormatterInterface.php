@@ -8,5 +8,5 @@ use TomasVotruba\Lines\Measurements;
 
 interface OutputFormatterInterface
 {
-    public function printMeasurement(Measurements $measurements, bool $isShort): void;
+    public function printMeasurement(Measurements $measurements, bool $isShort, bool $showLongestFiles): void;
 }

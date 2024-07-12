@@ -21,7 +21,7 @@ jobs:
                         run: bin/lines measure src --ansi
 
                     -
-                        name: 'Run "measure" with json and logest command'
+                        name: 'Run "measure" with json and longest command'
                         run: bin/lines measure src --json --longest --ansi
 
                     -

@@ -21,8 +21,8 @@ jobs:
                         run: bin/lines measure src --ansi
 
                     -
-                        name: 'Run "measure" with json command'
-                        run: bin/lines measure src --json --ansi
+                        name: 'Run "measure" with json and logest command'
+                        run: bin/lines measure src --json --longest --ansi
 
                     -
                         name: 'PHPStan'

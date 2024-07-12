@@ -44,6 +44,7 @@ final class MeasureCommand extends Command
         $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');
         $this->addOption('short', null, InputOption::VALUE_NONE, 'Print short metrics only');
         $this->addOption('allow-vendor', null, InputOption::VALUE_NONE, 'Allow /vendor directory to be scanned');
+        $this->addOption('longest', null, InputOption::VALUE_NONE, 'Show top 10 longest files');
     }
 
     /**
@@ -56,6 +57,7 @@ final class MeasureCommand extends Command
         $isJson = (bool) $input->getOption('json');
         $isShort = (bool) $input->getOption('short');
         $allowVendor = (bool) $input->getOption('allow-vendor');
+        $showLongestFiles = (bool) $input->getOption('longest');
 
         $filePaths = $this->phpFilesFinder->findInDirectories($paths, $excludes, $allowVendor);
         if ($filePaths === []) {
@@ -64,13 +66,13 @@ final class MeasureCommand extends Command
         }
 
         $progressBarClosure = $this->createProgressBarClosure($isJson, $filePaths);
-        $measurement = $this->analyser->measureFiles($filePaths, $progressBarClosure);
+        $measurements = $this->analyser->measureFiles($filePaths, $progressBarClosure);
 
         // print results
         if ($isJson) {
-            $this->jsonOutputFormatter->printMeasurement($measurement, $isShort);
+            $this->jsonOutputFormatter->printMeasurement($measurements, $isShort, $showLongestFiles);
         } else {
-            $this->textOutputFormatter->printMeasurement($measurement, $isShort);
+            $this->textOutputFormatter->printMeasurement($measurements, $isShort, $showLongestFiles);
         }
 
         return Command::SUCCESS;

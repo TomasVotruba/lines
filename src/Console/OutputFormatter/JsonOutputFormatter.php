@@ -10,7 +10,7 @@ use Webmozart\Assert\Assert;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
-    public function printMeasurement(Measurements $measurements, bool $isShort): void
+    public function printMeasurement(Measurements $measurements, bool $isShort, bool $showLongestFiles): void
     {
         $arrayData = [
             'filesystem' => [
@@ -55,6 +55,10 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 'private' => $measurements->getPrivateMethods(),
                 'private_relative' => $measurements->getPrivateMethodsRelative(),
             ];
+        }
+
+        if ($showLongestFiles) {
+            $arrayData['longest_files'] = $measurements->getLongestFiles();
         }
 
         $jsonString = json_encode($arrayData, JSON_PRETTY_PRINT);

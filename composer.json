@@ -18,9 +18,9 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5",
-        "rector/rector": "^1.1",
-        "phpstan/phpstan": "^1.10.57",
-        "symplify/easy-coding-standard": "^12.1",
+        "rector/rector": "^1.2.10",
+        "phpstan/phpstan": "^1.12",
+        "symplify/easy-coding-standard": "^12.4",
         "tracy/tracy": "^2.10",
         "tomasvotruba/class-leak": "^0.2",
         "phpstan/extension-installer": "^1.4",

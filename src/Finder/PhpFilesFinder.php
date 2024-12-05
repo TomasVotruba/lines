@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Finder;
 
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Webmozart\Assert\Assert;
 
@@ -11,10 +12,11 @@ final class PhpFilesFinder
 {
     /**
      * @param string[] $paths
-     * @param string[] $exclude
+     * @param string[] $excludes
+     *
      * @return string[]
      */
-    public function findInDirectories(array $paths, array $exclude = [], bool $allowVendor = false): array
+    public function findInDirectories(array $paths, array $excludes = [], bool $allowVendor = false): array
     {
         Assert::allFileExists($paths);
 
@@ -29,27 +31,49 @@ final class PhpFilesFinder
             }
         }
 
-        if ($directories !== []) {
-            $phpFilesFinder = Finder::create()
-                ->files()
-                ->in($directories)
-                ->name('*.php')
-                // skip this package in /vendor
-                ->notPath('tomasvotruba/lines')
-                ->exclude($exclude);
-
-            if ($allowVendor === false) {
-                // skip vendor directory, as we often need the full source code
-                $phpFilesFinder->notPath('vendor');
-            }
-
-            foreach ($phpFilesFinder->getIterator() as $fileInfo) {
-                $filePaths[] = $fileInfo->getRealPath();
-            }
+        // only files
+        if ($directories === []) {
+            return $filePaths;
         }
 
-        Assert::allString($filePaths);
+        $phpFilesFinder = Finder::create()
+            ->files()
+            ->in($directories)
+            ->sortByName()
+            ->name('*.php')
+            ->notPath('tomasvotruba/lines')
+            // fix exclude to handle directories
+            ->filter(function (SplFileInfo $fileInfo) use ($excludes) {
+                foreach ($excludes as $exclude) {
+                    if (str_contains($fileInfo->getRealPath(), $exclude)) {
+                        return \false;
+                    }
+                }
 
-        return $filePaths;
+                return true;
+            });
+
+        if ($allowVendor === false) {
+            // skip vendor directory, as we often need the full source code
+            $phpFilesFinder->notPath('vendor');
+        }
+
+        return $this->resolveRealPaths($phpFilesFinder);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveRealPaths(Finder $finder): array
+    {
+        $realFilePaths = [];
+
+        foreach ($finder->getIterator() as $fileInfo) {
+            $realFilePaths[] = $fileInfo->getRealPath();
+        }
+
+        Assert::allString($realFilePaths);
+
+        return $realFilePaths;
     }
 }

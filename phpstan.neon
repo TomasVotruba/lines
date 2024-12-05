@@ -9,5 +9,3 @@ parameters:
         - tests/Fixture/*
 
     level: 8
-
-    ignoreErrors:

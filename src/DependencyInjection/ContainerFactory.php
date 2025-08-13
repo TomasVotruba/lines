@@ -34,8 +34,8 @@ final class ContainerFactory
         $container->singleton(Application::class, function (Container $container): Application {
             $application = new Application();
 
-            $vendorCommand = $container->make(MeasureCommand::class);
-            $application->add($vendorCommand);
+            $measureCommand = $container->make(MeasureCommand::class);
+            $application->add($measureCommand);
 
             // remove basic command to make output clear
             $this->cleanupDefaultCommands($application);

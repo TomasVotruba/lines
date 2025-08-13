@@ -58,6 +58,9 @@ final class PhpFilesFinder
             $phpFilesFinder->notPath('vendor');
         }
 
+        // symfony cache dir
+        $phpFilesFinder->notPath('var');
+
         return $this->resolveRealPaths($phpFilesFinder);
     }
 

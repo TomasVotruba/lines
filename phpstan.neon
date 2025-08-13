@@ -9,3 +9,5 @@ parameters:
         - tests/Fixture/*
 
     level: 8
+
+    treatPhpDocTypesAsCertain: false

@@ -34,8 +34,8 @@ final class ContainerFactory
         $container->singleton(Application::class, function (Container $container): Application {
             $application = new Application();
 
-            $vendorCommand = $container->make(MeasureCommand::class);
-            $application->add($vendorCommand);
+            $measureCommand = $container->make(MeasureCommand::class);
+            $application->add($measureCommand);
 
             // remove basic command to make output clear
             $this->cleanupDefaultCommands($application);
@@ -46,7 +46,7 @@ final class ContainerFactory
         // parser
         $container->singleton(Parser::class, static function (): Parser {
             $phpParserFactory = new ParserFactory();
-            return $phpParserFactory->create(ParserFactory::PREFER_PHP7);
+            return $phpParserFactory->createForHostVersion();
         });
 
         return $container;
@@ -54,10 +54,13 @@ final class ContainerFactory
 
     public function cleanupDefaultCommands(Application $application): void
     {
+        $application->get('help')
+            ->setHidden(true);
+
         PrivatesAccessor::propertyClosure($application, 'commands', static function (array $commands): array {
             // remove default commands, as not needed here
             unset($commands['completion']);
-            unset($commands['help']);
+
             return $commands;
         });
     }

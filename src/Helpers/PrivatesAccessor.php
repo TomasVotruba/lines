@@ -21,7 +21,6 @@ final class PrivatesAccessor
     private static function getPrivateProperty(object $object, string $propertyName): mixed
     {
         $reflectionProperty = new ReflectionProperty($object, $propertyName);
-        $reflectionProperty->setAccessible(\true);
 
         return $reflectionProperty->getValue($object);
     }
@@ -29,7 +28,6 @@ final class PrivatesAccessor
     private static function setPrivateProperty(object $object, string $propertyName, mixed $value): void
     {
         $reflectionProperty = new ReflectionProperty($object, $propertyName);
-        $reflectionProperty->setAccessible(\true);
         $reflectionProperty->setValue($object, $value);
     }
 }

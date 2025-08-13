@@ -18,7 +18,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^12.0",
-        "rector/rector": "^2.1",
+        "rector/rector": "^2.1.3",
         "phpstan/phpstan": "^2.1",
         "phpecs/phpecs": "^2.1",
         "tracy/tracy": "^2.10",

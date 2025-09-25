@@ -39,7 +39,8 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $measurements->getClassConstantCount());
         $this->assertSame(1, $measurements->getInterfaceCount());
         $this->assertSame(0, $measurements->getTraitCount());
-        $this->assertSame(2, $measurements->getFunctionCount());
+        $this->assertSame(1, $measurements->getFunctionCount());
+        $this->assertSame(1, $measurements->getClosureCount());
         $this->assertSame(1, $measurements->getGlobalConstantCount());
 
         // methods

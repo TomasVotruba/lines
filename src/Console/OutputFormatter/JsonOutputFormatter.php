@@ -37,6 +37,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
                 'traits' => $measurements->getTraitCount(),
                 'enums' => $measurements->getEnumCount(),
                 'functions' => $measurements->getFunctionCount(),
+                'closures' => $measurements->getClosureCount(),
                 'global_constants' => $measurements->getGlobalConstantCount(),
             ];
 

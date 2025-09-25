@@ -37,6 +37,8 @@ final class Measurements
 
     private int $functionCount = 0;
 
+    private int $closureCount = 0;
+
     private int $globalConstantCount = 0;
 
     private int $classConstantCount = 0;
@@ -116,6 +118,11 @@ final class Measurements
     public function incrementFunctionCount(): void
     {
         ++$this->functionCount;
+    }
+
+    public function incrementClosureCount(): void
+    {
+        ++$this->closureCount;
     }
 
     public function incrementGlobalConstantCount(): void
@@ -219,6 +226,11 @@ final class Measurements
     public function getFunctionCount(): int
     {
         return $this->functionCount;
+    }
+
+    public function getClosureCount(): int
+    {
+        return $this->closureCount;
     }
 
     public function getGlobalConstantCount(): int

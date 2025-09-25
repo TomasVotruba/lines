@@ -24,7 +24,6 @@
         "tracy/tracy": "^2.10",
         "tomasvotruba/class-leak": "^2.0",
         "phpstan/extension-installer": "^1.4",
-        "symplify/vendor-patches": "^11.5",
         "symplify/phpstan-rules": "^14.6",
         "rector/type-perfect": "*"
     },
@@ -45,23 +44,13 @@
         "rector": "vendor/bin/rector --dry-run --ansi"
     },
     "replace": {
-        "symfony/string": "*",
         "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-intl-grapheme": "*",
-        "symfony/polyfill-mbstring": "*"
+        "symfony/polyfill-intl-grapheme": "*"
     },
     "config": {
         "platform-check": false,
         "allow-plugins": {
-            "phpstan/extension-installer": true,
-            "cweagans/composer-patches": true
-        }
-    },
-    "extra": {
-        "patches": {
-            "symfony/console": [
-                "patches/symfony-console-helper-helper-php.patch"
-            ]
+            "phpstan/extension-installer": true
         }
     }
 }

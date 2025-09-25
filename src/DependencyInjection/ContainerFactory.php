@@ -37,6 +37,8 @@ final class ContainerFactory
             $measureCommand = $container->make(MeasureCommand::class);
             $application->add($measureCommand);
 
+            $application->setDefaultCommand('measure', true);
+
             // remove basic command to make output clear
             $this->cleanupDefaultCommands($application);
 

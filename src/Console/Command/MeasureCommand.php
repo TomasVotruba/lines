@@ -32,7 +32,7 @@ final class MeasureCommand extends Command
         $this->setName('measure');
         $this->setDescription('Measure lines of code in given path(s)');
 
-        $this->addArgument('paths', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Path to analyze');
+        $this->addArgument('paths', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Path to analyze', [getcwd()]);
         $this->addOption(
             'exclude',
             null,

@@ -1,4 +1,4 @@
-# Lines
+# Lines of code
 
 CLI tool for quick size measure of PHP project, runs anywhere
 
@@ -22,25 +22,31 @@ composer require tomasvotruba/lines --dev
 ## Usage
 
 ```bash
-vendor/bin/lines measure src
+vendor/bin/lines
+```
+
+By default, we measure the root directory. To narrow it down, provide explicit path:
+
+```bash
+vendor/bin/lines src
 ```
 
 For short output:
 
 ```bash
-vendor/bin/lines measure src --short
+vendor/bin/lines --short
 ```
 
 For json output, just add `--json`:
 
 ```bash
-vendor/bin/lines measure src --json
+vendor/bin/lines --json
 ```
 
 Also, you can combine them (very handy for blog posts and tweets):
 
 ```bash
-vendor/bin/lines measure src --short --json
+vendor/bin/lines --short --json
 ```
 
 <br>
@@ -48,7 +54,7 @@ vendor/bin/lines measure src --short --json
 Are you looking for top 10 longest files?
 
 ```bash
-vendor/bin/lines measure src --longest
+vendor/bin/lines --longest
 ```
 
 ↓
@@ -154,5 +160,5 @@ This tool use case is to measure your code, not the 3rd party libraries. That's 
 If you want to measure vendor files too, use `--allow-vendor` option:
 
 ```bash
- vendor/bin/lines measure vendor/rector/rector --allow-vendor
+ vendor/bin/lines vendor/rector/rector --allow-vendor
 ```

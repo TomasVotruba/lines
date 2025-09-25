@@ -23,5 +23,7 @@ $container = $containerFactory->create();
 
 $application = $container->make(Application::class);
 
-$exitCode = $application->run(new ArgvInput(), new ConsoleOutput());
+$input = new ArgvInput();
+
+$exitCode = $application->run($input, new ConsoleOutput());
 exit($exitCode);

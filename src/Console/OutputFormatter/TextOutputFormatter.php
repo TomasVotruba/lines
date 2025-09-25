@@ -109,6 +109,7 @@ final readonly class TextOutputFormatter implements OutputFormatterInterface
             ['Traits', $measurements->getTraitCount()],
             ['Enums', $measurements->getEnumCount()],
             ['Functions', $measurements->getFunctionCount()],
+            ['Closures', $measurements->getClosureCount()],
             ['Global constants', $measurements->getGlobalConstantCount()],
         ]);
 

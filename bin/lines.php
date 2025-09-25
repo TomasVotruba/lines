@@ -23,7 +23,13 @@ $container = $containerFactory->create();
 
 $application = $container->make(Application::class);
 
-$input = new ArgvInput();
+// Allow both "bin/lines src" and "bin/lines measure src"
+$args = $_SERVER['argv'];
+if (isset($args[1]) && in_array($args[1], ['measure', 'm'], true)) {
+    array_splice($args, 1, 1); // drop the explicit command name
+}
+
+$input = new ArgvInput($args);
 
 $exitCode = $application->run($input, new ConsoleOutput());
 exit($exitCode);

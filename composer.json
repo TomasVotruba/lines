@@ -25,7 +25,7 @@
         "tomasvotruba/class-leak": "^2.0",
         "phpstan/extension-installer": "^1.4",
         "symplify/phpstan-rules": "^14.6",
-        "rector/type-perfect": "*"
+        "rector/type-perfect": "^2.1"
     },
     "autoload": {
         "psr-4": {

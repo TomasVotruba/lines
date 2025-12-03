@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\FeatureCounter\Enum;
+namespace TomasVotruba\Lines\FeatureCounter\Enum;
 
 final class FeatureName
 {

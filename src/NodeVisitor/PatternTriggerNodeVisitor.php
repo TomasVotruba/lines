@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\FeatureCounter\NodeVisitor;
+namespace TomasVotruba\Lines\FeatureCounter\NodeVisitor;
 
 use PhpParser\Modifiers;
 use PhpParser\Node;
@@ -15,8 +15,8 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
 use PhpParser\NodeVisitorAbstract;
-use Rector\FeatureCounter\Enum\FeatureName;
-use Rector\FeatureCounter\ValueObject\FeatureCollector;
+use TomasVotruba\Lines\FeatureCounter\Enum\FeatureName;
+use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 
 final class PatternTriggerNodeVisitor extends NodeVisitorAbstract
 {

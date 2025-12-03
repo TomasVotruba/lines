@@ -11,6 +11,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TomasVotruba\Lines\Console\Command\CountFeaturesCommand;
 use TomasVotruba\Lines\Console\Command\MeasureCommand;
 use TomasVotruba\Lines\Helpers\PrivatesAccessor;
 
@@ -26,9 +27,13 @@ final class ContainerFactory
         $this->emulateTokensOfOlderPHP();
 
         // console
+        $consoleVerbosity = defined(
+            'PHPUNIT_COMPOSER_INSTALL'
+        ) ? ConsoleOutput::VERBOSITY_QUIET : ConsoleOutput::VERBOSITY_NORMAL;
+
         $container->singleton(
             SymfonyStyle::class,
-            static fn (): SymfonyStyle => new SymfonyStyle(new ArrayInput([]), new ConsoleOutput())
+            static fn (): SymfonyStyle => new SymfonyStyle(new ArrayInput([]), new ConsoleOutput($consoleVerbosity))
         );
 
         $container->singleton(Application::class, function (Container $container): Application {
@@ -37,7 +42,8 @@ final class ContainerFactory
             $measureCommand = $container->make(MeasureCommand::class);
             $application->add($measureCommand);
 
-            $application->setDefaultCommand('measure', true);
+            $countFeatuersCommand = $container->make(CountFeaturesCommand::class);
+            $application->add($countFeatuersCommand);
 
             // remove basic command to make output clear
             $this->cleanupDefaultCommands($application);

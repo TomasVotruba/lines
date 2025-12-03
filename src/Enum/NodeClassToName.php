@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\FeatureCounter\Enum;
+namespace TomasVotruba\Lines\FeatureCounter\Enum;
 
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;

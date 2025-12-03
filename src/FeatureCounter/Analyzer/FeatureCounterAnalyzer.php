@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\FeatureCounter;
+namespace TomasVotruba\Lines\FeatureCounter\Analyzer;
 
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
-use Rector\FeatureCounter\Exception\InvalidStateException;
-use Rector\FeatureCounter\NodeVisitor\NodeInstanceNodeVisitor;
-use Rector\FeatureCounter\NodeVisitor\PatternTriggerNodeVisitor;
-use Rector\FeatureCounter\ValueObject\FeatureCollector;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Finder\SplFileInfo;
+use TomasVotruba\Lines\FeatureCounter\Exception\InvalidStateException;
+use TomasVotruba\Lines\FeatureCounter\NodeVisitor\NodeInstanceNodeVisitor;
+use TomasVotruba\Lines\FeatureCounter\NodeVisitor\PatternTriggerNodeVisitor;
+use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 
 final class FeatureCounterAnalyzer
 {

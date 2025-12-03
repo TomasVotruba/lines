@@ -1,0 +1,59 @@
+<?php
+
+declare(strict_types=1);
+
+namespace TomasVotruba\Lines\Console\Command;
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use TomasVotruba\Lines\FeatureCounter\Analyzer\FeatureCounterAnalyzer;
+use TomasVotruba\Lines\FeatureCounter\ResultPrinter;
+use TomasVotruba\Lines\Finder\ProjectFilesFinder;
+use Webmozart\Assert\Assert;
+
+final class CountFeaturesCommand extends Command
+{
+    public function __construct(
+        private readonly SymfonyStyle $symfonyStyle,
+        private readonly ProjectFilesFinder $projectFilesFinder,
+        private readonly FeatureCounterAnalyzer $featureCounterAnalyzer,
+        private readonly ResultPrinter $resultPrinter,
+    ) {
+        parent::__construct();
+    }
+
+    protected function configure(): void
+    {
+        $this->setName('count-features');
+        $this->setDescription('Count various PHP features in a project');
+
+        $this->addArgument('project-directory', InputArgument::OPTIONAL, 'Project directory to analyze', [getcwd()]);
+        $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');
+    }
+
+    /**
+     * @return self::FAILURE|self::SUCCESS
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $projectDirectory = $input->getArgument('project-directory');
+        Assert::string($projectDirectory);
+        Assert::directory($projectDirectory);
+
+        $isJson = (bool) $input->getOption('json');
+
+        // find project PHP files
+        $fileInfos = $this->projectFilesFinder->find($projectDirectory);
+        $featureCollector = $this->featureCounterAnalyzer->analyze($fileInfos);
+
+        $this->symfonyStyle->newLine();
+
+        $this->resultPrinter->print($featureCollector);
+
+        return Command::SUCCESS;
+    }
+}

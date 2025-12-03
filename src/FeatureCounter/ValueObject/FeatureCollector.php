@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\FeatureCounter\ValueObject;
+namespace TomasVotruba\Lines\FeatureCounter\ValueObject;
 
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
@@ -16,8 +16,8 @@ use PhpParser\Node\IntersectionType;
 use PhpParser\Node\PropertyHook;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Enum_;
-use Rector\FeatureCounter\Enum\FeatureName;
-use Rector\FeatureCounter\Enum\NodeClassToName;
+use TomasVotruba\Lines\FeatureCounter\Enum\FeatureName;
+use TomasVotruba\Lines\FeatureCounter\Enum\NodeClassToName;
 
 final class FeatureCollector
 {

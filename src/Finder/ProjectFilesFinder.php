@@ -1,6 +1,8 @@
 <?php
 
-namespace Rector\FeatureCounter\Finder;
+declare(strict_types=1);
+
+namespace TomasVotruba\Lines\Finder;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;

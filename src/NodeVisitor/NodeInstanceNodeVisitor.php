@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\FeatureCounter\NodeVisitor;
+namespace TomasVotruba\Lines\FeatureCounter\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
-use Rector\FeatureCounter\ValueObject\FeatureCollector;
+use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 
 final class NodeInstanceNodeVisitor extends NodeVisitorAbstract
 {

@@ -10,7 +10,9 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
@@ -31,7 +33,7 @@ final class PatternTriggerNodeVisitor extends NodeVisitorAbstract
         // @todo separate from nullable
         // UnionType::class => 0,
 
-        if ($node instanceof Node\NullableType) {
+        if ($node instanceof NullableType) {
             $this->featureCollector->structureCounterByPhpVersion['7.1'][FeatureName::NULLABLE_TYPE]++;
 
             return null;
@@ -74,7 +76,7 @@ final class PatternTriggerNodeVisitor extends NodeVisitorAbstract
             return null;
         }
 
-        if (($node instanceof Node\Stmt\Class_ && $node->isReadonly())) {
+        if (($node instanceof Class_ && $node->isReadonly())) {
             $this->featureCollector->structureCounterByPhpVersion['8.2'][FeatureName::READONLY_CLASS]++;
 
             return null;
@@ -104,12 +106,9 @@ final class PatternTriggerNodeVisitor extends NodeVisitorAbstract
             return null;
         }
 
-        if ($node instanceof FunctionLike && $node->getReturnType() instanceof Node) {
-            if ($node->getReturnType() instanceof Identifier && $node->getReturnType()->name === 'void') {
-                $this->featureCollector->structureCounterByPhpVersion['7.1'][FeatureName::VOID_RETURN_TYPE]++;
-
-                return null;
-            }
+        if ($node instanceof FunctionLike && $node->getReturnType() instanceof Node && ($node->getReturnType() instanceof Identifier && $node->getReturnType()->name === 'void')) {
+            $this->featureCollector->structureCounterByPhpVersion['7.1'][FeatureName::VOID_RETURN_TYPE]++;
+            return null;
         }
 
         if ($node instanceof Property && $node->type instanceof Node) {

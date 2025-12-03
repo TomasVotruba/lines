@@ -11,8 +11,8 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TomasVotruba\Lines\Console\Command\CountFeaturesCommand;
-use TomasVotruba\Lines\Console\Command\MeasureCommand;
+use TomasVotruba\Lines\Command\CountFeaturesCommand;
+use TomasVotruba\Lines\Command\MeasureCommand;
 use TomasVotruba\Lines\Helpers\PrivatesAccessor;
 
 final class ContainerFactory
@@ -42,8 +42,8 @@ final class ContainerFactory
             $measureCommand = $container->make(MeasureCommand::class);
             $application->add($measureCommand);
 
-            $countFeatuersCommand = $container->make(CountFeaturesCommand::class);
-            $application->add($countFeatuersCommand);
+            $countFeaturesCommand = $container->make(CountFeaturesCommand::class);
+            $application->add($countFeaturesCommand);
 
             // remove basic command to make output clear
             $this->cleanupDefaultCommands($application);

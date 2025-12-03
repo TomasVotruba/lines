@@ -20,7 +20,7 @@ The package is scoped and downgraded to PHP 7.2. So you can install it anywhere 
 composer require tomasvotruba/lines --dev
 ```
 
-## Usage
+## 1. Measure Lines and Size
 
 ```bash
 vendor/bin/lines measure
@@ -76,7 +76,7 @@ vendor/bin/lines measure --longest
 
 <br>
 
-## The Measured Items
+### 2. The Measured Items
 
 For the text output, you'll get data like these:
 
@@ -153,8 +153,7 @@ Or in a json format:
 }
 ```
 
-
-## Vendor file scanning
+### Vendor file scanning
 
 This tool use case is to measure your code, not the 3rd party libraries. That's why it ignores `/vendor` directory by default to avoid huge false positives.
 
@@ -163,3 +162,10 @@ If you want to measure vendor files too, use `--allow-vendor` option:
 ```bash
  vendor/bin/lines measure vendor/rector/rector --allow-vendor
 ```
+
+## 2. Feature Counter
+
+Two codebases using PHP 8.4 in `composer.json`, are not 2 same codebases. Reveal their real value by counting PHP feature they actually use.
+
+This tool scans your codebase, count PHP feature being used from which PHP version, and give you quick overview of how "modern" your codebase really is.
+

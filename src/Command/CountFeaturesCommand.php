@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TomasVotruba\Lines\Console\Command;
+namespace TomasVotruba\Lines\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -44,7 +44,7 @@ final class CountFeaturesCommand extends Command
         Assert::string($projectDirectory);
         Assert::directory($projectDirectory);
 
-        $isJson = (bool) $input->getOption('json');
+        $input->getOption('json');
 
         // find project PHP files
         $fileInfos = $this->projectFilesFinder->find($projectDirectory);

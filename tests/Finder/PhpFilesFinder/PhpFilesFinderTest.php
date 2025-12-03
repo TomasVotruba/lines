@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Finder\PhpFilesFinder;
+namespace TomasVotruba\Lines\Tests\Finder\PhpFilesFinder;
 
 use PHPUnit\Framework\TestCase;
 use TomasVotruba\Lines\Finder\PhpFilesFinder;

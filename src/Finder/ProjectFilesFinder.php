@@ -24,7 +24,7 @@ final class ProjectFilesFinder
             ->notPath('data-fixtures')
             ->notPath('build');
 
-        /** @var \Symfony\Component\Finder\SplFileInfo[] $fileInfos */
+        /** @var SplFileInfo[] $fileInfos */
         $fileInfos = iterator_to_array($finder->getIterator());
 
         return $fileInfos;

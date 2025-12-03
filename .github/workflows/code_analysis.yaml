@@ -25,6 +25,10 @@ jobs:
                         run: bin/lines measure src --json --longest --ansi
 
                     -
+                        name: 'Spot unused classes'
+                        run: vendor/bin/class-leak check src tests --skip-path="Fixture"
+
+                    -
                         name: 'PHPStan'
                         run: composer phpstan --ansi
 

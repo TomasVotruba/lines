@@ -24,7 +24,7 @@ final class NodeClassToName
     /**
      * @var array<class-string, string>
      */
-    public const LIST = [
+    public const array LIST = [
         PropertyHook::class => 'property hooks',
         IntersectionType::class => 'intersection types',
         Enum_::class => 'enum',

@@ -14,6 +14,7 @@ return RectorConfig::configure()
         deadCode: true,
         typeDeclarations: true,
         typeDeclarationDocblocks: true,
+        
     )
     ->withPhpSets()
     ->withImportNames()

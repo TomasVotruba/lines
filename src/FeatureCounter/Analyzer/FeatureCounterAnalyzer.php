@@ -10,12 +10,12 @@ use PhpParser\ParserFactory;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Finder\SplFileInfo;
-use TomasVotruba\Lines\FeatureCounter\Exception\InvalidStateException;
+use TomasVotruba\Lines\Exception\ShouldNotHappenException;
 use TomasVotruba\Lines\FeatureCounter\NodeVisitor\NodeInstanceNodeVisitor;
 use TomasVotruba\Lines\FeatureCounter\NodeVisitor\PatternTriggerNodeVisitor;
 use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 
-final class FeatureCounterAnalyzer
+final readonly class FeatureCounterAnalyzer
 {
     private Parser $parser;
 
@@ -40,7 +40,7 @@ final class FeatureCounterAnalyzer
         foreach ($fileInfos as $fileInfo) {
             $stmts = $this->parser->parse($fileInfo->getContents());
             if ($stmts === null) {
-                throw new InvalidStateException(sprintf(
+                throw new ShouldNotHappenException(sprintf(
                     'Parsing of file "%s" resulted in null statements.',
                     $fileInfo->getRealPath()
                 ));
@@ -58,9 +58,9 @@ final class FeatureCounterAnalyzer
 
     private function createNodeTraverser(FeatureCollector $featureCollector): NodeTraverser
     {
-        $featureCountingNodeVisitor = new PatternTriggerNodeVisitor($featureCollector);
+        $patternTriggerNodeVisitor = new PatternTriggerNodeVisitor($featureCollector);
         $nodeInstanceNodeVisitor = new NodeInstanceNodeVisitor($featureCollector);
 
-        return new NodeTraverser(...[$featureCountingNodeVisitor, $nodeInstanceNodeVisitor]);
+        return new NodeTraverser(...[$patternTriggerNodeVisitor, $nodeInstanceNodeVisitor]);
     }
 }

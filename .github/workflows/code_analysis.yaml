@@ -18,11 +18,14 @@ jobs:
 
                     -
                         name: 'Run "measure" command'
-                        run: bin/lines measure src --ansi
+                        run: |
+                            bin/lines measure src --ansi
+                            bin/lines measure src --json --longest --ansi
 
                     -
-                        name: 'Run "measure" with json and longest command'
-                        run: bin/lines measure src --json --longest --ansi
+                        name: 'Run "features" command'
+                        run: |
+                            bin/lines count-features src --ansi
 
                     -
                         name: 'Spot unused classes'

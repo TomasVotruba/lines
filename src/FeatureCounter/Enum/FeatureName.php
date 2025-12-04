@@ -1,36 +1,64 @@
 <?php
 
-declare(strict_types=1);
-
-namespace TomasVotruba\Lines\FeatureCounter\Enum;
+declare (strict_types=1);
+namespace Lines202512\TomasVotruba\Lines\FeatureCounter\Enum;
 
 final class FeatureName
 {
-    public const string FIRST_CLASS_CALLABLES = 'first class callables';
-
-    public const string READONLY_PROPERTY = 'read-only property';
-
-    public const string PROPERTY_PROMOTION = 'constructor property promotion';
-
-    public const string READONLY_CLASS = 'read-only classes';
-
-    public const string CLASS_CONSTANT_VISIBILITY = 'class constant visibility';
-
-    public const string OBJECT_TYPE = 'object type';
-
-    public const string TYPED_CONSTANTS = 'typed class constants';
-
-    public const string NAMED_ARGUMENTS = 'named arguments';
-
-    public const string VOID_RETURN_TYPE = 'void return type';
-
-    public const string TYPED_PROPERTIES = 'typed properties';
-
-    public const string PARAMETER_TYPES = 'parameter types';
-
-    public const string RETURN_TYPES = 'return types';
-
-    public const string UNION_TYPES = 'union types';
-
-    public const string NULLABLE_TYPE = 'nullable type';
+    /**
+     * @var string
+     */
+    public const FIRST_CLASS_CALLABLES = 'first class callables';
+    /**
+     * @var string
+     */
+    public const READONLY_PROPERTY = 'read-only property';
+    /**
+     * @var string
+     */
+    public const PROPERTY_PROMOTION = 'constructor property promotion';
+    /**
+     * @var string
+     */
+    public const READONLY_CLASS = 'read-only classes';
+    /**
+     * @var string
+     */
+    public const CLASS_CONSTANT_VISIBILITY = 'class constant visibility';
+    /**
+     * @var string
+     */
+    public const OBJECT_TYPE = 'object type';
+    /**
+     * @var string
+     */
+    public const TYPED_CONSTANTS = 'typed class constants';
+    /**
+     * @var string
+     */
+    public const NAMED_ARGUMENTS = 'named arguments';
+    /**
+     * @var string
+     */
+    public const VOID_RETURN_TYPE = 'void return type';
+    /**
+     * @var string
+     */
+    public const TYPED_PROPERTIES = 'typed properties';
+    /**
+     * @var string
+     */
+    public const PARAMETER_TYPES = 'parameter types';
+    /**
+     * @var string
+     */
+    public const RETURN_TYPES = 'return types';
+    /**
+     * @var string
+     */
+    public const UNION_TYPES = 'union types';
+    /**
+     * @var string
+     */
+    public const NULLABLE_TYPE = 'nullable type';
 }

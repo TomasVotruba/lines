@@ -8,7 +8,7 @@ final class FeatureName
 {
     public const string FIRST_CLASS_CALLABLES = 'first class callables';
 
-    public const string READONLY_PROPERTY = 'read-only property';
+    public const string READONLY_PROPERTY = 'read-only property (< PHP 8.2 readonly classes)';
 
     public const string PROPERTY_PROMOTION = 'constructor property promotion';
 

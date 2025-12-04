@@ -35,7 +35,8 @@ final readonly class ResultPrinter
             $this->symfonyStyle->table(['Feature', 'Count'], $rows);
         }
 
-        // @todo summary count by PHP version
+        $this->symfonyStyle->newLine();
+
         $this->symfonyStyle->writeln(
             sprintf('<fg=yellow>%s=== Summary by PHP version ===</>', str_repeat(' ', 16))
         );

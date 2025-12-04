@@ -32,11 +32,12 @@ final class FeatureCounterAnalyzerTest extends TestCase
 
         $featuresCountedByPhpVersion = $featureCollector->getFeaturesGroupedByPhpVersion();
 
-        // union types
-        // property type
+        $typedPropertiesPhpFeature = $featuresCountedByPhpVersion['7.4'][0];
+        $this->assertSame('Typed properties', $typedPropertiesPhpFeature->getName());
+        $this->assertSame(1, $typedPropertiesPhpFeature->getCount());
 
-        $typedPropertiesPhpFeature = $featuresCountedByPhpVersion['7.4'];
-        dump($typedPropertiesPhpFeature);
-//        die;
+        $unionTypedPhpFeature = $featuresCountedByPhpVersion['8.0'][1];
+        $this->assertSame('Union types', $unionTypedPhpFeature->getName());
+        $this->assertSame(2, $unionTypedPhpFeature->getCount());
     }
 }

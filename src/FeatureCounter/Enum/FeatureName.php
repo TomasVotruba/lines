@@ -18,7 +18,7 @@ final class FeatureName
 
     public const string OBJECT_TYPE = 'object type';
 
-    public const string TYPED_CONSTANTS = 'typed class constants';
+    public const string TYPED_CLASS_CONSTANTS = 'typed class constants';
 
     public const string NAMED_ARGUMENTS = 'named arguments';
 
@@ -33,4 +33,6 @@ final class FeatureName
     public const string UNION_TYPES = 'union types';
 
     public const string NULLABLE_TYPE = 'nullable type';
+
+    public const string PROPERTY_HOOKS = 'property hooks';
 }

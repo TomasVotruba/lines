@@ -25,35 +25,38 @@ final class FeatureCollector
      * @var array<string, array<string, int>>
      */
     public array $structureCounterByPhpVersion = [
-        '8.3' => [
-            FeatureName::TYPED_CONSTANTS => 0,
-        ],
-        '8.2' => [
-            FeatureName::READONLY_CLASS => 0,
-        ],
-        '8.1' => [
-            FeatureName::FIRST_CLASS_CALLABLES => 0,
-            FeatureName::READONLY_PROPERTY => 0,
-        ],
-        '8.0' => [
-            FeatureName::PROPERTY_PROMOTION => 0,
-            FeatureName::NAMED_ARGUMENTS => 0,
-            FeatureName::UNION_TYPES => 0,
-        ],
-        '7.4' => [
-            FeatureName::TYPED_PROPERTIES => 0,
-        ],
-        '7.2' => [
-            FeatureName::OBJECT_TYPE => 0,
+        '7.0' => [
+            FeatureName::PARAMETER_TYPES => 0,
+            FeatureName::RETURN_TYPES => 0,
         ],
         '7.1' => [
             FeatureName::NULLABLE_TYPE => 0,
             FeatureName::VOID_RETURN_TYPE => 0,
             FeatureName::CLASS_CONSTANT_VISIBILITY => 0,
         ],
-        '7.0' => [
-            FeatureName::PARAMETER_TYPES => 0,
-            FeatureName::RETURN_TYPES => 0,
+        '7.2' => [
+            FeatureName::OBJECT_TYPE => 0,
+        ],
+        '7.4' => [
+            FeatureName::TYPED_PROPERTIES => 0,
+        ],
+        '8.0' => [
+            FeatureName::PROPERTY_PROMOTION => 0,
+            FeatureName::NAMED_ARGUMENTS => 0,
+            FeatureName::UNION_TYPES => 0,
+        ],
+        '8.1' => [
+            FeatureName::FIRST_CLASS_CALLABLES => 0,
+            FeatureName::READONLY_PROPERTY => 0,
+        ],
+        '8.2' => [
+            FeatureName::READONLY_CLASS => 0,
+        ],
+        '8.3' => [
+            FeatureName::TYPED_CLASS_CONSTANTS => 0,
+        ],
+        '8.4' => [
+            FeatureName::PROPERTY_HOOKS => 0,
         ],
     ];
 
@@ -87,14 +90,29 @@ final class FeatureCollector
     ];
 
     /**
+     * @return array<string, int>
+     */
+    public function getFeatureCountByPhpVersion(): array
+    {
+        $data = [];
+
+        foreach ($this->structureCounterByPhpVersion as $phpVersion => $countByType) {
+            $phpFeaturesCount = array_sum($countByType);
+            $data[$phpVersion] = $phpFeaturesCount;
+        }
+
+        return $data;
+    }
+
+    /**
      * @return array<string, array<string, int>>
      */
     public function getGroupedFeatureCountedByPhpVersion(): array
     {
         $data = $this->structureCounterByPhpVersion;
 
-        foreach ($this->nodesTypesCounterByPhpVersion as $phpVersion => $nodesCount) {
-            foreach ($nodesCount as $nodeClass => $count) {
+        foreach ($this->nodesTypesCounterByPhpVersion as $phpVersion => $nodesCountByNodeClass) {
+            foreach ($nodesCountByNodeClass as $nodeClass => $count) {
                 $description = NodeClassToName::LIST[$nodeClass];
                 $data[$phpVersion][$description] = $count;
             }

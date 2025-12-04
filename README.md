@@ -20,6 +20,8 @@ The package is scoped and downgraded to PHP 7.2. So you can install it anywhere 
 composer require tomasvotruba/lines --dev
 ```
 
+<br>
+
 ## 1. Measure Lines and Size
 
 ```bash
@@ -51,32 +53,6 @@ vendor/bin/lines measure --short --json
 ```
 
 <br>
-
-Are you looking for top 10 longest files?
-
-```bash
-vendor/bin/lines measure --longest
-```
-
-↓
-
-```bash
-  Longest files                                 line count
-  src/Measurements.php ............................... 320
-  src/Console/OutputFormatter/TextOutputFormatter.php  136
-  src/NodeVisitor/StructureNodeVisitor.php ........... 124
-  src/Console/Command/MeasureCommand.php .............. 98
-  src/Analyser.php .................................... 92
-  src/DependencyInjection/ContainerFactory.php ........ 81
-  src/Console/OutputFormatter/JsonOutputFormatter.php . 70
-  src/Finder/PhpFilesFinder.php ....................... 56
-  src/ValueObject/TableView.php ....................... 54
-  src/ValueObject/TableRow.php ........................ 40
-```
-
-<br>
-
-### 2. The Measured Items
 
 For the text output, you'll get data like these:
 
@@ -153,19 +129,51 @@ Or in a json format:
 }
 ```
 
+### Longest files
+
+Are you looking for top 10 longest files?
+
+```bash
+vendor/bin/lines measure --longest
+```
+
+↓
+
+```bash
+  Longest files                                 line count
+  src/Measurements.php ............................... 320
+  src/Console/OutputFormatter/TextOutputFormatter.php  136
+  src/NodeVisitor/StructureNodeVisitor.php ........... 124
+  src/Console/Command/MeasureCommand.php .............. 98
+  src/Analyser.php .................................... 92
+```
+
+<br>
+
 ### Vendor file scanning
 
-This tool use case is to measure your code, not the 3rd party libraries. That's why it ignores `/vendor` directory by default to avoid huge false positives.
-
-If you want to measure vendor files too, use `--allow-vendor` option:
+This tool measures *your code*, not the 3rd party libraries. It skips `/vendor` directory by default to avoid false positives. If you want to measure vendor files too, use `--allow-vendor` option:
 
 ```bash
  vendor/bin/lines measure vendor/rector/rector --allow-vendor
 ```
 
+<br>
+
 ## 2. Feature Counter
 
 Two codebases using PHP 8.4 in `composer.json`, are not 2 same codebases. Reveal their real value by counting PHP feature they actually use.
 
-This tool scans your codebase, count PHP feature being used from which PHP version, and give you quick overview of how "modern" your codebase really is.
+This command:
+
+* scans your codebase,
+* count PHP feature being used from which PHP version,
+* and give you quick overview of how "modern" your codebase really is
+
+```bash
+vendor/bin/lines feature-count src
+```
+
+↓
+
 

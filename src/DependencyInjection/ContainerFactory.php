@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Command\FeaturesCommand;
 use TomasVotruba\Lines\Command\MeasureCommand;
+use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 use TomasVotruba\Lines\Helpers\PrivatesAccessor;
 
 final class ContainerFactory
@@ -56,6 +57,8 @@ final class ContainerFactory
             $phpParserFactory = new ParserFactory();
             return $phpParserFactory->createForHostVersion();
         });
+
+        $container->singleton(FeatureCollector::class);
 
         return $container;
     }

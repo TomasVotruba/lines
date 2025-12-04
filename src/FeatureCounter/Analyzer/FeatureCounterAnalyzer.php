@@ -11,8 +11,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Finder\SplFileInfo;
 use TomasVotruba\Lines\Exception\ShouldNotHappenException;
-use TomasVotruba\Lines\FeatureCounter\NodeVisitor\NodeInstanceNodeVisitor;
-use TomasVotruba\Lines\FeatureCounter\NodeVisitor\PatternTriggerNodeVisitor;
+use TomasVotruba\Lines\FeatureCounter\NodeVisitor\FeatureCollectorNodeVisitor;
 use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 
 /**
@@ -22,8 +21,9 @@ final readonly class FeatureCounterAnalyzer
 {
     private Parser $parser;
 
-    public function __construct()
-    {
+    public function __construct(
+        private FeatureCollectorNodeVisitor $featureCollectorNodeVisitor
+    ) {
         $parserFactory = new ParserFactory();
         $this->parser = $parserFactory->createForNewestSupportedVersion();
     }
@@ -36,9 +36,7 @@ final readonly class FeatureCounterAnalyzer
         $progressBar = new ProgressBar(new ConsoleOutput());
         $progressBar->start(count($fileInfos));
 
-        $featureCollector = new FeatureCollector();
-
-        $nodeTraverser = $this->createNodeTraverser($featureCollector);
+        $nodeTraverser = new NodeTraverser($this->featureCollectorNodeVisitor);
 
         foreach ($fileInfos as $fileInfo) {
             $stmts = $this->parser->parse($fileInfo->getContents());
@@ -57,13 +55,5 @@ final readonly class FeatureCounterAnalyzer
         $progressBar->finish();
 
         return $featureCollector;
-    }
-
-    private function createNodeTraverser(FeatureCollector $featureCollector): NodeTraverser
-    {
-        $patternTriggerNodeVisitor = new PatternTriggerNodeVisitor($featureCollector);
-        $nodeInstanceNodeVisitor = new NodeInstanceNodeVisitor($featureCollector);
-
-        return new NodeTraverser(...[$patternTriggerNodeVisitor, $nodeInstanceNodeVisitor]);
     }
 }

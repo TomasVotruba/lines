@@ -15,7 +15,7 @@ use TomasVotruba\Lines\FeatureCounter\ResultPrinter;
 use TomasVotruba\Lines\Finder\ProjectFilesFinder;
 use Webmozart\Assert\Assert;
 
-final class CountFeaturesCommand extends Command
+final class FeaturesCommand extends Command
 {
     public function __construct(
         private readonly SymfonyStyle $symfonyStyle,
@@ -28,8 +28,8 @@ final class CountFeaturesCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('count-features');
-        $this->setDescription('Count various PHP features in a project');
+        $this->setName('features');
+        $this->setDescription('Count used PHP features in the project');
 
         $this->addArgument('project-directory', InputArgument::OPTIONAL, 'Project directory to analyze', [getcwd()]);
         $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');

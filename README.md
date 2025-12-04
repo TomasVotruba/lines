@@ -165,17 +165,18 @@ This tool measures *your code*, not the 3rd party libraries. It skips `/vendor` 
 
 ## 2. Feature Counter
 
-Two codebases using PHP 8.4 in `composer.json`, are not 2 same codebases. Reveal their real value by counting PHP feature they actually use.
+Two codebases using PHP 8.4 in `composer.json`, are not the same codebases. One has zero type param/return/property declarations, other has promoted properties. Reveal their real value by counting PHP feature they actually use.
+
+```bash
+vendor/bin/lines feature-count src
+```
 
 This command:
 
 * scans your codebase,
 * count PHP feature being used from which PHP version,
-* and give you quick overview of how "modern" your codebase really is
+* gives you quick overview of how modern the codebase really is
 
-```bash
-vendor/bin/lines feature-count src
-```
 
 ↓
 

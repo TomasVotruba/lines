@@ -255,9 +255,7 @@ final class FeatureCollector
         // sort by php version first, just to normalize order
         usort(
             $this->phpFeatures,
-            function (PhpFeature $firstPhpFeature, PhpFeature $secondPhpFeature): int {
-                return version_compare($firstPhpFeature->getPhpVersion(), $secondPhpFeature->getPhpVersion());
-            }
+            fn(PhpFeature $firstPhpFeature, PhpFeature $secondPhpFeature): int => version_compare($firstPhpFeature->getPhpVersion(), $secondPhpFeature->getPhpVersion())
         );
 
         return $this->phpFeatures;

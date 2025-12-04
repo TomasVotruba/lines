@@ -24,7 +24,7 @@ final readonly class ResultPrinter
 
         $previousPhpVersion = null;
 
-        foreach ($featureCollector->getPhpFeatures() as $key => $phpFeature) {
+        foreach ($featureCollector->getPhpFeatures() as $phpFeature) {
             $changedPhpVersion = $previousPhpVersion !== null && $previousPhpVersion !== $phpFeature->getPhpVersion();
             if ($changedPhpVersion) {
                 // add empty breakline

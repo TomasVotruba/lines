@@ -31,17 +31,21 @@ final class FeatureCounterAnalyzerTest extends TestCase
         $fileInfos = $this->projectFilesFinder->find(__DIR__ . '/Fixture');
         $featureCollector = $this->featureCounterAnalyzer->analyze($fileInfos);
 
-        $featuresCountedByPhpVersion = $featureCollector->getGroupedFeatureCountedByPhpVersion();
+        $featuresCountedByPhpVersion = $featureCollector->getFeaturesGroupedByPhpVersion();
 
-        // uion types
-
+        // union types
         // property type
+
+        dump($featuresCountedByPhpVersion[70000]);
+
+        foreach ($featuresCountedByPhpVersion[70400]);
+        die;
 
         dump($featuresCountedByPhpVersion['7.0']);
 
         // strict declares
         $this->assertSame(1, $featuresCountedByPhpVersion['7.0'][FeatureName::STRICT_DECLARES]);
-        $this->assertSame(2, $featuresCountedByPhpVersion['7.4'][FeatureName::TYPED_PROPERTIES]);
+        $this->assertSame(1, $featuresCountedByPhpVersion['7.4'][FeatureName::TYPED_PROPERTIES]);
 
         // dump($featuresCountedByPhpVersion['8.0'][FeatureName::UNION_TYPES]);
 

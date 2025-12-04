@@ -254,24 +254,20 @@ final class FeatureCollector
     }
 
     /**
-     * @return array<string, array<string, int>>
+     * @return array<int, PhpFeature[]>
      */
-    public function getGroupedFeatureCountedByPhpVersion(): array
+    public function getFeaturesGroupedByPhpVersion(): array
     {
-        $data = $this->structureCounterByPhpVersion;
+        $featuresGroupedByPhpVersion = [];
 
-        foreach ($this->nodesTypesCounterByPhpVersion as $phpVersion => $nodesCountByNodeClass) {
-            foreach ($nodesCountByNodeClass as $nodeClass => $count) {
-                $description = NodeClassToName::LIST[$nodeClass];
-                $data[$phpVersion][$description] = $count;
-            }
-
-            ksort($data[$phpVersion]);
+        foreach ($this->phpFeatures as $phpFeature) {
+            $featuresGroupedByPhpVersion[$phpFeature->getPhpVersion()][] = $phpFeature;
         }
 
-        ksort($data);
+        // from lowest to highest
+        ksort($featuresGroupedByPhpVersion);
 
-        return $data;
+        return $featuresGroupedByPhpVersion;
     }
 
     public function collectFromNode(Node $node): void

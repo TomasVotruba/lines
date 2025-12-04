@@ -22,7 +22,7 @@ final readonly class FeatureCounterAnalyzer
     private Parser $parser;
 
     public function __construct(
-        private FeatureCollectorNodeVisitor $featureCollectorNodeVisitor
+        private FeatureCollector $featureCollector,
     ) {
         $parserFactory = new ParserFactory();
         $this->parser = $parserFactory->createForNewestSupportedVersion();
@@ -36,7 +36,8 @@ final readonly class FeatureCounterAnalyzer
         $progressBar = new ProgressBar(new ConsoleOutput());
         $progressBar->start(count($fileInfos));
 
-        $nodeTraverser = new NodeTraverser($this->featureCollectorNodeVisitor);
+        $featureCollectorNodeVisitor = new FeatureCollectorNodeVisitor($this->featureCollector);
+        $nodeTraverser = new NodeTraverser($featureCollectorNodeVisitor);
 
         foreach ($fileInfos as $fileInfo) {
             $stmts = $this->parser->parse($fileInfo->getContents());
@@ -54,6 +55,6 @@ final readonly class FeatureCounterAnalyzer
 
         $progressBar->finish();
 
-        return $featureCollector;
+        return $this->featureCollector;
     }
 }

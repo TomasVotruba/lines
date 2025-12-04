@@ -19,17 +19,18 @@ final readonly class ResultPrinter
     {
         $this->symfonyStyle->newLine(2);
 
-        foreach ($featureCollector->getGroupedFeatureCountedByPhpVersion() as $phpVersion => $featureCounts) {
+        foreach ($featureCollector->getFeaturesGroupedByPhpVersion() as $phpVersion => $phpFeatures) {
             $this->symfonyStyle->writeln(
                 sprintf('<fg=yellow>%s=== PHP ' . $phpVersion . ' ===</>', str_repeat(' ', 24))
             );
+
             $this->symfonyStyle->newLine();
 
             $rows = [];
-            foreach ($featureCounts as $featureName => $count) {
+            foreach ($phpFeatures as $phpFeature) {
                 $rows[] = [
-                    str_pad($featureName, 45, ' ', STR_PAD_RIGHT),
-                    str_pad(number_format($count, 0, ',', ' '), 10, ' ', STR_PAD_LEFT)];
+                    str_pad($phpFeature->getName(), 45, ' ', STR_PAD_RIGHT),
+                    str_pad(number_format($phpFeature->getCount(), 0, ',', ' '), 10, ' ', STR_PAD_LEFT)];
             }
 
             $this->symfonyStyle->table(['Feature', 'Count'], $rows);

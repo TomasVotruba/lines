@@ -12,6 +12,9 @@ return RectorConfig::configure()
         codingStyle: true,
         privatization: true,
         deadCode: true,
+        typeDeclarations: true,
+        typeDeclarationDocblocks: true,
+        
     )
     ->withPhpSets()
     ->withImportNames()

@@ -8,6 +8,7 @@ CLI tool for quick size measure of PHP project, runs anywhere
 * get quick overview of your project size - no details, no complexity, just lines of code
 * get easy JSON output for further processing
 * we keep it simple, so you can enjoy reading - for more complex operation use static analysis like PHPStan
+* measure **used PHP features in your project** - how much PHP 8.0-features used? How many attributes? How many arrow function? How many union types?
 
 <br>
 
@@ -19,34 +20,34 @@ The package is scoped and downgraded to PHP 7.2. So you can install it anywhere 
 composer require tomasvotruba/lines --dev
 ```
 
-## Usage
+## 1. Measure Lines and Size
 
 ```bash
-vendor/bin/lines
+vendor/bin/lines measure
 ```
 
 By default, we measure the root directory. To narrow it down, provide explicit path:
 
 ```bash
-vendor/bin/lines src
+vendor/bin/lines mesaure src
 ```
 
 For short output:
 
 ```bash
-vendor/bin/lines --short
+vendor/bin/lines measure --short
 ```
 
 For json output, just add `--json`:
 
 ```bash
-vendor/bin/lines --json
+vendor/bin/lines measure --json
 ```
 
 Also, you can combine them (very handy for blog posts and tweets):
 
 ```bash
-vendor/bin/lines --short --json
+vendor/bin/lines measure --short --json
 ```
 
 <br>
@@ -54,7 +55,7 @@ vendor/bin/lines --short --json
 Are you looking for top 10 longest files?
 
 ```bash
-vendor/bin/lines --longest
+vendor/bin/lines measure --longest
 ```
 
 ↓
@@ -75,7 +76,7 @@ vendor/bin/lines --longest
 
 <br>
 
-## The Measured Items
+### 2. The Measured Items
 
 For the text output, you'll get data like these:
 
@@ -152,13 +153,19 @@ Or in a json format:
 }
 ```
 
-
-## Vendor file scanning
+### Vendor file scanning
 
 This tool use case is to measure your code, not the 3rd party libraries. That's why it ignores `/vendor` directory by default to avoid huge false positives.
 
 If you want to measure vendor files too, use `--allow-vendor` option:
 
 ```bash
- vendor/bin/lines vendor/rector/rector --allow-vendor
+ vendor/bin/lines measure vendor/rector/rector --allow-vendor
 ```
+
+## 2. Feature Counter
+
+Two codebases using PHP 8.4 in `composer.json`, are not 2 same codebases. Reveal their real value by counting PHP feature they actually use.
+
+This tool scans your codebase, count PHP feature being used from which PHP version, and give you quick overview of how "modern" your codebase really is.
+

@@ -22,9 +22,9 @@ final class ContainerFactory
      */
     public function create(): Container
     {
-        $container = new Container();
-
         $this->emulateTokensOfOlderPHP();
+
+        $container = new Container();
 
         // console
         $consoleVerbosity = defined(
@@ -86,6 +86,18 @@ final class ContainerFactory
 
         if (! defined('T_ENUM')) {
             define('T_ENUM', 5015);
+        }
+
+        if (! defined('T_COALESCE_EQUAL')) {
+            define('T_COALESCE_EQUAL', 5020);
+        }
+
+        if (! defined('T_FN')) {
+            define('T_FN', 5030);
+        }
+
+        if (! defined('T_BAD_CHARACTER')) {
+            define('T_BAD_CHARACTER', 5040);
         }
     }
 }

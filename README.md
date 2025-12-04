@@ -1,6 +1,8 @@
 # Lines of code and PHP Features
 
-CLI tool for quick size measure of PHP project, and real used PHP features. Zero dependencies. Runs anywhere.
+CLI tool for quick size measure of PHP project, and real used PHP features.
+
+Zero dependencies. Runs anywhere.
 
 <br>
 

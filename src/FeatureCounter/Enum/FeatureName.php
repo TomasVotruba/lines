@@ -35,4 +35,6 @@ final class FeatureName
     public const string NULLABLE_TYPE = 'nullable type';
 
     public const string PROPERTY_HOOKS = 'property hooks';
+
+    public const string STRICT_DECLARES = 'strict declares';
 }

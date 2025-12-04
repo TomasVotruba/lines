@@ -22,12 +22,13 @@ use TomasVotruba\Lines\FeatureCounter\Enum\NodeClassToName;
 final class FeatureCollector
 {
     /**
-     * @var array<string, array<string, int>>
+     * @var array<string, array<FeatureName::*, int>>
      */
     public array $structureCounterByPhpVersion = [
         '7.0' => [
             FeatureName::PARAMETER_TYPES => 0,
             FeatureName::RETURN_TYPES => 0,
+            FeatureName::STRICT_DECLARES => 0,
         ],
         '7.1' => [
             FeatureName::NULLABLE_TYPE => 0,

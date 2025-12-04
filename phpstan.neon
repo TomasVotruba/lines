@@ -6,7 +6,7 @@ parameters:
         - views
 
     excludePaths:
-        - tests/Fixture/*
+        - */Fixture/*
 
     level: 8
 

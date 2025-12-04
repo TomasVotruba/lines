@@ -1,20 +1,22 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Lines202512\TomasVotruba\Lines\FeatureCounter\NodeVisitor;
 
-namespace TomasVotruba\Lines\FeatureCounter\NodeVisitor;
-
-use PhpParser\Node;
-use PhpParser\NodeVisitorAbstract;
-use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
-
+use Lines202512\PhpParser\Node;
+use Lines202512\PhpParser\NodeVisitorAbstract;
+use Lines202512\TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 final class FeatureCollectorNodeVisitor extends NodeVisitorAbstract
 {
-    public function __construct(
-        private readonly FeatureCollector $featureCollector
-    ) {
+    /**
+     * @readonly
+     * @var \TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector
+     */
+    private $featureCollector;
+    public function __construct(FeatureCollector $featureCollector)
+    {
+        $this->featureCollector = $featureCollector;
     }
-
     public function enterNode(Node $node)
     {
         foreach ($this->featureCollector->getPhpFeatures() as $phpFeature) {
@@ -23,7 +25,6 @@ final class FeatureCollectorNodeVisitor extends NodeVisitorAbstract
                 $phpFeature->increaseCount();
             }
         }
-
         return null;
     }
 }

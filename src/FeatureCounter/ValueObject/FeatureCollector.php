@@ -1,299 +1,194 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Lines202512\TomasVotruba\Lines\FeatureCounter\ValueObject;
 
-namespace TomasVotruba\Lines\FeatureCounter\ValueObject;
-
-use PhpParser\Modifiers;
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\AssignOp\Coalesce;
-use PhpParser\Node\Expr\BinaryOp\Spaceship;
-use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\Match_;
-use PhpParser\Node\Expr\NullsafeMethodCall;
-use PhpParser\Node\Expr\NullsafePropertyFetch;
-use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\IntersectionType;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Param;
-use PhpParser\Node\PropertyHook;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\Declare_;
-use PhpParser\Node\Stmt\Enum_;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\UnionType;
-use TomasVotruba\Lines\FeatureCounter\Enum\PhpVersion;
-
+use Lines202512\PhpParser\Modifiers;
+use Lines202512\PhpParser\Node;
+use Lines202512\PhpParser\Node\Arg;
+use Lines202512\PhpParser\Node\AttributeGroup;
+use Lines202512\PhpParser\Node\Expr\ArrowFunction;
+use Lines202512\PhpParser\Node\Expr\AssignOp\Coalesce;
+use Lines202512\PhpParser\Node\Expr\BinaryOp\Spaceship;
+use Lines202512\PhpParser\Node\Expr\CallLike;
+use Lines202512\PhpParser\Node\Expr\Match_;
+use Lines202512\PhpParser\Node\Expr\NullsafeMethodCall;
+use Lines202512\PhpParser\Node\Expr\NullsafePropertyFetch;
+use Lines202512\PhpParser\Node\Expr\Throw_;
+use Lines202512\PhpParser\Node\FunctionLike;
+use Lines202512\PhpParser\Node\Identifier;
+use Lines202512\PhpParser\Node\IntersectionType;
+use Lines202512\PhpParser\Node\NullableType;
+use Lines202512\PhpParser\Node\Param;
+use Lines202512\PhpParser\Node\PropertyHook;
+use Lines202512\PhpParser\Node\Stmt\Class_;
+use Lines202512\PhpParser\Node\Stmt\ClassConst;
+use Lines202512\PhpParser\Node\Stmt\Declare_;
+use Lines202512\PhpParser\Node\Stmt\Enum_;
+use Lines202512\PhpParser\Node\Stmt\Property;
+use Lines202512\PhpParser\Node\UnionType;
+use Lines202512\TomasVotruba\Lines\FeatureCounter\Enum\PhpVersion;
 final class FeatureCollector
 {
     /**
      * @var PhpFeature[]
      */
-    private array $phpFeatures = [];
-
+    private $phpFeatures = [];
     public function __construct()
     {
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_70,
-            'Parameter types',
-            fn (Node $node): bool => $node instanceof Param && $node->type instanceof Node,
-        );
-
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_70,
-            'Return types',
-            fn (Node $node): bool => $node instanceof FunctionLike && $node->getReturnType() !== null,
-        );
-
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_74,
-            'Typed properties',
-            fn (Node $node): bool => $node instanceof Property && $node->type instanceof Node,
-        );
-
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_70,
-            'Strict declares',
-            fn (Node $node): bool => $node instanceof Declare_,
-        );
-
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_70,
-            'Space ship <=> operator ',
-            fn (Node $node): bool => $node instanceof Spaceship,
-        );
-
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_71,
-            'Nullable type (?type)',
-            function (Node $node): bool {
-                if ($node instanceof NullableType) {
-                    return true;
-                }
-
-                if (! $node instanceof UnionType) {
-                    return false;
-                }
-
-                // include here, count as nullable type
-                return $this->isNullableUnionType($node);
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_70, 'Parameter types', function (Node $node) : bool {
+            return $node instanceof Param && $node->type instanceof Node;
+        });
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_70, 'Return types', function (Node $node) : bool {
+            return $node instanceof FunctionLike && $node->getReturnType() !== null;
+        });
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_74, 'Typed properties', function (Node $node) : bool {
+            return $node instanceof Property && $node->type instanceof Node;
+        });
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_70, 'Strict declares', function (Node $node) : bool {
+            return $node instanceof Declare_;
+        });
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_70, 'Space ship <=> operator ', function (Node $node) : bool {
+            return $node instanceof Spaceship;
+        });
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_71, 'Nullable type (?type)', function (Node $node) : bool {
+            if ($node instanceof NullableType) {
+                return \true;
             }
-        );
-
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_71,
-            'Void return type',
-            fn (Node $node): bool => $node instanceof FunctionLike && $node->getReturnType() instanceof Identifier && $node->getReturnType()
-                ->name === 'void',
-        );
-
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_72,
-            'Object type',
-            fn (Node $node): bool => $node instanceof Identifier && $node->toString() === 'object',
-        );
-
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_73,
-            'Coalesce ?? operator',
-            fn (Node $node): bool => $node instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce,
-        );
-
+            if (!$node instanceof UnionType) {
+                return \false;
+            }
+            // include here, count as nullable type
+            return $this->isNullableUnionType($node);
+        });
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_71, 'Void return type', function (Node $node) : bool {
+            return $node instanceof FunctionLike && $node->getReturnType() instanceof Identifier && $node->getReturnType()->name === 'void';
+        });
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_72, 'Object type', function (Node $node) : bool {
+            return $node instanceof Identifier && $node->toString() === 'object';
+        });
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_73, 'Coalesce ?? operator', function (Node $node) : bool {
+            return $node instanceof \Lines202512\PhpParser\Node\Expr\BinaryOp\Coalesce;
+        });
         // class constant visibility
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_71,
-            'Class constant visibility',
-            fn (Node $node): bool => $node instanceof ClassConst && ($node->flags & Modifiers::VISIBILITY_MASK) !== 0,
-        );
-
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_80,
-            'Named arguments',
-            fn (Node $node): bool => $node instanceof Arg && $node->name instanceof Identifier,
-        );
-
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_81,
-            'First-class callables',
-            fn (Node $node): bool => $node instanceof CallLike && $node->isFirstClassCallable()
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_71, 'Class constant visibility', function (Node $node) : bool {
+            return $node instanceof ClassConst && ($node->flags & Modifiers::VISIBILITY_MASK) !== 0;
+        });
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_80, 'Named arguments', function (Node $node) : bool {
+            return $node instanceof Arg && $node->name instanceof Identifier;
+        });
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_81, 'First-class callables', function (Node $node) : bool {
+            return $node instanceof CallLike && $node->isFirstClassCallable();
+        });
         // readonly property
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_81,
-            'Readonly property',
-            fn (Node $node): bool => $node instanceof Property && $node->isReadonly(),
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_81, 'Readonly property', function (Node $node) : bool {
+            return $node instanceof Property && $node->isReadonly();
+        });
         // readonly class
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_82,
-            'Readonly class',
-            fn (Node $node): bool => $node instanceof Class_ && $node->isReadonly(),
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_82, 'Readonly class', function (Node $node) : bool {
+            return $node instanceof Class_ && $node->isReadonly();
+        });
         // typed class constants
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_83,
-            'Typed class constants',
-            fn (Node $node): bool => $node instanceof ClassConst && $node->type instanceof Node,
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_83, 'Typed class constants', function (Node $node) : bool {
+            return $node instanceof ClassConst && $node->type instanceof Node;
+        });
         // arrow function
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_74,
-            'Arrow functions',
-            fn (Node $node): bool => $node instanceof ArrowFunction,
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_74, 'Arrow functions', function (Node $node) : bool {
+            return $node instanceof ArrowFunction;
+        });
         // coalesce assign (??=)
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_74,
-            'Coalesce assign (??=)',
-            fn (Node $node): bool => $node instanceof Coalesce,
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_74, 'Coalesce assign (??=)', function (Node $node) : bool {
+            return $node instanceof Coalesce;
+        });
         // union types
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_80,
-            'Union types',
-            function (Node $node): bool {
-                if (! $node instanceof UnionType) {
-                    return false;
-                }
-
-                // skip here, count as nullable type
-                return ! $this->isNullableUnionType($node);
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_80, 'Union types', function (Node $node) : bool {
+            if (!$node instanceof UnionType) {
+                return \false;
             }
-        );
-
+            // skip here, count as nullable type
+            return !$this->isNullableUnionType($node);
+        });
         // intersection types
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_81,
-            'Intersection types',
-            fn (Node $node): bool => $node instanceof IntersectionType,
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_81, 'Intersection types', function (Node $node) : bool {
+            return $node instanceof IntersectionType;
+        });
         // property hooks
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_84,
-            'Property hooks',
-            fn (Node $node): bool => $node instanceof PropertyHook,
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_84, 'Property hooks', function (Node $node) : bool {
+            return $node instanceof PropertyHook;
+        });
         // match
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_80,
-            'Match expression',
-            fn (Node $node): bool => $node instanceof Match_,
-        );
-
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_80,
-            'Nullsafe method call/property fetch',
-            fn (Node $node): bool => $node instanceof NullsafeMethodCall || $node instanceof NullsafePropertyFetch,
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_80, 'Match expression', function (Node $node) : bool {
+            return $node instanceof Match_;
+        });
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_80, 'Nullsafe method call/property fetch', function (Node $node) : bool {
+            return $node instanceof NullsafeMethodCall || $node instanceof NullsafePropertyFetch;
+        });
         // attributes
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_80,
-            'Attributes',
-            fn (Node $node): bool => $node instanceof AttributeGroup,
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_80, 'Attributes', function (Node $node) : bool {
+            return $node instanceof AttributeGroup;
+        });
         // throw expression
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_80,
-            'Throw expression',
-            fn (Node $node): bool => $node instanceof Throw_,
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_80, 'Throw expression', function (Node $node) : bool {
+            return $node instanceof Throw_;
+        });
         // enums
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_81,
-            'Enums',
-            fn (Node $node): bool => $node instanceof Enum_,
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_81, 'Enums', function (Node $node) : bool {
+            return $node instanceof Enum_;
+        });
         // promoted properties
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_80,
-            'Promoted properties',
-            fn (Node $node): bool => $node instanceof Param && $node->isPromoted(),
-        );
-
+        $this->phpFeatures[] = new PhpFeature(PhpVersion::PHP_80, 'Promoted properties', function (Node $node) : bool {
+            return $node instanceof Param && $node->isPromoted();
+        });
     }
-
     /**
      * @return array<string, int>
      */
-    public function getFeatureCountByPhpVersion(): array
+    public function getFeatureCountByPhpVersion() : array
     {
         $phpFeaturesByVersion = [];
         foreach ($this->phpFeatures as $phpFeature) {
-            if (! isset($phpFeaturesByVersion[$phpFeature->getPhpVersion()])) {
+            if (!isset($phpFeaturesByVersion[$phpFeature->getPhpVersion()])) {
                 $phpFeaturesByVersion[$phpFeature->getPhpVersion()] = 0;
             }
-
             $phpFeaturesByVersion[$phpFeature->getPhpVersion()] += $phpFeature->getCount();
         }
-
         return $phpFeaturesByVersion;
     }
-
     /**
      * @return PhpFeature[]
      */
-    public function getPhpFeatures(): array
+    public function getPhpFeatures() : array
     {
         // sort by php version first, just to normalize order
-        usort(
-            $this->phpFeatures,
-            fn (PhpFeature $firstPhpFeature, PhpFeature $secondPhpFeature): int => version_compare(
-                $firstPhpFeature->getPhpVersion(),
-                $secondPhpFeature->getPhpVersion()
-            )
-        );
-
+        \usort($this->phpFeatures, function (PhpFeature $firstPhpFeature, PhpFeature $secondPhpFeature) : int {
+            return \version_compare($firstPhpFeature->getPhpVersion(), $secondPhpFeature->getPhpVersion());
+        });
         return $this->phpFeatures;
     }
-
     /**
      * @return array<string, PhpFeature[]>
      */
-    public function getFeaturesGroupedByPhpVersion(): array
+    public function getFeaturesGroupedByPhpVersion() : array
     {
         $featuresGroupedByPhpVersion = [];
-
         foreach ($this->phpFeatures as $phpFeature) {
             $featuresGroupedByPhpVersion[$phpFeature->getPhpVersion()][] = $phpFeature;
         }
-
         // from lowest to highest
-        ksort($featuresGroupedByPhpVersion);
-
+        \ksort($featuresGroupedByPhpVersion);
         return $featuresGroupedByPhpVersion;
     }
-
-    private function isNullableUnionType(UnionType $unionType): bool
+    private function isNullableUnionType(UnionType $unionType) : bool
     {
-        if (count($unionType->types) !== 2) {
-            return false;
+        if (\count($unionType->types) !== 2) {
+            return \false;
         }
-
         // has `Null`?
         foreach ($unionType->types as $type) {
-            if ($type instanceof Identifier && strtolower($type->name) === 'null') {
-                return true;
+            if ($type instanceof Identifier && \strtolower($type->name) === 'null') {
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
 }

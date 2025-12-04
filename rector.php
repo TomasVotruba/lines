@@ -18,7 +18,7 @@ return RectorConfig::configure()
         phpunitCodeQuality: true,
     )
     ->withPhpSets()
-    ->withImportNames()
+    ->withImportNames(removeUnusedImports: true)
     ->withSkip([
         '*/Fixture/*',
     ]);

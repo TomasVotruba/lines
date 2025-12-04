@@ -12,7 +12,8 @@ final class PhpFeature
     public function __construct(
         private readonly int $phpVersion,
         private readonly string $name,
-        private $nodeTrigger
+        private $nodeTrigger,
+        private int $count = 0
     ) {
     }
 
@@ -29,5 +30,15 @@ final class PhpFeature
     public function getNodeTrigger(): callable
     {
         return $this->nodeTrigger;
+    }
+
+    public function increaseCount(): void
+    {
+        $this->count++;
+    }
+
+    public function getCount(): int
+    {
+        return $this->count;
     }
 }

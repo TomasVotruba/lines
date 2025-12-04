@@ -4,17 +4,25 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\FeatureCounter\ValueObject;
 
+use PhpParser\Modifiers;
+use PhpParser\Node;
+use PhpParser\Node\Expr\CallLike;
+use PhpParser\Node\Param;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Arg;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\AssignOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\IntersectionType;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\PropertyHook;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Enum_;
@@ -33,129 +41,183 @@ final class FeatureCollector
         $this->phpFeatures[] = new PhpFeature(
             70000,
             'Parameter types',
-            function (\PhpParser\Node $node): bool {
-                return $node instanceof \PhpParser\Node\Param && $node->type !== null;
-            },
+            fn(Node $node): bool => $node instanceof Param && $node->type instanceof Node,
         );
 
         $this->phpFeatures[] = new PhpFeature(
             70000,
             'Return types',
-            function (\PhpParser\Node $node): bool {
-                return $node instanceof \PhpParser\Node\FunctionLike && $node->getReturnType() !== null;
-            },
+            fn(Node $node): bool => $node instanceof FunctionLike && $node->getReturnType() !== null,
         );
 
         $this->phpFeatures[] = new PhpFeature(
             70400,
             'Typed properties',
-            function (\PhpParser\Node $node): bool {
-                return $node instanceof \PhpParser\Node\Stmt\Property && $node->type !== null;
-            },
+            fn(Node $node): bool => $node instanceof Property && $node->type instanceof Node,
         );
 
         $this->phpFeatures[] = new PhpFeature(
             70000,
-            'Strict declarations',
-            function (\PhpParser\Node $node): bool {
-                return $node instanceof Declare_;
-            },
+            'Strict declares',
+            fn(Node $node): bool => $node instanceof Declare_,
         );
 
         $this->phpFeatures[] = new PhpFeature(
             70000,
             'Space ship <=> operator ',
-            function (\PhpParser\Node $node): bool {
-                return $node instanceof Spaceship;
-            },
+            fn(Node $node): bool => $node instanceof Spaceship,
         );
 
         $this->phpFeatures[] = new PhpFeature(
             70100,
             'Nullable type (?type)',
-            function (\PhpParser\Node $node): bool {
-                return $node instanceof \PhpParser\Node\NullableType;
-            },
+            fn(Node $node): bool => $node instanceof NullableType,
         );
 
         $this->phpFeatures[] = new PhpFeature(
             70100,
             'Void return type',
-            function (\PhpParser\Node $node): bool {
-                return $node instanceof \PhpParser\Node\FunctionLike && $node->getReturnType() instanceof \PhpParser\Node\Identifier && $node->getReturnType()->name === 'void';
-            },
+            fn(Node $node): bool => $node instanceof FunctionLike && $node->getReturnType() instanceof Identifier && $node->getReturnType()->name === 'void',
         );
 
         $this->phpFeatures[] = new PhpFeature(
             70200,
             'Object type',
-            function (\PhpParser\Node $node): bool {
-                return $node instanceof Identifier && $node->toString() === 'object';
-            },
+            fn(Node $node): bool => $node instanceof Identifier && $node->toString() === 'object',
+        );
+
+        $this->phpFeatures[] = new PhpFeature(
+            70300,
+            'Coalesce ?? operator',
+            fn(Node $node): bool => $node instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce,
+        );
+
+        // class constant visibility
+        $this->phpFeatures[] = new PhpFeature(
+            70100,
+            'Class constant visibility',
+            fn(Node $node): bool => $node instanceof ClassConst && ($node->flags & Class_::MODIFIER_MASK) !== 0,
         );
 
 
-        // @todo
+        $this->phpFeatures[] = new PhpFeature(
+            80000,
+            'Named arguments',
+            fn(Node $node): bool => $node instanceof Arg && $node->name instanceof Identifier,
+        );
+
+        $this->phpFeatures[] = new PhpFeature(
+            80100,
+            'First-class callables',
+            fn(Node $node): bool => $node instanceof CallLike && $node->isFirstClassCallable()
+        );
+
+        // readonly property
+        $this->phpFeatures[] = new PhpFeature(
+            80100,
+            'Readonly property',
+            fn(Node $node): bool => $node instanceof Property && $node->isReadonly(),
+        );
+
+        // readonly class
+        $this->phpFeatures[] = new PhpFeature(
+            80200,
+            'Readonly class',
+            fn(Node $node): bool => $node instanceof Class_ && $node->isReadonly(),
+        );
+
+        // class const visibility
+        $this->phpFeatures[] = new PhpFeature(
+            70100,
+            'Class constant visibility',
+            fn(Node $node): bool => $node instanceof ClassConst && $node->flags & Modifiers::VISIBILITY_MASK) !== 0
+        );
+
+        // typed class constants
+        $this->phpFeatures[] = new PhpFeature(
+            80300,
+            'Typed class constants',
+            fn (Node $node): bool => $node instanceof ClassConst && $node->type instanceof Node,
+        );
+
+        // arrow function
+        $this->phpFeatures[] = new PhpFeature(
+            70400,
+            'Arrow functions',
+            fn(Node $node): bool => $node instanceof ArrowFunction,
+        );
+
+        // coalesce assign (??=)
+        $this->phpFeatures[] = new PhpFeature(
+            70400,
+            'Coalesce assign (??=)',
+            fn(Node $node): bool => $node instanceof Coalesce,
+        );
+
+        // union types
+        $this->phpFeatures[] = new PhpFeature(
+            80000,
+            'Union types',
+            fn(Node $node): bool => $node instanceof \PhpParser\Node\UnionType,
+        );
+
+        // intersection types
+        $this->phpFeatures[] = new PhpFeature(
+            80100,
+            'Intersection types',
+            fn(Node $node): bool => $node instanceof IntersectionType,
+        );
+
+        // property hooks
+        $this->phpFeatures[] = new PhpFeature(
+            80400,
+            'Property hooks',
+            fn(Node $node): bool => $node instanceof PropertyHook,
+        );
+
+        // match
+        $this->phpFeatures[] = new PhpFeature(
+            80000,
+            'Match expression',
+            fn(Node $node): bool => $node instanceof Node\Expr\Match_,
+        );
+
+        // nullsafe method call or property fetch
+        $this->phpFeatures[] = new PhpFeature(
+            80000,
+            'Nullsafe method call or property fetch',
+            fn(Node $node): bool => $node instanceof NullsafeMethodCall || $node instanceof NullsafePropertyFetch,
+        );
+
+        // attributes
+        $this->phpFeatures[] = new PhpFeature(
+            80000,
+            'Attributes',
+            fn(Node $node): bool => $node instanceof AttributeGroup,
+        );
+
+        // throw expression
+        $this->phpFeatures[] = new PhpFeature(
+            80000,
+            'Throw expression',
+            fn(Node $node): bool => $node instanceof Throw_,
+        );
+
+        // enums
+        $this->phpFeatures[] = new PhpFeature(
+            80100,
+            'Enums',
+            fn(Node $node): bool => $node instanceof Enum_,
+        );
+
+        // promoted properties
+        $this->phpFeatures[] = new PhpFeature(
+            80000,
+            'Promoted properties',
+            fn(Node $node): bool => $node instanceof Param && $node->isPromoted(),
+        );
+
     }
-
-    /**
-     * @var array<string, array<FeatureName::*, int>>
-     */
-    public array $structureCounterByPhpVersion = [
-        '7.1' => [
-            FeatureName::CLASS_CONSTANT_VISIBILITY => 0,
-        ],
-        '7.4' => [
-            FeatureName::TYPED_PROPERTIES => 0,
-        ],
-        '8.0' => [
-            FeatureName::PROPERTY_PROMOTION => 0,
-            FeatureName::NAMED_ARGUMENTS => 0,
-            FeatureName::UNION_TYPES => 0,
-        ],
-        '8.1' => [
-            FeatureName::FIRST_CLASS_CALLABLES => 0,
-            FeatureName::READONLY_PROPERTY => 0,
-        ],
-        '8.2' => [
-            FeatureName::READONLY_CLASS => 0,
-        ],
-        '8.3' => [
-            FeatureName::TYPED_CLASS_CONSTANTS => 0,
-        ],
-        '8.4' => [
-            FeatureName::PROPERTY_HOOKS => 0,
-        ],
-    ];
-
-    /**
-     * @var array<string, array<class-string, int>>
-     */
-    public array $nodesTypesCounterByPhpVersion = [
-        '7.0' => [
-            \PhpParser\Node\Expr\BinaryOp\Coalesce::class => 0,
-            Spaceship::class => 0,
-            Declare_::class => 0,
-        ],
-        '7.4' => [
-            ArrowFunction::class => 0,
-            Coalesce::class => 0,
-        ],
-        '8.0' => [
-            Match_::class => 0,
-            NullsafePropertyFetch::class => 0,
-            NullsafeMethodCall::class => 0,
-            AttributeGroup::class => 0,
-            Throw_::class => 0,
-        ],
-        '8.1' => [
-            IntersectionType::class => 0,
-            Enum_::class => 0,
-        ],
-        '8.4' => [
-            PropertyHook::class => 0,
-        ],
-    ];
 
     /**
      * @return array<string, int>

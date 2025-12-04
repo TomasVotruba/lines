@@ -15,6 +15,9 @@ use TomasVotruba\Lines\FeatureCounter\NodeVisitor\NodeInstanceNodeVisitor;
 use TomasVotruba\Lines\FeatureCounter\NodeVisitor\PatternTriggerNodeVisitor;
 use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 
+/**
+ * @see \TomasVotruba\Lines\Tests\FeatureCounter\Analyzer\FeatureCounterAnalyzerTest
+ */
 final readonly class FeatureCounterAnalyzer
 {
     private Parser $parser;

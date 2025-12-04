@@ -168,7 +168,7 @@ This tool measures *your code*, not the 3rd party libraries. It skips `/vendor` 
 Two codebases using PHP 8.4 in `composer.json`, are not the same codebases. One has zero type param/return/property declarations, other has promoted properties. Reveal their real value by counting PHP feature they actually use.
 
 ```bash
-vendor/bin/lines feature-count src
+vendor/bin/lines features src
 ```
 
 This command:

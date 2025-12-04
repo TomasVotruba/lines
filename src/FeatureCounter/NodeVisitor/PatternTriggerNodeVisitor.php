@@ -108,11 +108,11 @@ final class PatternTriggerNodeVisitor extends NodeVisitorAbstract
             return null;
         }
 
-        if ($node instanceof Identifier && $node->toString() === 'object') {
-            $this->featureCollector->structureCounterByPhpVersion['7.2'][FeatureName::OBJECT_TYPE]++;
-
-            return null;
-        }
+//        if ($node instanceof Identifier && $node->toString() === 'object') {
+//            $this->featureCollector->structureCounterByPhpVersion['7.2'][FeatureName::OBJECT_TYPE]++;
+//
+//            return null;
+//        }
 
         if ($node instanceof Arg && $node->name instanceof Identifier) {
             $this->featureCollector->structureCounterByPhpVersion['8.0'][FeatureName::NAMED_ARGUMENTS]++;

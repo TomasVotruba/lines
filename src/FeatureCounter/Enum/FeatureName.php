@@ -37,4 +37,7 @@ final class FeatureName
     public const string PROPERTY_HOOKS = 'property hooks';
 
     public const string STRICT_DECLARES = 'strict declares';
+
+    public const string COALESCE = 'coalesce operator (??)';
+    const SPACESHIP = ;
 }

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\FeatureCounter;
 
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 
@@ -50,12 +48,7 @@ final readonly class ResultPrinter
                 str_pad(number_format($featureCount, 0, ',', ' '), 15, ' ', STR_PAD_LEFT)];
         }
 
-
-        $this->symfonyStyle->table(
-            ['PHP version', 'Feature count'],
-            $rows
-        );
-
+        $this->symfonyStyle->table(['PHP version', 'Feature count'], $rows);
 
         $this->symfonyStyle->newLine();
     }

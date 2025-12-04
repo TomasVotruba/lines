@@ -22,6 +22,4 @@ $containerFactory = new ContainerFactory();
 $container = $containerFactory->create();
 
 $application = $container->make(Application::class);
-
-$exitCode = $application->run();
-exit($exitCode);
+exit($application->run());

@@ -11,7 +11,7 @@ use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 final class FeatureCollectorNodeVisitor extends NodeVisitorAbstract
 {
     public function __construct(
-        private FeatureCollector $featureCollector
+        private readonly FeatureCollector $featureCollector
     ) {
     }
 

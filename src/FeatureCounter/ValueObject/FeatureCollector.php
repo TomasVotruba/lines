@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\AssignOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\CallLike;
+use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\Throw_;
@@ -80,7 +81,7 @@ final class FeatureCollector
                 }
 
                 // include here, count as nullable type
-                return self::isNullableUnionType($node);
+                return $this->isNullableUnionType($node);
             }
         );
 
@@ -140,7 +141,13 @@ final class FeatureCollector
         $this->phpFeatures[] = new PhpFeature(
             70100,
             'Class constant visibility',
-            fn (Node $node): bool => ($node instanceof ClassConst && $node->flags & Modifiers::VISIBILITY_MASK) !== 0
+            function (Node $node): bool {
+                if (! $node instanceof ClassConst) {
+                    return false;
+                }
+
+                return ($node->flags & Modifiers::VISIBILITY_MASK) !== 0;
+            }
         );
 
         // typed class constants
@@ -169,12 +176,12 @@ final class FeatureCollector
             80000,
             'Union types',
             function (Node $node): bool {
-                if (! $node instanceof \PhpParser\Node\UnionType) {
+                if (! $node instanceof UnionType) {
                     return false;
                 }
 
                 // skip here, count as nullable type
-                return ! self::isNullableUnionType($node);
+                return ! $this->isNullableUnionType($node);
             }
         );
 
@@ -196,7 +203,7 @@ final class FeatureCollector
         $this->phpFeatures[] = new PhpFeature(
             80000,
             'Match expression',
-            fn (Node $node): bool => $node instanceof Node\Expr\Match_,
+            fn (Node $node): bool => $node instanceof Match_,
         );
 
         // nullsafe method call or property fetch
@@ -280,7 +287,7 @@ final class FeatureCollector
         }
     }
 
-    private static function isNullableUnionType(UnionType $unionType): bool
+    private function isNullableUnionType(UnionType $unionType): bool
     {
         if (count($unionType->types) !== 2) {
             return false;

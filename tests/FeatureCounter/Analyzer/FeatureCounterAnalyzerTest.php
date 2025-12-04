@@ -37,8 +37,7 @@ final class FeatureCounterAnalyzerTest extends TestCase
         // property type
 
         dump($featuresCountedByPhpVersion[70000]);
-
-        foreach ($featuresCountedByPhpVersion[70400]);
+        dump($featuresCountedByPhpVersion[70400]);
         die;
 
         dump($featuresCountedByPhpVersion['7.0']);

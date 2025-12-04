@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\FeatureCounter;
 
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 
@@ -19,22 +20,29 @@ final readonly class ResultPrinter
     {
         $this->symfonyStyle->newLine(2);
 
-        foreach ($featureCollector->getFeaturesGroupedByPhpVersion() as $phpVersion => $phpFeatures) {
-            $this->symfonyStyle->writeln(
-                sprintf('<fg=yellow>%s=== PHP ' . $phpVersion . ' ===</>', str_repeat(' ', 24))
-            );
+        $rows = [];
 
-            $this->symfonyStyle->newLine();
+        $previousPhpVersion = null;
+        $lastItemKey = array_key_last($featureCollector->getPhpFeatures());
+        foreach ($featureCollector->getPhpFeatures() as $key => $phpFeature) {
 
-            $rows = [];
-            foreach ($phpFeatures as $phpFeature) {
-                $rows[] = [
-                    str_pad($phpFeature->getName(), 45, ' ', STR_PAD_RIGHT),
-                    str_pad(number_format($phpFeature->getCount(), 0, ',', ' '), 10, ' ', STR_PAD_LEFT)];
+            //            foreach ($phpFeatures as $phpFeature) {
+            $rows[] = [
+                '<fg=yellow>' . $phpFeature->getPhpVersion() . '</>',
+                str_pad($phpFeature->getName(), 45, ' ', STR_PAD_RIGHT),
+                str_pad(number_format($phpFeature->getCount(), 0, ',', ' '), 10, ' ', STR_PAD_LEFT)];
+            //            }
+
+            $changedPhpVersion = $previousPhpVersion !== null && $previousPhpVersion !== $phpFeature->getPhpVersion();
+            $previousPhpVersion = $phpFeature->getPhpVersion();
+
+            if ($changedPhpVersion && $lastItemKey !== $key) {
+                // add empty breakline
+                $rows[] = new TableSeparator();
             }
-
-            $this->symfonyStyle->table(['Feature', 'Count'], $rows);
         }
+
+        $this->symfonyStyle->table(['PHP', 'Feature', 'Count'], $rows);
 
         $this->symfonyStyle->newLine();
 

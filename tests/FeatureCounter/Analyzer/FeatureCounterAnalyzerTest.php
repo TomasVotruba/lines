@@ -30,14 +30,14 @@ final class FeatureCounterAnalyzerTest extends TestCase
         $fileInfos = $this->projectFilesFinder->find(__DIR__ . '/Fixture');
         $featureCollector = $this->featureCounterAnalyzer->analyze($fileInfos);
 
-        $featuresCountedByPhpVersion = $featureCollector->getFeaturesGroupedByPhpVersion();
+        foreach ($featureCollector->getPhpFeatures() as $phpFeature) {
+            if ($phpFeature->getName() === 'Typed properties') {
+                $this->assertSame(1, $phpFeature->getCount());
+            }
 
-        $typedPropertiesPhpFeature = $featuresCountedByPhpVersion['7.4'][0];
-        $this->assertSame('Typed properties', $typedPropertiesPhpFeature->getName());
-        $this->assertSame(1, $typedPropertiesPhpFeature->getCount());
-
-        $unionTypedPhpFeature = $featuresCountedByPhpVersion['8.0'][1];
-        $this->assertSame('Union types', $unionTypedPhpFeature->getName());
-        $this->assertSame(2, $unionTypedPhpFeature->getCount());
+            if ($phpFeature->getName() === 'Union types') {
+                $this->assertSame(2, $phpFeature->getCount());
+            }
+        }
     }
 }

@@ -17,7 +17,13 @@ final class FeatureCollectorNodeVisitor extends NodeVisitorAbstract
 
     public function enterNode(Node $node)
     {
-        $this->featureCollector->collectFromNode($node);
+        foreach ($this->featureCollector->getPhpFeatures() as $phpFeature) {
+            $callableNodeTrigger = $phpFeature->getNodeTrigger();
+            if ($callableNodeTrigger($node)) {
+                $phpFeature->increaseCount();
+            }
+        }
+
         return null;
     }
 }

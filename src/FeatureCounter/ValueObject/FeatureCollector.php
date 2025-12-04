@@ -138,19 +138,6 @@ final class FeatureCollector
             fn (Node $node): bool => $node instanceof Class_ && $node->isReadonly(),
         );
 
-        // class const visibility
-        $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_71,
-            'Class constant visibility',
-            function (Node $node): bool {
-                if (! $node instanceof ClassConst) {
-                    return false;
-                }
-
-                return ($node->flags & Modifiers::VISIBILITY_MASK) !== 0;
-            }
-        );
-
         // typed class constants
         $this->phpFeatures[] = new PhpFeature(
             PhpVersion::PHP_83,
@@ -207,10 +194,9 @@ final class FeatureCollector
             fn (Node $node): bool => $node instanceof Match_,
         );
 
-        // nullsafe method call or property fetch
         $this->phpFeatures[] = new PhpFeature(
             PhpVersion::PHP_80,
-            'Nullsafe method call or property fetch',
+            'Nullsafe method call/property fetch',
             fn (Node $node): bool => $node instanceof NullsafeMethodCall || $node instanceof NullsafePropertyFetch,
         );
 
@@ -262,6 +248,22 @@ final class FeatureCollector
     }
 
     /**
+     * @return PhpFeature[]
+     */
+    public function getPhpFeatures(): array
+    {
+        // sort by php version first, just to normalize order
+        usort(
+            $this->phpFeatures,
+            function (PhpFeature $firstPhpFeature, PhpFeature $secondPhpFeature): int {
+                return version_compare($firstPhpFeature->getPhpVersion(), $secondPhpFeature->getPhpVersion());
+            }
+        );
+
+        return $this->phpFeatures;
+    }
+
+    /**
      * @return array<string, PhpFeature[]>
      */
     public function getFeaturesGroupedByPhpVersion(): array
@@ -276,16 +278,6 @@ final class FeatureCollector
         ksort($featuresGroupedByPhpVersion);
 
         return $featuresGroupedByPhpVersion;
-    }
-
-    public function collectFromNode(Node $node): void
-    {
-        foreach ($this->phpFeatures as $phpFeature) {
-            $callableNodeTrigger = $phpFeature->getNodeTrigger();
-            if ($callableNodeTrigger($node)) {
-                $phpFeature->increaseCount();
-            }
-        }
     }
 
     private function isNullableUnionType(UnionType $unionType): bool

@@ -1,13 +1,14 @@
 # Lines of code
 
-CLI tool for quick size measure of PHP project, runs anywhere
+CLI tool for quick size measure of PHP project, and real used PHP features. Zero dependencies. Runs anywhere.
+
+<br>
 
 ## What are killer features?
 
 * install anywhere - PHP 7.2? PHPUnit 6? Symfony 3? Not a problem, this package **has zero dependencies and works on PHP 7.2+**
 * get quick overview of your project size - no details, no complexity, just lines of code
-* get easy JSON output for further processing
-* we keep it simple, so you can enjoy reading - for more complex operation use static analysis like PHPStan
+* get easy **JSON output** for further processing
 * measure **used PHP features in your project** - how much PHP 8.0-features used? How many attributes? How many arrow function? How many union types?
 
 <br>
@@ -129,6 +130,8 @@ Or in a json format:
 }
 ```
 
+<br>
+
 ### Longest files
 
 Are you looking for top 10 longest files?
@@ -150,7 +153,7 @@ vendor/bin/lines measure --longest
 
 <br>
 
-### Vendor file scanning
+### Scan package in `/vendor`
 
 This tool measures *your code*, not the 3rd party libraries. It skips `/vendor` directory by default to avoid false positives. If you want to measure vendor files too, use `--allow-vendor` option:
 

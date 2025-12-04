@@ -25,7 +25,7 @@ jobs:
                     -
                         name: 'Run "features" command'
                         run: |
-                            bin/lines count-features src --ansi
+                            bin/lines features src --ansi
 
                     -
                         name: 'Spot unused classes'

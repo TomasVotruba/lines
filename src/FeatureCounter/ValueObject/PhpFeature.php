@@ -7,17 +7,18 @@ namespace TomasVotruba\Lines\FeatureCounter\ValueObject;
 final class PhpFeature
 {
     /**
+     * @parma PhpVersion::*
      * @param callable $nodeTrigger
      */
     public function __construct(
-        private readonly int $phpVersion,
+        private readonly string $phpVersion,
         private readonly string $name,
         private $nodeTrigger,
         private int $count = 0
     ) {
     }
 
-    public function getPhpVersion(): int
+    public function getPhpVersion(): string
     {
         return $this->phpVersion;
     }

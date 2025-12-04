@@ -28,6 +28,7 @@ use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
+use TomasVotruba\Lines\FeatureCounter\Enum\PhpVersion;
 
 final class FeatureCollector
 {
@@ -39,37 +40,37 @@ final class FeatureCollector
     public function __construct()
     {
         $this->phpFeatures[] = new PhpFeature(
-            70000,
+            PhpVersion::PHP_70,
             'Parameter types',
             fn (Node $node): bool => $node instanceof Param && $node->type instanceof Node,
         );
 
         $this->phpFeatures[] = new PhpFeature(
-            70000,
+            PhpVersion::PHP_70,
             'Return types',
             fn (Node $node): bool => $node instanceof FunctionLike && $node->getReturnType() !== null,
         );
 
         $this->phpFeatures[] = new PhpFeature(
-            70400,
+            PhpVersion::PHP_74,
             'Typed properties',
             fn (Node $node): bool => $node instanceof Property && $node->type instanceof Node,
         );
 
         $this->phpFeatures[] = new PhpFeature(
-            70000,
+            PhpVersion::PHP_70,
             'Strict declares',
             fn (Node $node): bool => $node instanceof Declare_,
         );
 
         $this->phpFeatures[] = new PhpFeature(
-            70000,
+            PhpVersion::PHP_70,
             'Space ship <=> operator ',
             fn (Node $node): bool => $node instanceof Spaceship,
         );
 
         $this->phpFeatures[] = new PhpFeature(
-            70100,
+            PhpVersion::PHP_71,
             'Nullable type (?type)',
             function (Node $node): bool {
                 if ($node instanceof NullableType) {
@@ -86,60 +87,60 @@ final class FeatureCollector
         );
 
         $this->phpFeatures[] = new PhpFeature(
-            70100,
+            PhpVersion::PHP_71,
             'Void return type',
             fn (Node $node): bool => $node instanceof FunctionLike && $node->getReturnType() instanceof Identifier && $node->getReturnType()
                 ->name === 'void',
         );
 
         $this->phpFeatures[] = new PhpFeature(
-            70200,
+            PhpVersion::PHP_72,
             'Object type',
             fn (Node $node): bool => $node instanceof Identifier && $node->toString() === 'object',
         );
 
         $this->phpFeatures[] = new PhpFeature(
-            70300,
+            PhpVersion::PHP_73,
             'Coalesce ?? operator',
             fn (Node $node): bool => $node instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce,
         );
 
         // class constant visibility
         $this->phpFeatures[] = new PhpFeature(
-            70100,
+            PhpVersion::PHP_71,
             'Class constant visibility',
             fn (Node $node): bool => $node instanceof ClassConst && ($node->flags & Modifiers::VISIBILITY_MASK) !== 0,
         );
 
         $this->phpFeatures[] = new PhpFeature(
-            80000,
+            PhpVersion::PHP_80,
             'Named arguments',
             fn (Node $node): bool => $node instanceof Arg && $node->name instanceof Identifier,
         );
 
         $this->phpFeatures[] = new PhpFeature(
-            80100,
+            PhpVersion::PHP_81,
             'First-class callables',
             fn (Node $node): bool => $node instanceof CallLike && $node->isFirstClassCallable()
         );
 
         // readonly property
         $this->phpFeatures[] = new PhpFeature(
-            80100,
+            PhpVersion::PHP_81,
             'Readonly property',
             fn (Node $node): bool => $node instanceof Property && $node->isReadonly(),
         );
 
         // readonly class
         $this->phpFeatures[] = new PhpFeature(
-            80200,
+            PhpVersion::PHP_82,
             'Readonly class',
             fn (Node $node): bool => $node instanceof Class_ && $node->isReadonly(),
         );
 
         // class const visibility
         $this->phpFeatures[] = new PhpFeature(
-            70100,
+            PhpVersion::PHP_71,
             'Class constant visibility',
             function (Node $node): bool {
                 if (! $node instanceof ClassConst) {
@@ -152,28 +153,28 @@ final class FeatureCollector
 
         // typed class constants
         $this->phpFeatures[] = new PhpFeature(
-            80300,
+            PhpVersion::PHP_83,
             'Typed class constants',
             fn (Node $node): bool => $node instanceof ClassConst && $node->type instanceof Node,
         );
 
         // arrow function
         $this->phpFeatures[] = new PhpFeature(
-            70400,
+            PhpVersion::PHP_74,
             'Arrow functions',
             fn (Node $node): bool => $node instanceof ArrowFunction,
         );
 
         // coalesce assign (??=)
         $this->phpFeatures[] = new PhpFeature(
-            70400,
+            PhpVersion::PHP_74,
             'Coalesce assign (??=)',
             fn (Node $node): bool => $node instanceof Coalesce,
         );
 
         // union types
         $this->phpFeatures[] = new PhpFeature(
-            80000,
+            PhpVersion::PHP_80,
             'Union types',
             function (Node $node): bool {
                 if (! $node instanceof UnionType) {
@@ -187,56 +188,56 @@ final class FeatureCollector
 
         // intersection types
         $this->phpFeatures[] = new PhpFeature(
-            80100,
+            PhpVersion::PHP_81,
             'Intersection types',
             fn (Node $node): bool => $node instanceof IntersectionType,
         );
 
         // property hooks
         $this->phpFeatures[] = new PhpFeature(
-            80400,
+            PhpVersion::PHP_84,
             'Property hooks',
             fn (Node $node): bool => $node instanceof PropertyHook,
         );
 
         // match
         $this->phpFeatures[] = new PhpFeature(
-            80000,
+            PhpVersion::PHP_80,
             'Match expression',
             fn (Node $node): bool => $node instanceof Match_,
         );
 
         // nullsafe method call or property fetch
         $this->phpFeatures[] = new PhpFeature(
-            80000,
+            PhpVersion::PHP_80,
             'Nullsafe method call or property fetch',
             fn (Node $node): bool => $node instanceof NullsafeMethodCall || $node instanceof NullsafePropertyFetch,
         );
 
         // attributes
         $this->phpFeatures[] = new PhpFeature(
-            80000,
+            PhpVersion::PHP_80,
             'Attributes',
             fn (Node $node): bool => $node instanceof AttributeGroup,
         );
 
         // throw expression
         $this->phpFeatures[] = new PhpFeature(
-            80000,
+            PhpVersion::PHP_80,
             'Throw expression',
             fn (Node $node): bool => $node instanceof Throw_,
         );
 
         // enums
         $this->phpFeatures[] = new PhpFeature(
-            80100,
+            PhpVersion::PHP_81,
             'Enums',
             fn (Node $node): bool => $node instanceof Enum_,
         );
 
         // promoted properties
         $this->phpFeatures[] = new PhpFeature(
-            80000,
+            PhpVersion::PHP_80,
             'Promoted properties',
             fn (Node $node): bool => $node instanceof Param && $node->isPromoted(),
         );
@@ -261,7 +262,7 @@ final class FeatureCollector
     }
 
     /**
-     * @return array<int, PhpFeature[]>
+     * @return array<string, PhpFeature[]>
      */
     public function getFeaturesGroupedByPhpVersion(): array
     {

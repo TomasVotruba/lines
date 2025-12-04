@@ -35,11 +35,8 @@ final class FeatureCounterAnalyzerTest extends TestCase
         // union types
         // property type
 
-        dump($featuresCountedByPhpVersion[70000]);
-
-        $typedPropertiesPhpFeature = $featuresCountedByPhpVersion[70400][0];
-
+        $typedPropertiesPhpFeature = $featuresCountedByPhpVersion['7.4'];
         dump($typedPropertiesPhpFeature);
-        die;
+//        die;
     }
 }

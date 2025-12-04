@@ -37,10 +37,13 @@ final class FeatureCounterAnalyzerTest extends TestCase
 
         // property type
 
+        dump($featuresCountedByPhpVersion['7.0']);
+
         // strict declares
-        dump($featuresCountedByPhpVersion['7.0'][FeatureName::STRICT_DECLARES]);
-        dump($featuresCountedByPhpVersion['7.4'][FeatureName::TYPED_PROPERTIES]);
-        dump($featuresCountedByPhpVersion['8.0'][FeatureName::UNION_TYPES]);
+        $this->assertSame(1, $featuresCountedByPhpVersion['7.0'][FeatureName::STRICT_DECLARES]);
+        $this->assertSame(2, $featuresCountedByPhpVersion['7.4'][FeatureName::TYPED_PROPERTIES]);
+
+        // dump($featuresCountedByPhpVersion['8.0'][FeatureName::UNION_TYPES]);
 
         die;
     }

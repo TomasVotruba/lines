@@ -65,12 +65,14 @@ final class FeatureCollector
      * @var array<string, array<class-string, int>>
      */
     public array $nodesTypesCounterByPhpVersion = [
-        '8.4' => [
-            PropertyHook::class => 0,
+        '7.0' => [
+            \PhpParser\Node\Expr\BinaryOp\Coalesce::class => 0,
+            Spaceship::class => 0,
+            Declare_::class => 0,
         ],
-        '8.1' => [
-            IntersectionType::class => 0,
-            Enum_::class => 0,
+        '7.4' => [
+            ArrowFunction::class => 0,
+            Coalesce::class => 0,
         ],
         '8.0' => [
             Match_::class => 0,
@@ -79,14 +81,12 @@ final class FeatureCollector
             AttributeGroup::class => 0,
             Throw_::class => 0,
         ],
-        '7.4' => [
-            ArrowFunction::class => 0,
-            Coalesce::class => 0,
+        '8.1' => [
+            IntersectionType::class => 0,
+            Enum_::class => 0,
         ],
-        '7.0' => [
-            \PhpParser\Node\Expr\BinaryOp\Coalesce::class => 0,
-            Spaceship::class => 0,
-            Declare_::class => 0,
+        '8.4' => [
+            PropertyHook::class => 0,
         ],
     ];
 

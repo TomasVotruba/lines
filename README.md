@@ -34,7 +34,7 @@ vendor/bin/lines measure
 By default, we measure the root directory. To narrow it down, provide explicit path:
 
 ```bash
-vendor/bin/lines mesaure src
+vendor/bin/lines measure src
 ```
 
 For short output:

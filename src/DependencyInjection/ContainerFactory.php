@@ -63,7 +63,7 @@ final class ContainerFactory
         return $container;
     }
 
-    public function cleanupDefaultCommands(Application $application): void
+    private function cleanupDefaultCommands(Application $application): void
     {
         $application->get('help')
             ->setHidden(true);

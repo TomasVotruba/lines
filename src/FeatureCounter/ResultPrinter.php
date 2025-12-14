@@ -13,7 +13,6 @@ final readonly class ResultPrinter
     public function __construct(
         private SymfonyStyle $symfonyStyle
     ) {
-
     }
 
     public function print(FeatureCollector $featureCollector): void

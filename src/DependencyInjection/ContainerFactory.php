@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\DependencyInjection;
 
-use Illuminate\Container\Container;
+use Entropy\Container\Container;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TomasVotruba\Lines\Command\FeaturesCommand;
-use TomasVotruba\Lines\Command\MeasureCommand;
-use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 use TomasVotruba\Lines\Helpers\PrivatesAccessor;
 
 final class ContainerFactory
 {
-    /**
-     * @api used in bin and tests
-     */
     public function create(): Container
     {
         $this->emulateTokensOfOlderPHP();
@@ -32,19 +27,16 @@ final class ContainerFactory
             'PHPUNIT_COMPOSER_INSTALL'
         ) ? ConsoleOutput::VERBOSITY_QUIET : ConsoleOutput::VERBOSITY_NORMAL;
 
-        $container->singleton(
+        $container->service(
             SymfonyStyle::class,
             static fn (): SymfonyStyle => new SymfonyStyle(new ArrayInput([]), new ConsoleOutput($consoleVerbosity))
         );
 
-        $container->singleton(Application::class, function (Container $container): Application {
+        $container->service(Application::class, function (Container $container): Application {
             $application = new Application();
 
-            $measureCommand = $container->make(MeasureCommand::class);
-            $application->add($measureCommand);
-
-            $countFeaturesCommand = $container->make(FeaturesCommand::class);
-            $application->add($countFeaturesCommand);
+            $commands = $container->findByContract(Command::class);
+            $application->addCommands($commands);
 
             // remove basic command to make output clear
             $this->cleanupDefaultCommands($application);
@@ -52,18 +44,15 @@ final class ContainerFactory
             return $application;
         });
 
-        // parser
-        $container->singleton(Parser::class, static function (): Parser {
+        $container->service(Parser::class, static function (): Parser {
             $phpParserFactory = new ParserFactory();
             return $phpParserFactory->createForHostVersion();
         });
 
-        $container->singleton(FeatureCollector::class);
-
         return $container;
     }
 
-    public function cleanupDefaultCommands(Application $application): void
+    private function cleanupDefaultCommands(Application $application): void
     {
         $application->get('help')
             ->setHidden(true);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\DependencyInjection;
 
+use Entropy\Container\Container;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Application;
@@ -18,11 +19,11 @@ final class ContainerFactory
     /**
      * @api used in bin and tests
      */
-    public function create(): \Entropy\Container\Container
+    public function create(): Container
     {
         $this->emulateTokensOfOlderPHP();
 
-        $container = new \Entropy\Container\Container();
+        $container = new Container();
 
         // console
         $consoleVerbosity = defined(
@@ -34,7 +35,7 @@ final class ContainerFactory
             static fn (): SymfonyStyle => new SymfonyStyle(new ArrayInput([]), new ConsoleOutput($consoleVerbosity))
         );
 
-        $container->service(Application::class, function (\Entropy\Container\Container $container): Application {
+        $container->service(Application::class, function (Container $container): Application {
             $application = new Application();
 
             $commands = $container->findByContract(Command::class);

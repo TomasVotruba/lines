@@ -16,9 +16,6 @@ use TomasVotruba\Lines\Helpers\PrivatesAccessor;
 
 final class ContainerFactory
 {
-    /**
-     * @api used in bin and tests
-     */
     public function create(): Container
     {
         $this->emulateTokensOfOlderPHP();
@@ -47,13 +44,10 @@ final class ContainerFactory
             return $application;
         });
 
-        // parser
         $container->service(Parser::class, static function (): Parser {
             $phpParserFactory = new ParserFactory();
             return $phpParserFactory->createForHostVersion();
         });
-
-        //        $container->singleton(FeatureCollector::class);
 
         return $container;
     }

@@ -231,23 +231,6 @@ final class FeatureCollector
     }
 
     /**
-     * @return array<string, int>
-     */
-    public function getFeatureCountByPhpVersion(): array
-    {
-        $phpFeaturesByVersion = [];
-        foreach ($this->phpFeatures as $phpFeature) {
-            if (! isset($phpFeaturesByVersion[$phpFeature->getPhpVersion()])) {
-                $phpFeaturesByVersion[$phpFeature->getPhpVersion()] = 0;
-            }
-
-            $phpFeaturesByVersion[$phpFeature->getPhpVersion()] += $phpFeature->getCount();
-        }
-
-        return $phpFeaturesByVersion;
-    }
-
-    /**
      * @return PhpFeature[]
      */
     public function getPhpFeatures(): array
@@ -262,23 +245,6 @@ final class FeatureCollector
         );
 
         return $this->phpFeatures;
-    }
-
-    /**
-     * @return array<string, PhpFeature[]>
-     */
-    public function getFeaturesGroupedByPhpVersion(): array
-    {
-        $featuresGroupedByPhpVersion = [];
-
-        foreach ($this->phpFeatures as $phpFeature) {
-            $featuresGroupedByPhpVersion[$phpFeature->getPhpVersion()][] = $phpFeature;
-        }
-
-        // from lowest to highest
-        ksort($featuresGroupedByPhpVersion);
-
-        return $featuresGroupedByPhpVersion;
     }
 
     private function isNullableUnionType(UnionType $unionType): bool

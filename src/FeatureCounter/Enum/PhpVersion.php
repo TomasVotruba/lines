@@ -25,6 +25,4 @@ final class PhpVersion
     public const string PHP_83 = '8.3';
 
     public const string PHP_84 = '8.4';
-
-    public const string PHP_85 = '8.5';
 }

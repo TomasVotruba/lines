@@ -15,6 +15,11 @@ final readonly class ResultPrinter
     ) {
     }
 
+    public function setSymfonyStyle(SymfonyStyle $symfonyStyle): void
+    {
+        $this->symfonyStyle = $symfonyStyle;
+    }
+
     public function print(FeatureCollector $featureCollector): void
     {
         $this->symfonyStyle->newLine(2);

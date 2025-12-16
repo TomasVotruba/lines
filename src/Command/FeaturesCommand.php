@@ -65,7 +65,8 @@ final class FeaturesCommand extends Command
         $featureCollector = $this->featureCounterAnalyzer->analyze($allFileInfos);
 
         $this->symfonyStyle->title('PHP features');
-        $this->resultPrinter->print($featureCollector, $this->symfonyStyle);
+        $this->resultPrinter->setSymfonyStyle($this->symfonyStyle);
+        $this->resultPrinter->print($featureCollector);
 
         return Command::SUCCESS;
     }

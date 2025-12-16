@@ -22,8 +22,20 @@ final class FeaturesCommand extends Command
         private readonly SymfonyStyle $symfonyStyle,
         private readonly ProjectFilesFinder $projectFilesFinder,
         private readonly FeatureCounterAnalyzer $featureCounterAnalyzer,
+<<<<<<< HEAD
+<<<<<<< HEAD
         private readonly ResultPrinter $resultPrinter,
         private readonly JsonOutputFormatter $jsonOutputFormatter,
+=======
+        private readonly ResultPrinter $resultPrinter
+>>>>>>> 1e5ea4c (fix(test): fix failing unit tests for FeaturesCommand output capture)
+=======
+        private readonly ResultPrinter $resultPrinter
+=======
+        private readonly ResultPrinter $resultPrinter,
+        private readonly JsonOutputFormatter $jsonOutputFormatter,
+>>>>>>> 3807e5e (implement first POC to resolve issue #63 (#65))
+>>>>>>> e23eac8 (implement first POC to resolve issue #63 (#65))
     ) {
         parent::__construct();
     }
@@ -33,7 +45,12 @@ final class FeaturesCommand extends Command
         $this->setName('features');
         $this->setDescription('Count used PHP features in the project');
 
-        $this->addArgument('project-directory', InputArgument::OPTIONAL, 'Project directory to analyze', [getcwd()]);
+        $this->addArgument(
+            'project-directories',
+            InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
+            'Project directories to analyze',
+            [getcwd()]
+        );
         $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');
     }
 
@@ -42,24 +59,54 @@ final class FeaturesCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $projectDirectory = $input->getArgument('project-directory');
-        Assert::string($projectDirectory);
-        Assert::directory($projectDirectory);
+        $projectDirectories = $input->getArgument('project-directories');
+        Assert::isArray($projectDirectories);
+
+        $allFileInfos = [];
+        foreach ($projectDirectories as $projectDirectory) {
+            Assert::string($projectDirectory, 'Expected a string for project directory.');
+            Assert::directory($projectDirectory, sprintf('The directory "%s" does not exist.', $projectDirectory));
+
+            // Find project PHP files in the directory
+            $fileInfos = $this->projectFilesFinder->find($projectDirectory);
+            $allFileInfos = array_merge($allFileInfos, $fileInfos);
+        }
 
         $isJson = (bool) $input->getOption('json');
 
-        // find project PHP files
-        $fileInfos = $this->projectFilesFinder->find($projectDirectory);
-        $featureCollector = $this->featureCounterAnalyzer->analyze($fileInfos);
+        // Analyze collected files
+        $featureCollector = $this->featureCounterAnalyzer->analyze($allFileInfos);
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
         $this->symfonyStyle->newLine();
 
+=======
+>>>>>>> e23eac8 (implement first POC to resolve issue #63 (#65))
+=======
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->title('PHP features');
+
+>>>>>>> 8e4a618 (fix(test): fix failing unit tests for FeaturesCommand output capture)
         // print results
         if ($isJson) {
             $this->jsonOutputFormatter->printFeatures($featureCollector);
         } else {
-            $this->resultPrinter->print($featureCollector);
+            $this->resultPrinter->print($featureCollector, $this->symfonyStyle);
         }
+<<<<<<< HEAD
+=======
+        $this->symfonyStyle->title('PHP features');
+<<<<<<< HEAD
+        $this->resultPrinter->print($featureCollector, $this->symfonyStyle);
+>>>>>>> 1e5ea4c (fix(test): fix failing unit tests for FeaturesCommand output capture)
+=======
+        $this->resultPrinter->setSymfonyStyle($this->symfonyStyle);
+        $this->resultPrinter->print($featureCollector);
+>>>>>>> 76d9476 (fix: setting symfony style in result printer)
+=======
+>>>>>>> e23eac8 (implement first POC to resolve issue #63 (#65))
 
         return Command::SUCCESS;
     }

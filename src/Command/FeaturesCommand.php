@@ -70,11 +70,14 @@ final class FeaturesCommand extends Command
         // Analyze collected files
         $featureCollector = $this->featureCounterAnalyzer->analyze($allFileInfos);
 
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->title('PHP features');
+
         // print results
         if ($isJson) {
             $this->jsonOutputFormatter->printFeatures($featureCollector);
         } else {
-            $this->resultPrinter->print($featureCollector);
+            $this->resultPrinter->print($featureCollector, $this->symfonyStyle);
         }
 
         return Command::SUCCESS;

@@ -26,6 +26,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Enum_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
 use TomasVotruba\Lines\FeatureCounter\Enum\PhpVersion;
@@ -211,7 +212,7 @@ final class FeatureCollector
         $this->phpFeatures[] = new PhpFeature(
             PhpVersion::PHP_80,
             'Throw expression',
-            fn (Node $node): bool => $node instanceof Throw_,
+            fn (Node $node): bool => $node instanceof Throw_ && ! $node->getAttribute('parent') instanceof Expression,
         );
 
         // enums

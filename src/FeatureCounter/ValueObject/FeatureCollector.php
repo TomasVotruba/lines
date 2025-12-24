@@ -100,7 +100,7 @@ final class FeatureCollector
         );
 
         $this->phpFeatures[] = new PhpFeature(
-            PhpVersion::PHP_73,
+            PhpVersion::PHP_70,
             'Coalesce ?? operator',
             fn (Node $node): bool => $node instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce,
         );

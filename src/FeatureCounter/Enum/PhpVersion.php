@@ -12,7 +12,7 @@ final class PhpVersion
 
     public const string PHP_72 = '7.2';
 
-    public const string PHP_73 = '7.3';
+    public const string PHP_73 = '7.3'; // @phpstan-ignore-line public.classConstant.unused
 
     public const string PHP_74 = '7.4';
 

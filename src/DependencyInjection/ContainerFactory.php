@@ -21,6 +21,7 @@ final class ContainerFactory
         $this->emulateTokensOfOlderPHP();
 
         $container = new Container();
+        $container->autodiscover(__DIR__ . '/../Command');
 
         // console
         $consoleVerbosity = defined(

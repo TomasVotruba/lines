@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines\FeatureCounter\Analyzer;
 
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -13,6 +12,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Finder\SplFileInfo;
 use TomasVotruba\Lines\Exception\ShouldNotHappenException;
 use TomasVotruba\Lines\FeatureCounter\NodeVisitor\FeatureCollectorNodeVisitor;
+use TomasVotruba\Lines\FeatureCounter\NodeVisitor\ThrowExpressionFlaggingNodeVisitor;
 use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 
 /**
@@ -38,7 +38,7 @@ final readonly class FeatureCounterAnalyzer
         $progressBar->start(count($fileInfos));
 
         $featureCollectorNodeVisitor = new FeatureCollectorNodeVisitor($this->featureCollector);
-        $nodeTraverser = new NodeTraverser(new ParentConnectingVisitor(), $featureCollectorNodeVisitor);
+        $nodeTraverser = new NodeTraverser(new ThrowExpressionFlaggingNodeVisitor(), $featureCollectorNodeVisitor);
 
         foreach ($fileInfos as $fileInfo) {
             $stmts = $this->parser->parse($fileInfo->getContents());

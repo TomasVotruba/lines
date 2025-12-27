@@ -212,7 +212,7 @@ final class FeatureCollector
         $this->phpFeatures[] = new PhpFeature(
             PhpVersion::PHP_80,
             'Throw expression',
-            fn (Node $node): bool => $node instanceof Throw_ && ! $node->getAttribute('parent') instanceof Expression,
+            fn (Node $node): bool => $node instanceof Throw_ && $node->getAttribute('is_throw_expression', false) === true,
         );
 
         // enums

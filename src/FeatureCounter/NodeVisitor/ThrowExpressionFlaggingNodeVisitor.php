@@ -18,6 +18,8 @@ final class ThrowExpressionFlaggingNodeVisitor extends NodeVisitorAbstract {
 
     public function beforeTraverse(array $nodes) {
         $this->stack = [];
+
+        return null;
     }
 
     public function enterNode(Node $node) {
@@ -30,9 +32,13 @@ final class ThrowExpressionFlaggingNodeVisitor extends NodeVisitorAbstract {
         }
 
         $this->stack[] = $node;
+
+        return null;
     }
 
     public function leaveNode(Node $node) {
         array_pop($this->stack);
+
+        return null;
     }
 }

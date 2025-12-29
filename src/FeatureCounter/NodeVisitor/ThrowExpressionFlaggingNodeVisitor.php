@@ -9,6 +9,9 @@ use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 
 final class ThrowExpressionFlaggingNodeVisitor extends NodeVisitorAbstract {
+    /**
+     * @return null|int
+     */
     public function enterNode(Node $node) {
         if ($node instanceof Expression && $node->expr instanceof Throw_) {
             return NodeVisitor::DONT_TRAVERSE_CHILDREN;

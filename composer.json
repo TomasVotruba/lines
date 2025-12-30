@@ -8,6 +8,7 @@
     ],
     "require": {
         "php": "^8.3",
+        "ext-intl": "*",
         "symfony/console": "^6.4",
         "symfony/finder": "^6.4",
         "webmozart/assert": "^1.12",

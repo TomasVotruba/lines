@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+if (!extension_loaded('intl')) {
+    echo "The intl extension is required but not loaded.\n";
+    exit(1);
+}
+
 use Symfony\Component\Console\Application;
 use TomasVotruba\Lines\DependencyInjection\ContainerFactory;
 

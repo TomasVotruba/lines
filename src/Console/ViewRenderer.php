@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console;
 
-use TomasVotruba\Lines\ValueObject\TableView;
 use function Termwind\render;
+use TomasVotruba\Lines\ValueObject\TableView;
 
 final class ViewRenderer
 {

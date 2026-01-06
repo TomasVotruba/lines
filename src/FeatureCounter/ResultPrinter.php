@@ -39,7 +39,7 @@ final readonly class ResultPrinter
 
         }
 
-        $this->symfonyStyle->table(['PHP version', 'Feature count'], $rows);
+        $this->symfonyStyle->table(['PHP version', 'PHP Feature', 'Count'], $rows);
 
         $this->symfonyStyle->newLine();
     }

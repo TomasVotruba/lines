@@ -212,7 +212,7 @@ final class FeatureCollector
         $this->phpFeatures[] = new PhpFeature(
             PhpVersion::PHP_80,
             'Throw expression',
-            function (Node $node) {
+            function (Node $node): bool {
                 if ($node instanceof Expression && $node->expr instanceof Throw_) {
                     $node->expr->setAttribute('is_throw_statement', true);
 

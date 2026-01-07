@@ -19,7 +19,7 @@ use Webmozart\Assert\Assert;
 final class FeaturesCommand extends Command
 {
     public function __construct(
-        private SymfonyStyle $symfonyStyle,
+        private readonly SymfonyStyle $symfonyStyle,
         private readonly ProjectFilesFinder $projectFilesFinder,
         private readonly FeatureCounterAnalyzer $featureCounterAnalyzer,
 <<<<<<< HEAD
@@ -51,7 +51,6 @@ final class FeaturesCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->symfonyStyle = new SymfonyStyle($input, $output);
         $projectDirectories = $input->getArgument('project-directories');
         Assert::isArray($projectDirectories);
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
 use TomasVotruba\Lines\Contract\OutputFormatterInterface;
+use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 use TomasVotruba\Lines\Measurements;
 use Webmozart\Assert\Assert;
 
@@ -60,6 +61,30 @@ final class JsonOutputFormatter implements OutputFormatterInterface
 
         if ($showLongestFiles) {
             $arrayData['longest_files'] = $measurements->getLongestFiles();
+        }
+
+        $jsonString = json_encode($arrayData, JSON_PRETTY_PRINT);
+        Assert::string($jsonString);
+
+        echo $jsonString . PHP_EOL;
+    }
+
+    public function printFeatures(FeatureCollector $featureCollector): void
+    {
+        $arrayData = [];
+
+        $previousPhpVersion = null;
+
+        foreach ($featureCollector->getPhpFeatures() as $phpFeature) {
+            if ($previousPhpVersion !== $phpFeature->getPhpVersion()) {
+                $arrayData[$phpFeature->getPhpVersion()] = [];
+                $previousPhpVersion = $phpFeature->getPhpVersion();
+            }
+
+            $arrayData[$phpFeature->getPhpVersion()][] = [
+                'name' => $phpFeature->getName(),
+                'count' => $phpFeature->getCount(),
+            ];
         }
 
         $jsonString = json_encode($arrayData, JSON_PRETTY_PRINT);

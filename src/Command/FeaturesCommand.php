@@ -22,12 +22,8 @@ final class FeaturesCommand extends Command
         private readonly SymfonyStyle $symfonyStyle,
         private readonly ProjectFilesFinder $projectFilesFinder,
         private readonly FeatureCounterAnalyzer $featureCounterAnalyzer,
-<<<<<<< HEAD
-        private readonly ResultPrinter $resultPrinter
-=======
         private readonly ResultPrinter $resultPrinter,
         private readonly JsonOutputFormatter $jsonOutputFormatter,
->>>>>>> 3807e5e (implement first POC to resolve issue #63 (#65))
     ) {
         parent::__construct();
     }

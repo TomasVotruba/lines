@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\FeatureCounter\Analyzer\FeatureCounterAnalyzer;
 use TomasVotruba\Lines\FeatureCounter\ResultPrinter;
 use TomasVotruba\Lines\Finder\ProjectFilesFinder;
@@ -21,7 +22,12 @@ final class FeaturesCommand extends Command
         private SymfonyStyle $symfonyStyle,
         private readonly ProjectFilesFinder $projectFilesFinder,
         private readonly FeatureCounterAnalyzer $featureCounterAnalyzer,
+<<<<<<< HEAD
         private readonly ResultPrinter $resultPrinter
+=======
+        private readonly ResultPrinter $resultPrinter,
+        private readonly JsonOutputFormatter $jsonOutputFormatter,
+>>>>>>> 3807e5e (implement first POC to resolve issue #63 (#65))
     ) {
         parent::__construct();
     }
@@ -59,14 +65,17 @@ final class FeaturesCommand extends Command
             $allFileInfos = array_merge($allFileInfos, $fileInfos);
         }
 
-        $input->getOption('json');
+        $isJson = (bool) $input->getOption('json');
 
         // Analyze collected files
         $featureCollector = $this->featureCounterAnalyzer->analyze($allFileInfos);
 
-        $this->symfonyStyle->title('PHP features');
-        $this->resultPrinter->setSymfonyStyle($this->symfonyStyle);
-        $this->resultPrinter->print($featureCollector);
+        // print results
+        if ($isJson) {
+            $this->jsonOutputFormatter->printFeatures($featureCollector);
+        } else {
+            $this->resultPrinter->print($featureCollector);
+        }
 
         return Command::SUCCESS;
     }

@@ -17,7 +17,8 @@ final readonly class ResultPrinter
 
     public function print(FeatureCollector $featureCollector): void
     {
-        $this->symfonyStyle->newLine(2);
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->title('PHP features');
 
         $rows = [];
 

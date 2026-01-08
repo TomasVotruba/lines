@@ -173,6 +173,12 @@ Two codebases using PHP 8.4 in `composer.json`, are not the same codebases. One 
 vendor/bin/lines features src
 ```
 
+For json output, just add `--json`:
+
+```bash
+vendor/bin/lines features src --json
+```
+
 This command:
 
 * scans your codebase,
@@ -181,9 +187,15 @@ This command:
 
 <br>
 
+For the text output, you'll get data like these:
+
 ```text
+PHP features
+============
+
+
  ------------- ----------------------------------------------- ------------
-  PHP version   Feature count
+  PHP version   PHP Feature                                     Count
  ------------- ----------------------------------------------- ------------
   7.0           Parameter types                                      2 793
   7.0           Return types                                         1 736
@@ -221,6 +233,135 @@ This command:
  ------------- ----------------------------------------------- ------------
   8.4           Property hooks                                           0
  ------------- ----------------------------------------------- ------------
+```
+
+Or in a json format:
+
+```json
+{
+    "7.0": [
+        {
+            "name": "Parameter types",
+            "count": 122
+        },
+        {
+            "name": "Return types",
+            "count": 143
+        },
+        {
+            "name": "Strict declares",
+            "count": 31
+        },
+        {
+            "name": "Space ship <=> operator ",
+            "count": 0
+        },
+        {
+            "name": "Coalesce ?? operator",
+            "count": 1
+        }
+    ],
+    "7.1": [
+        {
+            "name": "Nullable type (?type)",
+            "count": 5
+        },
+        {
+            "name": "Void return type",
+            "count": 48
+        },
+        {
+            "name": "Class constant visibility",
+            "count": 15
+        }
+    ],
+    "7.2": [
+        {
+            "name": "Object type",
+            "count": 3
+        }
+    ],
+    "7.4": [
+        {
+            "name": "Typed properties",
+            "count": 26
+        },
+        {
+            "name": "Arrow functions",
+            "count": 25
+        },
+        {
+            "name": "Coalesce assign (??=)",
+            "count": 0
+        }
+    ],
+    "8.0": [
+        {
+            "name": "Named arguments",
+            "count": 14
+        },
+        {
+            "name": "Union types",
+            "count": 5
+        },
+        {
+            "name": "Match expression",
+            "count": 0
+        },
+        {
+            "name": "Nullsafe method call\/property fetch",
+            "count": 0
+        },
+        {
+            "name": "Attributes",
+            "count": 0
+        },
+        {
+            "name": "Throw expression",
+            "count": 0
+        },
+        {
+            "name": "Promoted properties",
+            "count": 30
+        }
+    ],
+    "8.1": [
+        {
+            "name": "First-class callables",
+            "count": 0
+        },
+        {
+            "name": "Readonly property",
+            "count": 0
+        },
+        {
+            "name": "Intersection types",
+            "count": 0
+        },
+        {
+            "name": "Enums",
+            "count": 1
+        }
+    ],
+    "8.2": [
+        {
+            "name": "Readonly class",
+            "count": 6
+        }
+    ],
+    "8.3": [
+        {
+            "name": "Typed class constants",
+            "count": 9
+        }
+    ],
+    "8.4": [
+        {
+            "name": "Property hooks",
+            "count": 0
+        }
+    ]
+}
 ```
 
 <br>

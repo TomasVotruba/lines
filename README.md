@@ -59,7 +59,7 @@ vendor/bin/lines measure --short --json
 
 For the text output, you'll get data like these:
 
-```bash
+```text
   Filesystem                                         count
   Directories ......................................... 32
   Files .............................................. 160
@@ -142,9 +142,9 @@ Are you looking for top 10 longest files?
 vendor/bin/lines measure --longest
 ```
 
-↓
+<br>
 
-```bash
+```text
   Longest files                                 line count
   src/Measurements.php ............................... 320
   src/Console/OutputFormatter/TextOutputFormatter.php  136
@@ -179,10 +179,9 @@ This command:
 * count PHP feature being used from which PHP version,
 * gives you quick overview of how modern the codebase really is
 
+<br>
 
-↓
-
-```bash
+```text
  ------------- ----------------------------------------------- ------------
   PHP version   Feature count
  ------------- ----------------------------------------------- ------------
@@ -227,5 +226,3 @@ This command:
 <br>
 
 That's it. Happy coding!
-
-

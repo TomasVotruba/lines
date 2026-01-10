@@ -8,6 +8,7 @@
     ],
     "require": {
         "php": "^8.3",
+        "symfony/polyfill-intl-grapheme": "^1.0",
         "symfony/console": "^6.4",
         "symfony/finder": "^6.4",
         "webmozart/assert": "^1.12",
@@ -47,8 +48,7 @@
         "rector": "vendor/bin/rector --dry-run --ansi"
     },
     "replace": {
-        "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-intl-grapheme": "*"
+        "symfony/polyfill-ctype": "*"
     },
     "config": {
         "platform-check": false,

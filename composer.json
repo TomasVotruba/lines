@@ -13,6 +13,7 @@
         "symfony/finder": "^6.4",
         "webmozart/assert": "^1.12",
         "nikic/php-parser": "^5.7",
+        "ondram/ci-detector": "^4.2",
         "sebastian/lines-of-code": "^4.0",
         "nunomaduro/termwind": "^1.17|^2.3",
         "entropy/entropy": "dev-main"

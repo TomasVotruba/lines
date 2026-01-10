@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\FeatureCounter\Analyzer;
 
+use OndraM\CiDetector\CiDetector;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Finder\SplFileInfo;
 use TomasVotruba\Lines\Exception\ShouldNotHappenException;
 use TomasVotruba\Lines\FeatureCounter\NodeVisitor\FeatureCollectorNodeVisitor;
@@ -33,7 +35,13 @@ final readonly class FeatureCounterAnalyzer
      */
     public function analyze(array $fileInfos): FeatureCollector
     {
-        $progressBar = new ProgressBar(new ConsoleOutput());
+        if ((new CiDetector())->isCiDetected()) {
+            $output = new NullOutput();
+        } else {
+            $output = new ConsoleOutput();
+        }
+
+        $progressBar = new ProgressBar($output);
         $progressBar->start(count($fileInfos));
 
         $featureCollectorNodeVisitor = new FeatureCollectorNodeVisitor($this->featureCollector);

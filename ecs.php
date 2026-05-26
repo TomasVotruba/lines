@@ -13,4 +13,4 @@ return ECSConfig::configure()
     ->withSkip([
         '*/Fixture/*'
     ])
-    ->withPreparedSets(psr12: true, common: true, strict: true, symplify: true);
+    ->withPreparedSets(psr12: true, common: true, symplify: true);

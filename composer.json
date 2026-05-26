@@ -16,12 +16,12 @@
         "ondram/ci-detector": "^4.2",
         "sebastian/lines-of-code": "^4.0",
         "nunomaduro/termwind": "^1.17|^2.3",
-        "entropy/entropy": "^0.1",
-        "rector/jack": "^1.0"
+        "entropy/entropy": "^0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^12.5",
         "rector/rector": "^2.4",
+        "rector/jack": "^1.0",
         "phpstan/phpstan": "^2.1",
         "phpecs/phpecs": "^2.3",
         "tracy/tracy": "^2.12",

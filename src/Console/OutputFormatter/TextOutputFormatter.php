@@ -11,7 +11,6 @@ use TomasVotruba\Lines\Helpers\NumberFormat;
 use TomasVotruba\Lines\Measurements;
 use TomasVotruba\Lines\ValueObject\TableRow;
 use TomasVotruba\Lines\ValueObject\TableView;
-use Webmozart\Assert\Assert;
 
 final readonly class TextOutputFormatter implements OutputFormatterInterface
 {
@@ -118,14 +117,12 @@ final readonly class TextOutputFormatter implements OutputFormatterInterface
     }
 
     /**
-     * @param array<array{0?: string, 1?: int|float, 2?: float|null, 3?: bool}> $rows
+     * @param array<array{0: string, 1: int|float, 2?: float|null, 3?: bool}> $rows
      * @return TableRow[]
      */
     private function formatRows(array $rows): array
     {
         return array_map(static function (array $row): TableRow {
-            Assert::notEmpty($row);
-
             $prettyNumber = NumberFormat::pretty($row[1]);
 
             return new TableRow($row[0], $prettyNumber, isset($row[2]) ? NumberFormat::percent(

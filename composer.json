@@ -8,29 +8,29 @@
     ],
     "require": {
         "php": "^8.3",
-        "symfony/polyfill-intl-grapheme": "^1.0",
+        "symfony/polyfill-intl-grapheme": "^1.38",
         "symfony/console": "^6.4",
         "symfony/finder": "^6.4",
-        "webmozart/assert": "^1.12|^2.0",
+        "webmozart/assert": "^2.0",
         "nikic/php-parser": "^5.7",
         "ondram/ci-detector": "^4.2",
         "sebastian/lines-of-code": "^4.0",
         "nunomaduro/termwind": "^1.17|^2.3",
-        "entropy/entropy": "^0.1"
+        "entropy/entropy": "^0.1",
+        "rector/jack": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^12.5",
-        "rector/rector": "^2.2",
+        "rector/rector": "^2.4",
         "phpstan/phpstan": "^2.1",
-        "phpecs/phpecs": "^2.2",
-        "tracy/tracy": "^2.11",
+        "phpecs/phpecs": "^2.3",
+        "tracy/tracy": "^2.12",
         "tomasvotruba/class-leak": "^2.1",
         "phpstan/extension-installer": "^1.4",
-        "symplify/phpstan-rules": "^14.9",
+        "symplify/phpstan-rules": "^14.10",
         "rector/type-perfect": "^2.1",
         "symplify/phpstan-extensions": "^12.0",
-        "tomasvotruba/unused-public": "^2.1",
-        "rector/jack": "^1.0"
+        "tomasvotruba/unused-public": "^2.2"
     },
     "autoload": {
         "psr-4": {

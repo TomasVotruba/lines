@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Symfony\Component\Console\Application;
+use Entropy\Console\ConsoleApplication;
 use TomasVotruba\Lines\DependencyInjection\ContainerFactory;
 
 if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
@@ -19,5 +19,5 @@ if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
 $containerFactory = new ContainerFactory();
 $container = $containerFactory->create();
 
-$application = $container->make(Application::class);
-exit($application->run());
+$consoleApplication = $container->make(ConsoleApplication::class);
+exit($consoleApplication->run($argv));

@@ -7,12 +7,9 @@ namespace TomasVotruba\Lines\DependencyInjection;
 use Entropy\Container\Container;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TomasVotruba\Lines\Helpers\PrivatesAccessor;
 
 final class ContainerFactory
 {
@@ -33,37 +30,12 @@ final class ContainerFactory
             static fn (): SymfonyStyle => new SymfonyStyle(new ArrayInput([]), new ConsoleOutput($consoleVerbosity))
         );
 
-        $container->service(Application::class, function (Container $container): Application {
-            $application = new Application();
-
-            $commands = $container->findByContract(Command::class);
-            $application->addCommands($commands);
-
-            // remove basic command to make output clear
-            $this->cleanupDefaultCommands($application);
-
-            return $application;
-        });
-
         $container->service(Parser::class, static function (): Parser {
             $phpParserFactory = new ParserFactory();
             return $phpParserFactory->createForHostVersion();
         });
 
         return $container;
-    }
-
-    private function cleanupDefaultCommands(Application $application): void
-    {
-        $application->get('help')
-            ->setHidden(true);
-
-        PrivatesAccessor::propertyClosure($application, 'commands', static function (array $commands): array {
-            // remove default commands, as not needed here
-            unset($commands['completion']);
-
-            return $commands;
-        });
     }
 
     private function emulateTokensOfOlderPHP(): void

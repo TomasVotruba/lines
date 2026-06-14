@@ -262,13 +262,9 @@ final class FeatureCollector
             return false;
         }
 
-        // has `Null`?
-        foreach ($unionType->types as $type) {
-            if ($type instanceof Identifier && strtolower($type->name) === 'null') {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any(
+            $unionType->types,
+            fn ($type): bool => $type instanceof Identifier && strtolower($type->name) === 'null'
+        );
     }
 }

@@ -19,17 +19,17 @@ jobs:
                     -
                         name: 'Run "measure" command'
                         run: |
-                            bin/lines measure src --ansi
-                            bin/lines measure src --json --longest --ansi
+                            bin/lines measure src
+                            bin/lines measure src --json --longest
 
                     -
                         name: 'Run "features" command'
                         run: |
-                            bin/lines features src --ansi
+                            bin/lines features src
 
                     -
                         name: 'Spot unused classes'
-                        run: vendor/bin/class-leak check src tests --skip-path="Fixture"
+                        run: vendor/bin/class-leak check src tests --skip-path="Fixture" --skip-type="Entropy\Console\Contract\CommandInterface"
 
                     -
                         name: 'PHPStan'
@@ -52,7 +52,7 @@ jobs:
             # see https://github.com/shivammathur/setup-php
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 8.3
+                    php-version: 8.4
                     coverage: none
 
             # composer install cache - https://github.com/ramsey/composer-install

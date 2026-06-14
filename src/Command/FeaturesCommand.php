@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Entropy\Console\Contract\CommandInterface;
+use Entropy\Console\Enum\ExitCode;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\FeatureCounter\Analyzer\FeatureCounterAnalyzer;
@@ -16,64 +13,54 @@ use TomasVotruba\Lines\FeatureCounter\ResultPrinter;
 use TomasVotruba\Lines\Finder\ProjectFilesFinder;
 use Webmozart\Assert\Assert;
 
-final class FeaturesCommand extends Command
+final readonly class FeaturesCommand implements CommandInterface
 {
     public function __construct(
-        private readonly SymfonyStyle $symfonyStyle,
-        private readonly ProjectFilesFinder $projectFilesFinder,
-        private readonly FeatureCounterAnalyzer $featureCounterAnalyzer,
-        private readonly ResultPrinter $resultPrinter,
-        private readonly JsonOutputFormatter $jsonOutputFormatter,
+        private SymfonyStyle $symfonyStyle,
+        private ProjectFilesFinder $projectFilesFinder,
+        private FeatureCounterAnalyzer $featureCounterAnalyzer,
+        private ResultPrinter $resultPrinter,
+        private JsonOutputFormatter $jsonOutputFormatter,
     ) {
-        parent::__construct();
     }
 
-    protected function configure(): void
+    public function getName(): string
     {
-        $this->setName('features');
-        $this->setDescription('Count used PHP features in the project');
+        return 'features';
+    }
 
-        $this->addArgument(
-            'project-directories',
-            InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
-            'Project directories to analyze',
-            [getcwd()]
-        );
-        $this->addOption('json', null, InputOption::VALUE_NONE, 'Output in JSON format');
+    public function getDescription(): string
+    {
+        return 'Count used PHP features in the project';
     }
 
     /**
-     * @return self::FAILURE|self::SUCCESS
+     * @api invoked dynamically by entropy console
+     *
+     * @param string $path Project directory to analyze
+     * @param bool $json Output in JSON format
+     * @return ExitCode::*
      */
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function run(string $path = '', bool $json = false): int
     {
-        $projectDirectories = $input->getArgument('project-directories');
-        Assert::isArray($projectDirectories);
+        $projectDirectory = $path === '' ? (string) getcwd() : $path;
+        Assert::directory($projectDirectory, sprintf('The directory "%s" does not exist.', $projectDirectory));
 
-        $allFileInfos = [];
-        foreach ($projectDirectories as $projectDirectory) {
-            Assert::string($projectDirectory, 'Expected a string for project directory.');
-            Assert::directory($projectDirectory, sprintf('The directory "%s" does not exist.', $projectDirectory));
-
-            // Find project PHP files in the directory
-            $fileInfos = $this->projectFilesFinder->find($projectDirectory);
-            $allFileInfos = array_merge($allFileInfos, $fileInfos);
-        }
-
-        $isJson = (bool) $input->getOption('json');
+        // Find project PHP files in the directory
+        $fileInfos = $this->projectFilesFinder->find($projectDirectory);
 
         // Analyze collected files
-        $featureCollector = $this->featureCounterAnalyzer->analyze($allFileInfos);
+        $featureCollector = $this->featureCounterAnalyzer->analyze($fileInfos);
 
         $this->symfonyStyle->newLine();
 
         // print results
-        if ($isJson) {
+        if ($json) {
             $this->jsonOutputFormatter->printFeatures($featureCollector);
         } else {
             $this->resultPrinter->print($featureCollector);
         }
 
-        return Command::SUCCESS;
+        return ExitCode::SUCCESS;
     }
 }

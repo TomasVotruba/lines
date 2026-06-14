@@ -83,3 +83,9 @@ jobs:
                     # force push tag, so there is only 1 version
                     git tag "${GITHUB_REF#refs/tags/}" --force
                     git push origin "${GITHUB_REF#refs/tags/}" --force
+
+                    # also publish the built downgraded code to the anywherephp/lines repository
+                    # (uses the WORKFLOWS_TOKEN persisted by actions/checkout for github.com)
+                    git remote add anywherephp https://github.com/anywherephp/lines.git
+                    git push anywherephp HEAD:main --force
+                    git push anywherephp "${GITHUB_REF#refs/tags/}" --force

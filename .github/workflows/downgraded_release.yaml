@@ -68,6 +68,21 @@ jobs:
             # clear the dev files
             -   run: rm -rf build scoper.php rector.php php-scoper.phar rector-local
 
+            # clone the remote repository, so we can commit on top of its history and push without --force
+            # inspired by https://github.com/easy-coding-standard/ecs-src/blob/main/.github/workflows/buid_release.yaml
+            -
+                uses: "actions/checkout@v4"
+                with:
+                    repository: anywherephp/config-transformer
+                    path: remote-repository
+                    token: ${{ secrets.WORKFLOWS_TOKEN }}
+
+            # remove remote files, to avoid piling up dead code in remote repository
+            -   run: rm -rf remote-repository/bin remote-repository/src remote-repository/vendor remote-repository/.github
+
+            # copy the downgraded code to the remote repository
+            -   run: rsync -a --exclude .git --exclude remote-repository ./ remote-repository/
+
             # setup git user
             -
                 working-directory: remote-repository

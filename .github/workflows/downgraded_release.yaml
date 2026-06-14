@@ -14,7 +14,7 @@ jobs:
         steps:
             -   uses: "actions/checkout@v3"
                 with:
-                    token: ${{ secrets.ACCESS_TOKEN }}
+                    token: ${{ secrets.WORKFLOWS_TOKEN }}
 
             -
                 uses: "shivammathur/setup-php@v2"
@@ -38,14 +38,33 @@ jobs:
             # clear the dev files
             -   run: rm -rf tests ecs.php phpstan.neon phpunit.xml .gitignore .editorconfig
 
-            # prefix and scope
-            -   run: sh prefix-code.sh
+            # prefix and scope (inlined from prefix-code.sh)
+            -
+                run: |
+                    export TERM=xterm-color
+
+                    # download php-scoper
+                    wget https://github.com/humbug/php-scoper/releases/download/0.18.3/php-scoper.phar -N --no-verbose
+
+                    # scope the code, work around possible PHP memory limits
+                    php -d memory_limit=-1 php-scoper.phar add-prefix bin src vendor composer.json --config scoper.php --force --ansi --output-dir scoped-code
+
+                    # the output code is in "/scoped-code", move it up; local dirs must be empty to move easily
+                    rm -r bin src vendor composer.json
+                    mv scoped-code/* .
+
+                    # dump composer autoload
+                    composer dump-autoload --ansi --classmap-authoritative --no-dev
+
+                    # make bin runnable without "php"
+                    chmod 777 "bin/lines"
+                    chmod 777 "bin/lines.php"
 
             # copy PHP 7.2 composer + workflows
             -   run: cp -r build/target-repository/. .
 
             # clear the dev files
-            -   run: rm -rf build prefix-code.sh full-tool-build.sh scoper.php rector.php rector-local php-scoper.phar
+            -   run: rm -rf build scoper.php rector.php php-scoper.phar rector-local
 
             # setup git user
             -

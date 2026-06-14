@@ -261,6 +261,7 @@ final class FeatureCollector
         if (count($unionType->types) !== 2) {
             return false;
         }
+
         return array_any(
             $unionType->types,
             fn ($type): bool => $type instanceof Identifier && strtolower($type->name) === 'null'

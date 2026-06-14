@@ -13,7 +13,7 @@
         "nikic/php-parser": "^5.7",
         "ondram/ci-detector": "^4.2",
         "sebastian/lines-of-code": "^4.0",
-        "nunomaduro/termwind": "^1.17|^2.3",
+        "nunomaduro/termwind": "^2.3",
         "entropy/entropy": "^0.4"
     },
     "require-dev": {

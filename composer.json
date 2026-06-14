@@ -13,7 +13,6 @@
         "nikic/php-parser": "^5.7",
         "ondram/ci-detector": "^4.2",
         "sebastian/lines-of-code": "^4.0",
-        "nunomaduro/termwind": "^2.4",
         "entropy/entropy": "^0.4"
     },
     "require-dev": {
@@ -27,7 +26,8 @@
         "symplify/easy-coding-standard": "^13.2",
         "symplify/phpstan-rules": "^14.10",
         "rector/type-perfect": "^2.1",
-        "tomasvotruba/unused-public": "^2.2"
+        "tomasvotruba/unused-public": "^2.2",
+        "shipmonk/composer-dependency-analyser": "^1.8"
     },
     "autoload": {
         "psr-4": {

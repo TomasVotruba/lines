@@ -32,6 +32,10 @@ jobs:
                         run: vendor/bin/class-leak check src tests --skip-path="Fixture" --skip-type="Entropy\Console\Contract\CommandInterface"
 
                     -
+                        name: 'Composer Dependency Analyser'
+                        run: vendor/bin/composer-dependency-analyser
+
+                    -
                         name: 'PHPStan'
                         run: composer phpstan --ansi
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Entropy\Console\Output\OutputPrinter;
 use TomasVotruba\Lines\Console\ViewRenderer;
 use TomasVotruba\Lines\Contract\OutputFormatterInterface;
 use TomasVotruba\Lines\Helpers\NumberFormat;
@@ -16,19 +16,19 @@ final readonly class TextOutputFormatter implements OutputFormatterInterface
 {
     public function __construct(
         private ViewRenderer $viewRenderer,
-        private SymfonyStyle $symfonyStyle,
+        private OutputPrinter $outputPrinter,
     ) {
     }
 
     public function printMeasurement(Measurements $measurements, bool $isShort, bool $showLongestFiles): void
     {
-        $this->symfonyStyle->newLine();
+        $this->outputPrinter->newline();
 
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
 
         if ($isShort) {
-            $this->symfonyStyle->newLine();
+            $this->outputPrinter->newline();
 
             return;
         }
@@ -47,7 +47,7 @@ final readonly class TextOutputFormatter implements OutputFormatterInterface
             $this->viewRenderer->renderTableView($tableView);
         }
 
-        $this->symfonyStyle->newLine();
+        $this->outputPrinter->newline();
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void

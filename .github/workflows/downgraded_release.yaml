@@ -14,9 +14,9 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            -   uses: "actions/checkout@v3"
+            -   uses: "actions/checkout@v5"
                 with:
-                    token: ${{ secrets.WORKFLOWS_TOKEN }}
+                    token: ${{ secrets.WORKFLOWS_TOKEN || github.token }}
 
             -
                 uses: "shivammathur/setup-php@v2"
@@ -73,20 +73,25 @@ jobs:
                 run: |
                     git config user.email "action@github.com"
                     git config user.name "GitHub Action"
-            # publish to the same repository with a new tag
-            # see https://tomasvotruba.com/blog/how-to-release-php-81-and-72-package-in-the-same-repository/
+
+            # publish to remote repository without tag
             -
-                name: "Tag Downgraded Code"
+                name: "Push Downgraded Code - branch"
+                working-directory: remote-repository
+                if: "!startsWith(github.ref, 'refs/tags/')"
                 run: |
-                    # separate a "git add" to add untracked (new) files too
                     git add --all
-                    git commit -m "release PHP 7.2 downgraded"
+                    git commit -m "Updated TypePerfect to commit ${{ github.event.after }}"
+                    git push --quiet origin main
 
-                    # publish the built downgraded code to the anywherephp/lines repository
-                    # (uses the WORKFLOWS_TOKEN persisted by actions/checkout for github.com)
-                    git remote add anywherephp https://github.com/anywherephp/lines.git
-                    git push anywherephp HEAD:main --force
-
-                    # force push tag into the same anywherephp/lines repository, so there is only 1 version
-                    git tag "${GITHUB_REF#refs/tags/}" --force
-                    git push anywherephp "${GITHUB_REF#refs/tags/}" --force
+            # publish to remote repository with tag
+            -
+                name: "Push Downgraded Code - tag"
+                working-directory: remote-repository
+                if: "startsWith(github.ref, 'refs/tags/')"
+                run: |
+                    git add --all
+                    git commit --allow-empty -m "TypePerfect ${GITHUB_REF#refs/tags/}"
+                    git push --quiet origin main
+                    git tag "${GITHUB_REF#refs/tags/}" -m "${GITHUB_REF#refs/tags/}"
+                    git push --quiet origin "${GITHUB_REF#refs/tags/}"

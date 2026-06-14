@@ -6,7 +6,8 @@ namespace TomasVotruba\Lines\Command;
 
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Entropy\Console\Output\OutputPrinter;
+use Entropy\Console\Output\ProgressBar;
 use TomasVotruba\Lines\Analyser;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
 use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
@@ -19,7 +20,8 @@ final readonly class MeasureCommand implements CommandInterface
         private Analyser $analyser,
         private JsonOutputFormatter $jsonOutputFormatter,
         private TextOutputFormatter $textOutputFormatter,
-        private SymfonyStyle $symfonyStyle,
+        private OutputPrinter $outputPrinter,
+        private ProgressBar $progressBar,
     ) {
     }
 
@@ -58,7 +60,7 @@ final readonly class MeasureCommand implements CommandInterface
 
         $filePaths = $this->phpFilesFinder->findInDirectories($paths, $excludes, $allowVendor);
         if ($filePaths === []) {
-            $this->symfonyStyle->error('No files found to scan');
+            $this->outputPrinter->error('No files found to scan');
             return ExitCode::ERROR;
         }
 
@@ -69,6 +71,7 @@ final readonly class MeasureCommand implements CommandInterface
         if ($json) {
             $this->jsonOutputFormatter->printMeasurement($measurements, $short, $longest);
         } else {
+            $this->progressBar->finish();
             $this->textOutputFormatter->printMeasurement($measurements, $short, $longest);
         }
 
@@ -84,11 +87,10 @@ final readonly class MeasureCommand implements CommandInterface
             return null;
         }
 
-        $progressBar = $this->symfonyStyle->createProgressBar(count($filePaths));
-        $progressBar->start();
+        $this->progressBar->start(count($filePaths));
 
-        return static function () use ($progressBar): void {
-            $progressBar->advance();
+        return function (): void {
+            $this->progressBar->advance();
         };
     }
 }

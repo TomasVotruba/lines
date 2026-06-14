@@ -4,74 +4,77 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console;
 
-use Entropy\Console\Enum\Color;
-use Entropy\Console\Output\OutputColorizer;
 use Entropy\Console\Output\OutputPrinter;
 use TomasVotruba\Lines\ValueObject\TableRow;
 use TomasVotruba\Lines\ValueObject\TableView;
 
 final readonly class ViewRenderer
 {
-    private const WIDTH = 60;
-
     public function __construct(
         private OutputPrinter $outputPrinter,
-        private OutputColorizer $outputColorizer,
+        private ConsoleTable $consoleTable,
     ) {
     }
 
     public function renderTableView(TableView $tableView): void
     {
         $this->outputPrinter->newline();
-        $this->renderHeader($tableView);
 
-        foreach ($tableView->getRows() as $tableRow) {
-            $this->renderRow($tableRow);
-        }
-    }
-
-    private function renderHeader(TableView $tableView): void
-    {
-        $title = $this->outputColorizer->color($tableView->getTitle(), Color::GREEN);
-
-        $label = strtolower($tableView->getLabel());
+        $headers = [$tableView->getTitle(), $tableView->getLabel()];
         if ($tableView->isShouldIncludeRelative()) {
-            $label .= ' / Relative';
+            $headers[] = 'Relative';
         }
 
-        $this->outputPrinter->writeln($this->createLeaderLine($title, $label, ' '));
+        $countColumnWidth = $this->resolveCountColumnWidth($tableView);
+        $percentColumnWidth = $this->resolvePercentColumnWidth($tableView);
+
+        $rows = [];
+        foreach ($tableView->getRows() as $tableRow) {
+            $rows[] = $this->createRow($tableRow, $tableView, $countColumnWidth, $percentColumnWidth);
+        }
+
+        $this->consoleTable->render($headers, $rows);
     }
 
-    private function renderRow(TableRow $tableRow): void
-    {
+    /**
+     * @return string[]
+     */
+    private function createRow(
+        TableRow $tableRow,
+        TableView $tableView,
+        int $countColumnWidth,
+        int $percentColumnWidth
+    ): array {
         $name = $tableRow->isChild() ? '  ' . $tableRow->getName() : $tableRow->getName();
 
-        $value = $tableRow->getCount();
-        if ($tableRow->getPercent() !== null) {
-            $value .= ' / ' . $tableRow->getPercent();
+        $row = [$name, str_pad($tableRow->getCount(), $countColumnWidth, ' ', STR_PAD_LEFT)];
+
+        if ($tableView->isShouldIncludeRelative()) {
+            $row[] = str_pad((string) $tableRow->getPercent(), $percentColumnWidth, ' ', STR_PAD_LEFT);
         }
 
-        $this->outputPrinter->writeln($this->createLeaderLine($name, $value, '.'));
+        return $row;
     }
 
-    /**
-     * Renders "left .......... right" aligned to a fixed width, ignoring color tags.
-     */
-    private function createLeaderLine(string $left, string $right, string $fillChar): string
+    private function resolveCountColumnWidth(TableView $tableView): int
     {
-        $leaderCount = self::WIDTH - $this->visibleLength($left) - $this->visibleLength($right) - 2;
-        $leaderCount = max(1, $leaderCount);
+        $width = strlen($tableView->getLabel());
+        foreach ($tableView->getRows() as $tableRow) {
+            $width = max($width, strlen($tableRow->getCount()));
+        }
 
-        return $left . ' ' . str_repeat($fillChar, $leaderCount) . ' ' . $right;
+        return $width;
     }
 
-    /**
-     * Length of the text as rendered, ignoring color tags like "<fg=green>".
-     */
-    private function visibleLength(string $text): int
+    private function resolvePercentColumnWidth(TableView $tableView): int
     {
-        $stripped = preg_replace('#</?>|<(?:fg|bg)=(?:green|yellow|red|cyan|orange|grey)>#', '', $text);
+        $width = strlen('Relative');
+        foreach ($tableView->getRows() as $tableRow) {
+            if ($tableRow->getPercent() !== null) {
+                $width = max($width, strlen($tableRow->getPercent()));
+            }
+        }
 
-        return strlen($stripped ?? $text);
+        return $width;
     }
 }

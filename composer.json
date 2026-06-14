@@ -24,7 +24,7 @@
         "tomasvotruba/class-leak": "^2.1",
         "phpstan/extension-installer": "^1.4",
         "symplify/easy-coding-standard": "^13.2",
-        "symplify/phpstan-rules": "^14.10",
+        "symplify/phpstan-rules": "^14.12",
         "rector/type-perfect": "^2.1",
         "tomasvotruba/unused-public": "^2.2",
         "shipmonk/composer-dependency-analyser": "^1.8"

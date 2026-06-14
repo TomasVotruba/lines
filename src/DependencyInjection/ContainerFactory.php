@@ -7,9 +7,6 @@ namespace TomasVotruba\Lines\DependencyInjection;
 use Entropy\Container\Container;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ContainerFactory
 {
@@ -19,16 +16,6 @@ final class ContainerFactory
 
         $container = new Container();
         $container->autodiscover(__DIR__ . '/../Command');
-
-        // console
-        $consoleVerbosity = defined(
-            'PHPUNIT_COMPOSER_INSTALL'
-        ) ? ConsoleOutput::VERBOSITY_QUIET : ConsoleOutput::VERBOSITY_NORMAL;
-
-        $container->service(
-            SymfonyStyle::class,
-            static fn (): SymfonyStyle => new SymfonyStyle(new ArrayInput([]), new ConsoleOutput($consoleVerbosity))
-        );
 
         $container->service(Parser::class, static function (): Parser {
             $phpParserFactory = new ParserFactory();

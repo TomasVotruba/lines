@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console;
 
-use Entropy\Console\Enum\Color;
-use Entropy\Console\Output\OutputColorizer;
 use Entropy\Console\Output\OutputPrinter;
 
 /**
@@ -15,16 +13,13 @@ final readonly class ConsoleTable
 {
     /**
      * Marks a separator line between table rows.
-     *
-     * @var string
      */
-    public const SEPARATOR = '__separator__';
+    public const string SEPARATOR = '__separator__';
 
-    private const COLUMN_PADDING = 2;
+    private const int COLUMN_PADDING = 2;
 
     public function __construct(
         private OutputPrinter $outputPrinter,
-        private OutputColorizer $outputColorizer,
     ) {
     }
 
@@ -34,24 +29,41 @@ final readonly class ConsoleTable
      */
     public function render(array $headers, array $rows): void
     {
+        foreach ($this->createTableLines($headers, $rows) as $line) {
+            $this->outputPrinter->writeln($line);
+        }
+    }
+
+    /**
+     * Pure rendering of the table into aligned text lines, so it can be unit tested.
+     *
+     * @param string[] $headers
+     * @param array<string[]|self::SEPARATOR> $rows
+     * @return string[]
+     */
+    public function createTableLines(array $headers, array $rows): array
+    {
         $columnWidths = $this->resolveColumnWidths($headers, $rows);
 
         $coloredHeaders = array_map(
-            fn (string $header): string => $this->outputColorizer->color($header, Color::YELLOW),
+            static fn (string $header): string => '<fg=yellow>' . $header . '</>',
             $headers,
         );
 
-        $this->outputPrinter->writeln($this->formatRow($coloredHeaders, $columnWidths));
-        $this->outputPrinter->writeln($this->createSeparatorLine($columnWidths));
+        $lines = [];
+        $lines[] = $this->formatRow($coloredHeaders, $columnWidths);
+        $lines[] = $this->createSeparatorLine($columnWidths);
 
         foreach ($rows as $row) {
             if ($row === self::SEPARATOR) {
-                $this->outputPrinter->writeln($this->createSeparatorLine($columnWidths));
+                $lines[] = $this->createSeparatorLine($columnWidths);
                 continue;
             }
 
-            $this->outputPrinter->writeln($this->formatRow($row, $columnWidths));
+            $lines[] = $this->formatRow($row, $columnWidths);
         }
+
+        return $lines;
     }
 
     /**

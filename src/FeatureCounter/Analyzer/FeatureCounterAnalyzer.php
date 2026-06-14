@@ -35,7 +35,7 @@ final readonly class FeatureCounterAnalyzer
      */
     public function analyze(array $fileInfos): FeatureCollector
     {
-        if ((new CiDetector())->isCiDetected()) {
+        if (new CiDetector()->isCiDetected()) {
             $output = new NullOutput();
         } else {
             $output = new ConsoleOutput();

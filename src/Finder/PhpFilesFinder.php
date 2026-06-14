@@ -43,15 +43,12 @@ final class PhpFilesFinder
             ->name('*.php')
             ->notPath('tomasvotruba/lines')
             // fix exclude to handle directories
-            ->filter(function (SplFileInfo $fileInfo) use ($excludes): bool {
-                foreach ($excludes as $exclude) {
-                    if (str_contains($fileInfo->getRealPath(), $exclude)) {
-                        return \false;
-                    }
-                }
-
-                return true;
-            });
+            ->filter(
+                fn (SplFileInfo $fileInfo): bool => array_all($excludes, fn ($exclude): bool => ! str_contains(
+                    $fileInfo->getRealPath(),
+                    (string) $exclude
+                ))
+            );
 
         if ($allowVendor === false) {
             // skip vendor directory, as we often need the full source code

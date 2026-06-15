@@ -27,9 +27,9 @@ final readonly class ConsoleTable
      * @param string[] $headers
      * @param array<string[]|self::SEPARATOR> $rows
      */
-    public function render(array $headers, array $rows): void
+    public function render(array $headers, array $rows, int $minWidth = 0): void
     {
-        foreach ($this->createTableLines($headers, $rows) as $line) {
+        foreach ($this->createTableLines($headers, $rows, $minWidth) as $line) {
             $this->outputPrinter->writeln($line);
         }
     }
@@ -41,27 +41,33 @@ final readonly class ConsoleTable
      * @param array<string[]|self::SEPARATOR> $rows
      * @return string[]
      */
-    public function createTableLines(array $headers, array $rows): array
+    public function createTableLines(array $headers, array $rows, int $minWidth = 0): array
     {
         $columnWidths = $this->resolveColumnWidths($headers, $rows);
+        $columnWidths = $this->expandToMinWidth($columnWidths, $minWidth);
 
         $coloredHeaders = array_map(
             static fn (string $header): string => '<fg=yellow>' . $header . '</>',
             $headers,
         );
 
+        $borderLine = $this->createBorderLine($columnWidths);
+
         $lines = [];
+        $lines[] = $borderLine;
         $lines[] = $this->formatRow($coloredHeaders, $columnWidths);
-        $lines[] = $this->createSeparatorLine($columnWidths);
+        $lines[] = $borderLine;
 
         foreach ($rows as $row) {
             if ($row === self::SEPARATOR) {
-                $lines[] = $this->createSeparatorLine($columnWidths);
+                $lines[] = $borderLine;
                 continue;
             }
 
             $lines[] = $this->formatRow($row, $columnWidths);
         }
+
+        $lines[] = $borderLine;
 
         return $lines;
     }
@@ -92,28 +98,51 @@ final readonly class ConsoleTable
     }
 
     /**
+     * Grows the first column so the whole table spans at least the given width.
+     *
+     * @param int[] $columnWidths
+     * @return int[]
+     */
+    private function expandToMinWidth(array $columnWidths, int $minWidth): array
+    {
+        $totalWidth = array_sum($columnWidths) + (count($columnWidths) * self::COLUMN_PADDING);
+        if ($totalWidth < $minWidth) {
+            $columnWidths[0] += $minWidth - $totalWidth;
+        }
+
+        return $columnWidths;
+    }
+
+    /**
+     * Renders a single row as " cell  cell  cell", each cell padded to its column width.
+     *
      * @param string[] $cells
      * @param int[] $columnWidths
      */
     private function formatRow(array $cells, array $columnWidths): string
     {
-        $paddedCells = [];
+        $line = '';
         foreach ($cells as $columnIndex => $cell) {
-            $padding = $columnWidths[$columnIndex] - $this->visibleLength($cell) + self::COLUMN_PADDING;
-            $paddedCells[] = $cell . str_repeat(' ', $padding);
+            $padding = $columnWidths[$columnIndex] - $this->visibleLength($cell);
+            $line .= '  ' . $cell . str_repeat(' ', $padding) . ' ';
         }
 
-        return rtrim(implode('', $paddedCells));
+        return rtrim($line);
     }
 
     /**
+     * Renders a border line as " ----- ----- -----", one dash run per column.
+     *
      * @param int[] $columnWidths
      */
-    private function createSeparatorLine(array $columnWidths): string
+    private function createBorderLine(array $columnWidths): string
     {
-        $totalWidth = array_sum($columnWidths) + (count($columnWidths) * self::COLUMN_PADDING);
+        $segments = [];
+        foreach ($columnWidths as $columnWidth) {
+            $segments[] = str_repeat('-', $columnWidth + self::COLUMN_PADDING);
+        }
 
-        return str_repeat('-', $totalWidth);
+        return ' ' . implode(' ', $segments);
     }
 
     /**

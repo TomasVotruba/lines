@@ -47,7 +47,7 @@ final readonly class ConsoleTable
         $columnWidths = $this->expandToMinWidth($columnWidths, $minWidth);
 
         $coloredHeaders = array_map(
-            static fn (string $header): string => '<fg=yellow>' . $header . '</>',
+            static fn (string $header): string => '<fg=green>' . $header . '</>',
             $headers,
         );
 
@@ -105,12 +105,22 @@ final readonly class ConsoleTable
      */
     private function expandToMinWidth(array $columnWidths, int $minWidth): array
     {
-        $totalWidth = array_sum($columnWidths) + (count($columnWidths) * self::COLUMN_PADDING);
+        $totalWidth = $this->resolveTotalWidth($columnWidths);
         if ($totalWidth < $minWidth) {
             $columnWidths[0] += $minWidth - $totalWidth;
         }
 
         return $columnWidths;
+    }
+
+    /**
+     * Total rendered width: each column takes "  cell " (2 leading + content + 1 trailing space).
+     *
+     * @param int[] $columnWidths
+     */
+    private function resolveTotalWidth(array $columnWidths): int
+    {
+        return array_sum($columnWidths) + (count($columnWidths) * (self::COLUMN_PADDING + 1));
     }
 
     /**

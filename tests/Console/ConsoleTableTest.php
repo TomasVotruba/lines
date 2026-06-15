@@ -26,10 +26,12 @@ final class ConsoleTableTest extends TestCase
         );
 
         $this->assertSame([
-            '<fg=yellow>Name</>         <fg=yellow>Count</>',
-            '--------------------',
-            'Directories  12',
-            'Files        345',
+            ' ------------- -------',
+            '  <fg=green>Name</>          <fg=green>Count</>',
+            ' ------------- -------',
+            '  Directories   12',
+            '  Files         345',
+            ' ------------- -------',
         ], $lines);
     }
 
@@ -40,7 +42,15 @@ final class ConsoleTableTest extends TestCase
             [['1', '2'], ConsoleTable::SEPARATOR, ['3', '4']],
         );
 
-        $this->assertSame(['<fg=yellow>A</>  <fg=yellow>B</>', '------', '1  2', '------', '3  4'], $lines);
+        $this->assertSame([
+            ' --- ---',
+            '  <fg=green>A</>   <fg=green>B</>',
+            ' --- ---',
+            '  1   2',
+            ' --- ---',
+            '  3   4',
+            ' --- ---',
+        ], $lines);
     }
 
     public function testIgnoresColorTagsWhenMeasuringWidth(): void
@@ -48,6 +58,13 @@ final class ConsoleTableTest extends TestCase
         $lines = $this->consoleTable->createTableLines(['Version'], [['<fg=yellow>8.4</>'], ['7.4']]);
 
         // both value rows pad to the "Version" header width (7), regardless of color tags
-        $this->assertSame(['<fg=yellow>Version</>', '---------', '<fg=yellow>8.4</>', '7.4'], $lines);
+        $this->assertSame([
+            ' ---------',
+            '  <fg=green>Version</>',
+            ' ---------',
+            '  <fg=yellow>8.4</>',
+            '  7.4',
+            ' ---------',
+        ], $lines);
     }
 }

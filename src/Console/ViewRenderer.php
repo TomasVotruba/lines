@@ -10,6 +10,11 @@ use TomasVotruba\Lines\ValueObject\TableView;
 
 final readonly class ViewRenderer
 {
+    /**
+     * @var int Tables span at least this many characters wide
+     */
+    private const int MIN_WIDTH = 80;
+
     public function __construct(
         private OutputPrinter $outputPrinter,
         private ConsoleTable $consoleTable,
@@ -33,7 +38,7 @@ final readonly class ViewRenderer
             $rows[] = $this->createRow($tableRow, $tableView, $countColumnWidth, $percentColumnWidth);
         }
 
-        $this->consoleTable->render($headers, $rows);
+        $this->consoleTable->render($headers, $rows, self::MIN_WIDTH);
     }
 
     /**

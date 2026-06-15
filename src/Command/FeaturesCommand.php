@@ -6,20 +6,20 @@ namespace TomasVotruba\Lines\Command;
 
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Entropy\Console\Output\OutputPrinter;
 use TomasVotruba\Lines\Console\OutputFormatter\JsonOutputFormatter;
+use TomasVotruba\Lines\Console\OutputFormatter\TextOutputFormatter;
 use TomasVotruba\Lines\FeatureCounter\Analyzer\FeatureCounterAnalyzer;
-use TomasVotruba\Lines\FeatureCounter\ResultPrinter;
 use TomasVotruba\Lines\Finder\ProjectFilesFinder;
 use Webmozart\Assert\Assert;
 
 final readonly class FeaturesCommand implements CommandInterface
 {
     public function __construct(
-        private SymfonyStyle $symfonyStyle,
+        private OutputPrinter $outputPrinter,
         private ProjectFilesFinder $projectFilesFinder,
         private FeatureCounterAnalyzer $featureCounterAnalyzer,
-        private ResultPrinter $resultPrinter,
+        private TextOutputFormatter $textOutputFormatter,
         private JsonOutputFormatter $jsonOutputFormatter,
     ) {
     }
@@ -52,13 +52,13 @@ final readonly class FeaturesCommand implements CommandInterface
         // Analyze collected files
         $featureCollector = $this->featureCounterAnalyzer->analyze($fileInfos);
 
-        $this->symfonyStyle->newLine();
+        $this->outputPrinter->newline();
 
         // print results
         if ($json) {
             $this->jsonOutputFormatter->printFeatures($featureCollector);
         } else {
-            $this->resultPrinter->print($featureCollector);
+            $this->textOutputFormatter->printFeatures($featureCollector);
         }
 
         return ExitCode::SUCCESS;

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\ValueObject;
 
-/**
- * @api used in templates
- */
 final readonly class TableRow
 {
     public function __construct(

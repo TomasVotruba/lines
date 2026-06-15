@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\FeatureCounter\Analyzer;
 
+use Entropy\Console\Output\ProgressBar;
 use OndraM\CiDetector\CiDetector;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Finder\SplFileInfo;
 use TomasVotruba\Lines\Exception\ShouldNotHappenException;
 use TomasVotruba\Lines\FeatureCounter\NodeVisitor\FeatureCollectorNodeVisitor;
@@ -25,6 +23,7 @@ final readonly class FeatureCounterAnalyzer
 
     public function __construct(
         private FeatureCollector $featureCollector,
+        private ProgressBar $progressBar,
     ) {
         $parserFactory = new ParserFactory();
         $this->parser = $parserFactory->createForNewestSupportedVersion();
@@ -35,14 +34,13 @@ final readonly class FeatureCounterAnalyzer
      */
     public function analyze(array $fileInfos): FeatureCollector
     {
-        if (new CiDetector()->isCiDetected()) {
-            $output = new NullOutput();
-        } else {
-            $output = new ConsoleOutput();
-        }
+        // progress bar is just noise in CI logs
+        $showProgressBar = ! new CiDetector()
+            ->isCiDetected();
 
-        $progressBar = new ProgressBar($output);
-        $progressBar->start(count($fileInfos));
+        if ($showProgressBar) {
+            $this->progressBar->start(count($fileInfos));
+        }
 
         $featureCollectorNodeVisitor = new FeatureCollectorNodeVisitor($this->featureCollector);
         $nodeTraverser = new NodeTraverser($featureCollectorNodeVisitor);
@@ -58,10 +56,14 @@ final readonly class FeatureCounterAnalyzer
 
             $nodeTraverser->traverse($stmts);
 
-            $progressBar->advance();
+            if ($showProgressBar) {
+                $this->progressBar->advance();
+            }
         }
 
-        $progressBar->finish();
+        if ($showProgressBar) {
+            $this->progressBar->finish();
+        }
 
         return $this->featureCollector;
     }

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Entropy\Console\Output\OutputPrinter;
+use TomasVotruba\Lines\Console\ConsoleTable;
 use TomasVotruba\Lines\Console\ViewRenderer;
 use TomasVotruba\Lines\Contract\OutputFormatterInterface;
+use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 use TomasVotruba\Lines\Helpers\NumberFormat;
 use TomasVotruba\Lines\Measurements;
 use TomasVotruba\Lines\ValueObject\TableRow;
@@ -16,19 +18,48 @@ final readonly class TextOutputFormatter implements OutputFormatterInterface
 {
     public function __construct(
         private ViewRenderer $viewRenderer,
-        private SymfonyStyle $symfonyStyle,
+        private OutputPrinter $outputPrinter,
+        private ConsoleTable $consoleTable,
     ) {
+    }
+
+    public function printFeatures(FeatureCollector $featureCollector): void
+    {
+        $this->outputPrinter->title('PHP features');
+
+        $rows = [];
+
+        $previousPhpVersion = null;
+
+        foreach ($featureCollector->getPhpFeatures() as $phpFeature) {
+            $changedPhpVersion = $previousPhpVersion !== null && $previousPhpVersion !== $phpFeature->getPhpVersion();
+            if ($changedPhpVersion) {
+                $rows[] = ConsoleTable::SEPARATOR;
+            }
+
+            $rows[] = [
+                '<fg=yellow>' . $phpFeature->getPhpVersion() . '</>',
+                $phpFeature->getName(),
+                str_pad(number_format($phpFeature->getCount(), 0, ',', ' '), 10, ' ', STR_PAD_LEFT),
+            ];
+
+            $previousPhpVersion = $phpFeature->getPhpVersion();
+        }
+
+        $this->consoleTable->render(['PHP version', 'PHP Feature', 'Count'], $rows);
+
+        $this->outputPrinter->newline();
     }
 
     public function printMeasurement(Measurements $measurements, bool $isShort, bool $showLongestFiles): void
     {
-        $this->symfonyStyle->newLine();
+        $this->outputPrinter->newline();
 
         $this->printFilesAndDirectories($measurements);
         $this->printLinesOfCode($measurements);
 
         if ($isShort) {
-            $this->symfonyStyle->newLine();
+            $this->outputPrinter->newline();
 
             return;
         }
@@ -47,7 +78,7 @@ final readonly class TextOutputFormatter implements OutputFormatterInterface
             $this->viewRenderer->renderTableView($tableView);
         }
 
-        $this->symfonyStyle->newLine();
+        $this->outputPrinter->newline();
     }
 
     private function printFilesAndDirectories(Measurements $measurements): void

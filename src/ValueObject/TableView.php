@@ -6,9 +6,6 @@ namespace TomasVotruba\Lines\ValueObject;
 
 use Webmozart\Assert\Assert;
 
-/**
- * @api used in templates
- */
 final readonly class TableView
 {
     /**
@@ -44,10 +41,5 @@ final readonly class TableView
     public function getRows(): array
     {
         return $this->tableRows;
-    }
-
-    public function getTemplateFilePath(): string
-    {
-        return __DIR__ . '/../../views/table.php';
     }
 }

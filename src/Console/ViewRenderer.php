@@ -13,7 +13,7 @@ final readonly class ViewRenderer
     /**
      * @var int Tables span at least this many characters wide
      */
-    private const int MIN_WIDTH = 80;
+    private const int MIN_WIDTH = 60;
 
     public function __construct(
         private OutputPrinter $outputPrinter,

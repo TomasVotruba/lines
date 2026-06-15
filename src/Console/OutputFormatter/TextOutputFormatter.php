@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\Console\OutputFormatter;
 
+use Entropy\Console\ConsoleTable\ConsoleTable;
+use Entropy\Console\ConsoleTable\ValueObject\TableRow;
+use Entropy\Console\ConsoleTable\ValueObject\TableView;
+use Entropy\Console\ConsoleTable\ViewRenderer;
 use Entropy\Console\Output\OutputPrinter;
-use TomasVotruba\Lines\Console\ConsoleTable;
-use TomasVotruba\Lines\Console\ViewRenderer;
 use TomasVotruba\Lines\Contract\OutputFormatterInterface;
 use TomasVotruba\Lines\FeatureCounter\ValueObject\FeatureCollector;
 use TomasVotruba\Lines\Helpers\NumberFormat;
 use TomasVotruba\Lines\Measurements;
-use TomasVotruba\Lines\ValueObject\TableRow;
-use TomasVotruba\Lines\ValueObject\TableView;
 
 final readonly class TextOutputFormatter implements OutputFormatterInterface
 {

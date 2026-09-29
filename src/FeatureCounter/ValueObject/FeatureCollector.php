@@ -19,6 +19,7 @@ use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\IntersectionType;
+use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\PropertyHook;
@@ -264,7 +265,7 @@ final class FeatureCollector
 
         return array_any(
             $unionType->types,
-            fn ($type): bool => $type instanceof Identifier && strtolower($type->name) === 'null'
+            fn (Identifier|Name|IntersectionType $type): bool => $type instanceof Identifier && strtolower($type->name) === 'null'
         );
     }
 }

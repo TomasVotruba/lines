@@ -35,7 +35,7 @@ final class PhpFeature
 
     public function increaseCount(): void
     {
-        $this->count++;
+        ++$this->count;
     }
 
     public function getCount(): int

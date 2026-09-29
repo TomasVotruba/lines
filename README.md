@@ -1,5 +1,17 @@
 # Lines of code and PHP Features
 
+> [!WARNING]
+> This package is **deprecated** and moved to [rector/swiss-knife](https://github.com/rectorphp/swiss-knife).
+>
+> The `lines measure` and `lines features` commands now live there as `swiss-knife measure` and `swiss-knife features`:
+>
+> ```bash
+> composer require rector/swiss-knife --dev
+>
+> vendor/bin/swiss-knife measure src
+> vendor/bin/swiss-knife features src
+> ```
+
 CLI tool for quick size measure of PHP project, and real used PHP features.
 
 Zero dependencies. Runs anywhere.

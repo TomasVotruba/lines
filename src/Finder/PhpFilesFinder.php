@@ -44,9 +44,9 @@ final class PhpFilesFinder
             ->notPath('tomasvotruba/lines')
             // fix exclude to handle directories
             ->filter(
-                fn (SplFileInfo $fileInfo): bool => array_all($excludes, fn ($exclude): bool => ! str_contains(
+                fn (SplFileInfo $fileInfo): bool => array_all($excludes, fn (string $exclude): bool => ! str_contains(
                     $fileInfo->getRealPath(),
-                    (string) $exclude
+                    $exclude
                 ))
             );
 

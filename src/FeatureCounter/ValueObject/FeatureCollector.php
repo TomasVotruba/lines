@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\FeatureCounter\ValueObject;
 
+use PhpParser\Node\Name;
 use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -264,7 +265,7 @@ final class FeatureCollector
 
         return array_any(
             $unionType->types,
-            fn ($type): bool => $type instanceof Identifier && strtolower($type->name) === 'null'
+            fn (Identifier|Name|IntersectionType $type): bool => $type instanceof Identifier && strtolower($type->name) === 'null'
         );
     }
 }

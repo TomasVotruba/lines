@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TomasVotruba\Lines\FeatureCounter\ValueObject;
 
-use PhpParser\Node\Name;
 use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -20,6 +19,7 @@ use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\IntersectionType;
+use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\PropertyHook;
